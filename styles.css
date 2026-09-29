@@ -1,0 +1,138 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+.app {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 42px;
+
+    background: #1e293b;
+    border-radius: 25px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+h1 {
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    color: #94a3b8;
+    margin-top: 8px;
+}
+
+.status {
+    display: inline-block;
+
+    margin-top: 20px;
+    padding: 8px 15px;
+
+    background: #064e3b;
+    color: #6ee7b7;
+
+    border-radius: 20px;
+
+    font-size: 14px;
+}
+
+.status-dot {
+    display: inline-block;
+
+    width: 8px;
+    height: 8px;
+
+    background: #22c55e;
+
+    border-radius: 50%;
+
+    margin-right: 6px;
+}
+
+.card {
+    background: #1e293b;
+
+    margin-top: 25px;
+    padding: 25px;
+
+    border-radius: 20px;
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+.card h2 {
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+
+button {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 18px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #3b82f6;
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background: #2563eb;
+}
+
+button.emergency {
+    background: #dc2626;
+}
+
+button.emergency:hover {
+    background: #b91c1c;
+}
+
+#mensaje {
+    margin-top: 20px;
+
+    font-weight: bold;
+    color: #60a5fa;
+}
