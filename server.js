@@ -4,12 +4,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import alertRoutes from "./routes/alerts.js";
+import telemetryRoutes from "./routes/telemetry.js";
+import tutorRoutes from "./routes/tutors.js";
+import tripRoutes from "./routes/trips.js";
+import userRoutes from "./routes/users.js";
+import { startTelegramPolling } from "./services/telegramPolling.js";
 
 const app = express();
 const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const port = Number.parseInt(process.env.PORT || "3000", 10) || 3000;
 const nodeEnvironment = process.env.NODE_ENV || "development";
-const mockTwilio = /^(true|1|yes)$/i.test(process.env.MOCK_TWILIO || "false");
 const configuredCorsOrigins = new Set(
     String(process.env.CORS_ORIGINS || "")
         .split(",")
@@ -58,11 +62,15 @@ app.get("/health", (_req, res) => {
         ok: true,
         service: "guardian-notifications-api",
         environment: nodeEnvironment,
-        mockTwilio
+        telegramConfigured: Boolean(process.env.TELEGRAM_BOT_TOKEN)
     });
 });
 
 app.use("/api", alertRoutes);
+app.use("/api/tutores", tutorRoutes);
+app.use("/api/usuarios", userRoutes);
+app.use("/api/historial-ubicaciones", telemetryRoutes);
+app.use("/api/viajes", tripRoutes);
 app.use(express.static(projectRoot, { dotfiles: "ignore" }));
 app.use((error, _req, res, next) => {
     if (error instanceof SyntaxError && error.status === 400 && error.type === "entity.parse.failed") {
@@ -78,7 +86,7 @@ app.use((error, _req, res, next) => {
 export function startServer() {
     return app.listen(port, () => {
         console.log(`Guardian API ejecutándose en http://localhost:${port} (${nodeEnvironment})`);
-        console.log(`MOCK_TWILIO=${mockTwilio}`);
+        startTelegramPolling();
     });
 }
 

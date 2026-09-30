@@ -1,4 +1,4 @@
-const CACHE_NAME = "guardian-v2";
+const CACHE_NAME = "guardian-v3";
 
 const FILES_TO_CACHE = [
     "./",
@@ -8,6 +8,7 @@ const FILES_TO_CACHE = [
     "./config.js",
     "./manifest.json",
     "./camaras.json",
+    "./admin.html",
     "./assets/icon-192.png",
     "./assets/icon-512.png"
 ];
@@ -33,8 +34,12 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
+    const request = event.request;
+    const requestUrl = new URL(request.url);
+    if (request.method !== "GET" || requestUrl.pathname.startsWith("/api/")) return;
+
     event.respondWith(
-        fetch(event.request)
-            .catch(() => caches.match(event.request))
+        fetch(request)
+            .catch(() => caches.match(request))
     );
 });

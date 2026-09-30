@@ -66,6 +66,8 @@ function bindEvents() {
     document.getElementById("profile-form").addEventListener("submit", guardarPerfil);
     const tutorForm = document.getElementById("tutor-form");
     if (tutorForm) tutorForm.addEventListener("submit", guardarTutor);
+    const telegramButton = document.getElementById("btn-vincular-telegram");
+    if (telegramButton) telegramButton.addEventListener("click", vincularTelegram);
     document.getElementById("panic-button").addEventListener("click", enviarAlertaPanic);
     document.getElementById("zones-button").addEventListener("click", toggleZonasCriticas);
     document.getElementById("trip-control-button").addEventListener("click", manejarControlRecorrido);
@@ -802,6 +804,7 @@ async function trazarRuta(destino, savedPlaceKey = null) {
             if (config.API_BASE_URL) {
                 sendToApi("/viajes/notificar", {
                     idViaje: currentTrip.id_viaje,
+                    idUsuario: currentTrip.id_usuario,
                     nombreUsuario: getUserFullName(activeUser),
                     estado: "INICIADO",
                     origen: {
@@ -925,6 +928,7 @@ function recalcularYEscalarAlerta(nuevaPosicion) {
             if (config.API_BASE_URL) {
                 sendToApi("/alertas/desvio", {
                     idViaje: currentTrip?.id_viaje || null,
+                    idUsuario: activeUser?.id_usuario || null,
                     nombreUsuario: getUserFullName(activeUser),
                     numeroDesvios: deviationCount,
                     destino: currentTrip?.nombre_destino || "Destino no disponible",
@@ -991,6 +995,7 @@ function finalizarRuta(finalState = "FINALIZADO") {
         if (config.API_BASE_URL) {
             sendToApi("/viajes/notificar", {
                 idViaje: currentTrip.id_viaje,
+                idUsuario: currentTrip.id_usuario,
                 nombreUsuario: getUserFullName(activeUser),
                 estado: "FINALIZADO",
                 origen: {
@@ -1220,6 +1225,7 @@ async function enviarAlertaPanic() {
         await sendToApi("/alertas/panico", {
             id_alerta: alert.id_alerta,
             idViaje: alert.id_viaje,
+            idUsuario: activeUser?.id_usuario || null,
             nombreUsuario: getUserFullName(activeUser),
             telefonoUsuario: activeUser?.telefono || "No disponible",
             lat: alert.lat_incidente,
@@ -1286,6 +1292,13 @@ function llenarFormularioTutor(tutor) {
     setInputValue("tutor-telefono", tutor?.telefono || "");
     setInputValue("tutor-parentesco", tutor?.parentesco || "");
     setInputValue("tutor-email", tutor?.email || "");
+
+    const status = document.getElementById("tutor-telegram-status");
+    if (status) {
+        status.textContent = tutor?.telegram_chat_id
+            ? `Telegram vinculado · chat ${tutor.telegram_chat_id}`
+            : "Telegram sin vincular.";
+    }
 }
 
 async function guardarTutor(event) {
@@ -1308,7 +1321,8 @@ async function guardarTutor(event) {
         nombre: readInputValue("tutor-nombre"),
         telefono: normalizePhone(readInputValue("tutor-telefono")),
         parentesco: readInputValue("tutor-parentesco") || null,
-        email: readInputValue("tutor-email").toLowerCase() || null
+        email: readInputValue("tutor-email").toLowerCase() || null,
+        telegram_chat_id: obtenerTutorLocal(activeUser.id_usuario)?.telegram_chat_id || null
     };
 
     try {
@@ -1334,6 +1348,32 @@ async function guardarTutor(event) {
         showMessage(message, "API no disponible. Datos del tutor guardados localmente.");
         showToast("Tutor guardado en respaldo local.");
         console.warn("No se pudo guardar el tutor en la API.", error);
+    }
+}
+
+async function vincularTelegram() {
+    const message = document.getElementById("tutor-message");
+    const status = document.getElementById("tutor-telegram-status");
+    const usuarioId = activeUser?.id_usuario;
+    if (!usuarioId) {
+        showMessage(message, "Inicia sesión para vincular Telegram.");
+        return;
+    }
+
+    const popup = window.open("about:blank", "_blank");
+    try {
+        const response = await fetch(getApiUrl(`/telegram/enlace/${encodeURIComponent(usuarioId)}`));
+        const payload = await response.json();
+        if (!response.ok || !payload.url) throw new Error(payload.error || "No se pudo generar el enlace de Telegram.");
+
+        if (popup) popup.location.href = payload.url;
+        else window.location.href = payload.url;
+        if (status) status.textContent = "Enlace de Telegram abierto. Envía /start para completar la vinculación.";
+        showToast("Enlace de Telegram abierto.");
+    } catch (error) {
+        popup?.close();
+        showMessage(message, error.message);
+        console.warn("No se pudo generar el enlace de Telegram.", error);
     }
 }
 
@@ -1594,6 +1634,7 @@ function createTutor(data = {}) {
         telefono: data.telefono || "",
         parentesco: data.parentesco || data.relacion || "",
         email: data.email || null,
+        telegram_chat_id: data.telegram_chat_id || null,
         permisos: Array.isArray(data.permisos) ? data.permisos : []
     };
 }
