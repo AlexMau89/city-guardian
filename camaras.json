@@ -12,18 +12,6 @@
     "lon": "-99.144695"
   },
   {
-    "id": "CAM-08750",
-    "direccion": "N/A",
-    "esquina": "ESTADO DE BAJA CALIFORNIA NORTE",
-    "colonia": "PROVIDENCIA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.482408",
-    "lon": "-99.075298"
-  },
-  {
     "id": "CAM-01572",
     "direccion": "N/A",
     "esquina": "C. 312",
@@ -34,30 +22,6 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.498739",
     "lon": "-99.085684"
-  },
-  {
-    "id": "CAM-08832",
-    "direccion": "N/A",
-    "esquina": "C. PINO SUAREZ",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.539551",
-    "lon": "-99.147856"
-  },
-  {
-    "id": "CAM-01251",
-    "direccion": "N/A",
-    "esquina": "AV. RICARTE",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.489739",
-    "lon": "-99.142103"
   },
   {
     "id": "CAM-08442",
@@ -72,66 +36,6 @@
     "lon": "-99.148816"
   },
   {
-    "id": "CAM-08433",
-    "direccion": "N/A",
-    "esquina": "ENTRE ANDADOR 33 DEL TEMOLUCO Y AVENIDA DE LA INSULA",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.526398",
-    "lon": "-99.152333"
-  },
-  {
-    "id": "CAM-06374",
-    "direccion": "N/A",
-    "esquina": "ENTRE CALZ. TICOMAN Y C. CANDELARIA",
-    "colonia": "SAN JUAN TICOMAN BARRIO (LA CANDELARIA BARRIO TICOMAN)",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.519224",
-    "lon": "-99.134666"
-  },
-  {
-    "id": "CAM-06320",
-    "direccion": "N/A",
-    "esquina": "CJON. WASHINGTON",
-    "colonia": "BARRIO SAN JUAN Y GUADALUPE TICOMAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.520804",
-    "lon": "-99.131117"
-  },
-  {
-    "id": "CAM-06233",
-    "direccion": "N/A",
-    "esquina": "ENTRE RIO SAN JAVIER Y ANDADOR LA SIERRA",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.528972",
-    "lon": "-99.151563"
-  },
-  {
-    "id": "CAM-08573",
-    "direccion": "N/A",
-    "esquina": "ENTRE AV PREPARATORIAS Y EMILIANO ZAPATA",
-    "colonia": "ZONA ESCOLAR ORIENTE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.537087",
-    "lon": "-99.144241"
-  },
-  {
     "id": "CAM-01076",
     "direccion": "N/A",
     "esquina": "NORTE 23 A",
@@ -144,16 +48,16 @@
     "lon": "-99.148386"
   },
   {
-    "id": "CAM-08438",
+    "id": "CAM-00499",
     "direccion": "N/A",
-    "esquina": "ANDADOR 45 DEL TEMOLUCO",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "esquina": "AV. JOSE LORETO FABELA",
+    "colonia": "U.H. SAN JUAN DE ARAGON II SECCION",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.528738",
-    "lon": "-99.153641"
+    "lat": "19.455645",
+    "lon": "-99.078982"
   },
   {
     "id": "CAM-08670",
@@ -192,18 +96,6 @@
     "lon": "-99.149259"
   },
   {
-    "id": "CAM-00472",
-    "direccion": "N/A",
-    "esquina": "ANTONIO CASO",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.540515",
-    "lon": "-99.150035"
-  },
-  {
     "id": "CAM-01046",
     "direccion": "N/A",
     "esquina": "ENTRE C. 311 Y C. 315",
@@ -216,28 +108,16 @@
     "lon": "-99.085343"
   },
   {
-    "id": "CAM-08468",
+    "id": "CAM-00472",
     "direccion": "N/A",
-    "esquina": "4° ANDADOR RIO SAN JOAQUIN",
-    "colonia": "COL.: U.H. EL ARBOLILLO 1",
+    "esquina": "ANTONIO CASO",
+    "colonia": "ZONA ESCOLAR",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.531986",
-    "lon": "-99.148726"
-  },
-  {
-    "id": "CAM-01699",
-    "direccion": "N/A",
-    "esquina": "C. GRAN CANAL",
-    "colonia": "NUEVA ATZACOALCO",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.497882",
-    "lon": "-99.082872"
+    "lat": "19.540515",
+    "lon": "-99.150035"
   },
   {
     "id": "CAM-01857",
@@ -252,40 +132,16 @@
     "lon": "-99.121338"
   },
   {
-    "id": "CAM-01223",
+    "id": "CAM-01699",
     "direccion": "N/A",
-    "esquina": "AV. 17 DE MAYO",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
+    "esquina": "C. GRAN CANAL",
+    "colonia": "NUEVA ATZACOALCO",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "SIN BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.492694",
-    "lon": "-99.142496"
-  },
-  {
-    "id": "CAM-06309",
-    "direccion": "N/A",
-    "esquina": "AV. CALDAS",
-    "colonia": "VALLE DE TEPEYAC",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.487995",
-    "lon": "-99.14111"
-  },
-  {
-    "id": "CAM-01071",
-    "direccion": "N/A",
-    "esquina": "AV. DE LA INSULA",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.527769",
-    "lon": "-99.151401"
+    "lat": "19.497882",
+    "lon": "-99.082872"
   },
   {
     "id": "CAM-06214",
@@ -298,18 +154,6 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.500983",
     "lon": "-99.117434"
-  },
-  {
-    "id": "CAM-01601",
-    "direccion": "N/A",
-    "esquina": "1RA. CDA. AMISTAD",
-    "colonia": "AMPL. PROVIDENCIA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.481044",
-    "lon": "-99.077008"
   },
   {
     "id": "CAM-06373",
@@ -336,30 +180,6 @@
     "lon": "-99.076205"
   },
   {
-    "id": "CAM-06273",
-    "direccion": "N/A",
-    "esquina": "ENTRE AV. DE LA MAREJADA Y AND. 37",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.528771",
-    "lon": "-99.152067"
-  },
-  {
-    "id": "CAM-06220",
-    "direccion": "N/A",
-    "esquina": "ENTRE CALZ. TICOMAN  Y  CJON. CAÑADA",
-    "colonia": "BARRIO LA CANDELARIA TICOMAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.519282",
-    "lon": "-99.133512"
-  },
-  {
     "id": "CAM-07751",
     "direccion": "N/A",
     "esquina": "AV. PREPARATORIA",
@@ -370,18 +190,6 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.539052",
     "lon": "-99.145711"
-  },
-  {
-    "id": "CAM-08346",
-    "direccion": "N/A",
-    "esquina": "C. CAMINO DE LA UNION",
-    "colonia": "PROVIDENCIA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.482616",
-    "lon": "-99.07627"
   },
   {
     "id": "CAM-08230",
@@ -408,18 +216,6 @@
     "lon": "-99.145344"
   },
   {
-    "id": "CAM-08267",
-    "direccion": "N/A",
-    "esquina": "LEON GUZMAN",
-    "colonia": "CONSTITUCION DE LA REPUBLICA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.486435",
-    "lon": "-99.100895"
-  },
-  {
     "id": "CAM-06213",
     "direccion": "N/A",
     "esquina": "C. CAMINO CAMPESTRE",
@@ -432,28 +228,16 @@
     "lon": "-99.077766"
   },
   {
-    "id": "CAM-08839",
+    "id": "CAM-08267",
     "direccion": "N/A",
-    "esquina": "C. TORRES QUINTERO",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.541024",
-    "lon": "-99.148058"
-  },
-  {
-    "id": "CAM-01075",
-    "direccion": "N/A",
-    "esquina": "NORTE 31 A",
-    "colonia": "U. H. LINDAVISTA VALLEJO",
+    "esquina": "LEON GUZMAN",
+    "colonia": "CONSTITUCION DE LA REPUBLICA",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.495606",
-    "lon": "-99.150067"
+    "lat": "19.486435",
+    "lon": "-99.100895"
   },
   {
     "id": "CAM-08426",
@@ -466,30 +250,6 @@
     "altavoz": "SIN ALTAVOZ",
     "lat": "19.497137",
     "lon": "-99.080575"
-  },
-  {
-    "id": "CAM-08511",
-    "direccion": "N/A",
-    "esquina": "LEON GUZMAN",
-    "colonia": "CONSTITUCION DE LA REPUBLICA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.484682",
-    "lon": "-99.100446"
-  },
-  {
-    "id": "CAM-07555",
-    "direccion": "N/A",
-    "esquina": "MATEO ECHAIZ",
-    "colonia": "CONSTITUCION DE LA REPUBLICA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.485363",
-    "lon": "-99.102042"
   },
   {
     "id": "CAM-01827",
@@ -516,18 +276,6 @@
     "lon": "-99.081807"
   },
   {
-    "id": "CAM-08837",
-    "direccion": "N/A",
-    "esquina": "MAESTRO RURAL",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.539495",
-    "lon": "-99.149219"
-  },
-  {
     "id": "CAM-08229",
     "direccion": "N/A",
     "esquina": "NORTE 23-A",
@@ -538,6 +286,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.495197",
     "lon": "-99.14752"
+  },
+  {
+    "id": "CAM-08837",
+    "direccion": "N/A",
+    "esquina": "MAESTRO RURAL",
+    "colonia": "ZONA ESCOLAR",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.539495",
+    "lon": "-99.149219"
   },
   {
     "id": "CAM-08225",
@@ -552,16 +312,16 @@
     "lon": "-99.147599"
   },
   {
-    "id": "CAM-01020",
+    "id": "CAM-01256",
     "direccion": "N/A",
-    "esquina": "C. CAMINO CENTRAL SUR",
-    "colonia": "CAMPESTRE ARAGON",
+    "esquina": "2a DE 565",
+    "colonia": "U. H. SAN JUAN DE ARAGON",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.485641",
-    "lon": "-99.078464"
+    "lat": "19.450794",
+    "lon": "-99.080257"
   },
   {
     "id": "CAM-01889",
@@ -576,18 +336,6 @@
     "lon": "-99.150857"
   },
   {
-    "id": "CAM-08422",
-    "direccion": "N/A",
-    "esquina": "PRIVADA DE LOPEZ MATEOS",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.538512",
-    "lon": "-99.14735"
-  },
-  {
     "id": "CAM-08835",
     "direccion": "N/A",
     "esquina": "C. RAMON ZAPENA",
@@ -600,16 +348,28 @@
     "lon": "-99.150346"
   },
   {
-    "id": "CAM-08362",
+    "id": "CAM-05557",
     "direccion": "N/A",
-    "esquina": "C. RICARTE",
-    "colonia": "VALLE DEL TEPEYAC",
+    "esquina": "C. NORTE 84 A",
+    "colonia": "GERTRUDIS SANCHEZ  2DA. SECCION",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.488968",
-    "lon": "-99.138967"
+    "lat": "19.46549",
+    "lon": "-99.100038"
+  },
+  {
+    "id": "CAM-08564",
+    "direccion": "N/A",
+    "esquina": "C. NORTE 88-A",
+    "colonia": "GERTRUDIS SANCHEZ 2a SECC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.463111",
+    "lon": "-99.099166"
   },
   {
     "id": "CAM-08700",
@@ -622,6 +382,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.485029",
     "lon": "-99.074975"
+  },
+  {
+    "id": "CAM-06218",
+    "direccion": "N/A",
+    "esquina": "NORTE 84 - A",
+    "colonia": "GERTRUDIS SANCHEZ  2DA. SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.464535",
+    "lon": "-99.100396"
   },
   {
     "id": "CAM-08781",
@@ -648,16 +420,16 @@
     "lon": "-99.14823"
   },
   {
-    "id": "CAM-08378",
+    "id": "CAM-06252",
     "direccion": "N/A",
-    "esquina": "DIAGONAL DE CANTERAS",
-    "colonia": "BARRIO SAN JUAN Y GUADALUPE TICOMAN",
+    "esquina": "ESQ. 3era. CDA. AVE. 507",
+    "colonia": "U. H. SAN JUAN DE ARAGÓN 1ra.SECCIÓN",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.520887",
-    "lon": "-99.126356"
+    "lat": "19.460621",
+    "lon": "-99.093986"
   },
   {
     "id": "CAM-08233",
@@ -672,64 +444,16 @@
     "lon": "-99.081233"
   },
   {
-    "id": "CAM-01931",
+    "id": "CAM-08378",
     "direccion": "N/A",
-    "esquina": "C. CANDELARIA",
-    "colonia": "CANDELARIA TICOMAN",
+    "esquina": "DIAGONAL DE CANTERAS",
+    "colonia": "BARRIO SAN JUAN Y GUADALUPE TICOMAN",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.520525",
-    "lon": "-99.135525"
-  },
-  {
-    "id": "CAM-05520",
-    "direccion": "N/A",
-    "esquina": "C. 314",
-    "colonia": "NUEVA ATZACOALCO",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.499455",
-    "lon": "-99.081758"
-  },
-  {
-    "id": "CAM-08800",
-    "direccion": "N/A",
-    "esquina": "ENTRE CARRETERA TENAYUCA - CHALMITA Y VIRGINIA FABREGAS",
-    "colonia": "U.H. AIDE SOLIS",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.53329",
-    "lon": "-99.145772"
-  },
-  {
-    "id": "CAM-01829",
-    "direccion": "N/A",
-    "esquina": "C. 16 DE SEPTIEMBRE DE 1823",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.495215",
-    "lon": "-99.145957"
-  },
-  {
-    "id": "CAM-08532",
-    "direccion": "N/A",
-    "esquina": "ENTRE AVENIDA EMILIANO ZAPATA Y AVENIDA PREPARATORIAS",
-    "colonia": "EL ARBOLILLO II CROC",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.535468",
-    "lon": "-99.145812"
+    "lat": "19.520887",
+    "lon": "-99.126356"
   },
   {
     "id": "CAM-08669",
@@ -742,6 +466,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.533622",
     "lon": "-99.148308"
+  },
+  {
+    "id": "CAM-05513",
+    "direccion": "N/A",
+    "esquina": "AV. VICTORIA ORIENTE",
+    "colonia": "GERTRUDIS SANCHEZ  2DA. SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.464823",
+    "lon": "-99.097158"
   },
   {
     "id": "CAM-08833",
@@ -768,18 +504,6 @@
     "lon": "-99.147715"
   },
   {
-    "id": "CAM-01598",
-    "direccion": "N/A",
-    "esquina": "C. ESTADO DE BAJA CALIFORNIA SUR",
-    "colonia": "AMPLIACION LA PROVIDENCIA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.480884",
-    "lon": "-99.076465"
-  },
-  {
     "id": "CAM-08469",
     "direccion": "N/A",
     "esquina": "2° ANDADOR RIO SAN JAVIER",
@@ -790,18 +514,6 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.528976",
     "lon": "-99.15001"
-  },
-  {
-    "id": "CAM-08678",
-    "direccion": "N/A",
-    "esquina": "CALLE 319",
-    "colonia": "NUEVA ATZACOALCO",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.500524",
-    "lon": "-99.084055"
   },
   {
     "id": "CAM-08529",
@@ -816,40 +528,28 @@
     "lon": "-99.144134"
   },
   {
-    "id": "CAM-08699",
+    "id": "CAM-01647",
     "direccion": "N/A",
-    "esquina": "EDO DE CHIHUAHUA",
-    "colonia": "LA PROVIDENCIA",
+    "esquina": "C. ORIENTE 107",
+    "colonia": "GERTRUDIS SANCHEZ SECC. II",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.462041",
+    "lon": "-99.100013"
+  },
+  {
+    "id": "CAM-07462",
+    "direccion": "N/A",
+    "esquina": "C. ORIENTE 117",
+    "colonia": "GERTRUDIS SANCHEZ  2DA. SECCION",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "SIN BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.484524",
-    "lon": "-99.073527"
-  },
-  {
-    "id": "CAM-01595",
-    "direccion": "N/A",
-    "esquina": "C. CONSTITUCION DE LA REPUBLICA",
-    "colonia": "PROVIDENCIA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.482025",
-    "lon": "-99.073935"
-  },
-  {
-    "id": "CAM-08359",
-    "direccion": "N/A",
-    "esquina": "CELAYA",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.491091",
-    "lon": "-99.139979"
+    "lat": "19.466612",
+    "lon": "-99.10276"
   },
   {
     "id": "CAM-07705",
@@ -864,28 +564,28 @@
     "lon": "-99.077261"
   },
   {
-    "id": "CAM-08439",
+    "id": "CAM-08359",
     "direccion": "N/A",
-    "esquina": "AND. 25 DEL TEMOLUCO",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.527159",
-    "lon": "-99.149961"
-  },
-  {
-    "id": "CAM-08466",
-    "direccion": "N/A",
-    "esquina": "2DO DE RIO SAN JOAQUIN",
-    "colonia": "EL ARBOLILLO",
+    "esquina": "CELAYA",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.529916",
-    "lon": "-99.14962"
+    "lat": "19.491091",
+    "lon": "-99.139979"
+  },
+  {
+    "id": "CAM-01924",
+    "direccion": "N/A",
+    "esquina": "AV. 606",
+    "colonia": "U. H. SAN JUAN DE ARAGON 3a.SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.453103",
+    "lon": "-99.075763"
   },
   {
     "id": "CAM-08430",
@@ -900,18 +600,6 @@
     "lon": "-99.152935"
   },
   {
-    "id": "CAM-01596",
-    "direccion": "N/A",
-    "esquina": "C. ESTADO DE TLAXCALA",
-    "colonia": "CAMPESTRE ARAGON",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.48385",
-    "lon": "-99.075975"
-  },
-  {
     "id": "CAM-08441",
     "direccion": "N/A",
     "esquina": "ENTRE ANDADOR DE LA LLOVIZNA Y AVENIDA DE LAS BRISAS",
@@ -922,54 +610,6 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.526888",
     "lon": "-99.150237"
-  },
-  {
-    "id": "CAM-01578",
-    "direccion": "N/A",
-    "esquina": "C. LEON GUZMAN",
-    "colonia": "CONSTITUCION DE LA REPUBLICA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.484146",
-    "lon": "-99.100303"
-  },
-  {
-    "id": "CAM-08705",
-    "direccion": "N/A",
-    "esquina": "C. ESTADO DE SINALOA",
-    "colonia": "PROVIDENCIA",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.483051",
-    "lon": "-99.073564"
-  },
-  {
-    "id": "CAM-01694",
-    "direccion": "N/A",
-    "esquina": "C. 45 METROS",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.49161",
-    "lon": "-99.141352"
-  },
-  {
-    "id": "CAM-01065",
-    "direccion": "N/A",
-    "esquina": "C. ANTONIO CASO",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.539899",
-    "lon": "-99.148943"
   },
   {
     "id": "CAM-08443",
@@ -984,28 +624,16 @@
     "lon": "-99.145668"
   },
   {
-    "id": "CAM-08437",
+    "id": "CAM-01065",
     "direccion": "N/A",
-    "esquina": "ENTRE AVENIDA DE LAS BRISAS Y C. RIO SAN JAVIER",
-    "colonia": "ACUEDUCTO DE GUADALUPE",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.52956",
-    "lon": "-99.15348"
-  },
-  {
-    "id": "CAM-01063",
-    "direccion": "N/A",
-    "esquina": "ENTRE AV. PREPARATORIAS Y AV. EMILIANO ZAPATA",
-    "colonia": "U.H. EL ARBOLILLO 2 C.T.M.",
+    "esquina": "C. ANTONIO CASO",
+    "colonia": "ZONA ESCOLAR",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "SIN ALTAVOZ",
-    "lat": "19.535985",
-    "lon": "-99.147074"
+    "lat": "19.539899",
+    "lon": "-99.148943"
   },
   {
     "id": "CAM-08799",
@@ -1020,16 +648,16 @@
     "lon": "-99.147737"
   },
   {
-    "id": "CAM-08533",
+    "id": "CAM-01703",
     "direccion": "N/A",
-    "esquina": "ENTRE AVENIDA PREPARATORIAS Y AVENIDA EMILIANO ZAPATA",
-    "colonia": "EL ARBOLILLO II CROC",
-    "alcaldia": "GUSTAVO A. MADERO",
+    "esquina": "C. BRIGADA CARBAJAL",
+    "colonia": "EJERCITO DE ORIENTE SECC. 1",
+    "alcaldia": "IZTAPALAPA",
     "poste": "9m",
     "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.535179",
-    "lon": "-99.144888"
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.481881",
+    "lon": "-99.078564"
   },
   {
     "id": "CAM-01600",
@@ -1044,16 +672,16 @@
     "lon": "-99.080174"
   },
   {
-    "id": "CAM-01703",
+    "id": "CAM-01573",
     "direccion": "N/A",
-    "esquina": "C. BRIGADA CARBAJAL",
-    "colonia": "EJERCITO DE ORIENTE SECC. 1",
-    "alcaldia": "IZTAPALAPA",
+    "esquina": "C. HENRY FORD",
+    "colonia": "FAJA DE ORO",
+    "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "SIN ALTAVOZ",
-    "lat": "19.481881",
-    "lon": "-99.078564"
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.464814",
+    "lon": "-99.103987"
   },
   {
     "id": "CAM-08838",
@@ -1068,18 +696,6 @@
     "lon": "-99.148476"
   },
   {
-    "id": "CAM-01801",
-    "direccion": "N/A",
-    "esquina": "CARRETERA TENAYUCA-CHALMITA",
-    "colonia": "ZONA ESCOLAR",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.534603",
-    "lon": "-99.148729"
-  },
-  {
     "id": "CAM-01059",
     "direccion": "N/A",
     "esquina": "C. FRANCISCO VILLA",
@@ -1092,16 +708,16 @@
     "lon": "-99.151814"
   },
   {
-    "id": "CAM-08263",
+    "id": "CAM-05622",
     "direccion": "N/A",
-    "esquina": "C. MOCTEZUMA",
-    "colonia": "CHURUBUSCO TEPEYAC",
+    "esquina": "C. HENRY FORD",
+    "colonia": "GERTRUDIS SANCHEZ  2DA. SECCION",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.487441",
-    "lon": "-99.138784"
+    "lat": "19.463551",
+    "lon": "-99.1004"
   },
   {
     "id": "CAM-08467",
@@ -1128,18 +744,6 @@
     "lon": "-99.146663"
   },
   {
-    "id": "CAM-01902",
-    "direccion": "N/A",
-    "esquina": "AV. ACUEDUCTO",
-    "colonia": "SAN PEDRO ZACATENCO",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.501803",
-    "lon": "-99.117993"
-  },
-  {
     "id": "CAM-08637",
     "direccion": "N/A",
     "esquina": "ENTRE C. PONIENTE 152 Y C. NORTE 23-A",
@@ -1152,64 +756,16 @@
     "lon": "-99.148838"
   },
   {
-    "id": "CAM-08789",
+    "id": "CAM-01644",
     "direccion": "N/A",
-    "esquina": "C. RIO SAN JAVIER",
-    "colonia": "U.H. ACUEDUCTO DE GUADALUPE",
+    "esquina": "AV. 608",
+    "colonia": "U.H. SAN JUAN DE ARAGON 3ra. SECCION",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.529877",
-    "lon": "-99.152785"
-  },
-  {
-    "id": "CAM-06238",
-    "direccion": "N/A",
-    "esquina": "C. 311",
-    "colonia": "NUEVA ATZACOALCO",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.499151",
-    "lon": "-99.08659"
-  },
-  {
-    "id": "CAM-01839",
-    "direccion": "N/A",
-    "esquina": "AV. FORTUNA",
-    "colonia": "MAGDALENA DE LAS SALINAS",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.486232",
-    "lon": "-99.142986"
-  },
-  {
-    "id": "CAM-01086",
-    "direccion": "N/A",
-    "esquina": "AV. RIO DE LOS REMEDIOS",
-    "colonia": "LAGUNA DE TICOMAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.517733",
-    "lon": "-99.128889"
-  },
-  {
-    "id": "CAM-05552",
-    "direccion": "N/A",
-    "esquina": "C. BUENAVISTA",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.496748",
-    "lon": "-99.147122"
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.452102",
+    "lon": "-99.077142"
   },
   {
     "id": "CAM-08676",
@@ -1224,16 +780,16 @@
     "lon": "-99.083723"
   },
   {
-    "id": "CAM-06279",
+    "id": "CAM-05552",
     "direccion": "N/A",
-    "esquina": "C. CHACO",
-    "colonia": "RESIDENCIAL ZACATENCO",
+    "esquina": "C. BUENAVISTA",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.500365",
-    "lon": "-99.123309"
+    "lat": "19.496748",
+    "lon": "-99.147122"
   },
   {
     "id": "CAM-01569",
@@ -1248,16 +804,16 @@
     "lon": "-99.117905"
   },
   {
-    "id": "CAM-01805",
+    "id": "CAM-06279",
     "direccion": "N/A",
-    "esquina": "C. 30 DE JUNIO",
-    "colonia": "SANTA MARIA TICOMAN",
+    "esquina": "C. CHACO",
+    "colonia": "RESIDENCIAL ZACATENCO",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.517232",
-    "lon": "-99.127392"
+    "lat": "19.500365",
+    "lon": "-99.123309"
   },
   {
     "id": "CAM-08429",
@@ -1272,28 +828,28 @@
     "lon": "-99.151733"
   },
   {
-    "id": "CAM-05600",
+    "id": "CAM-01805",
     "direccion": "N/A",
-    "esquina": "C. EJIDO",
-    "colonia": "25 DE JULIO",
+    "esquina": "C. 30 DE JUNIO",
+    "colonia": "SANTA MARIA TICOMAN",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
-    "boton": "SIN BOTON",
+    "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.496481",
-    "lon": "-99.082719"
+    "lat": "19.517232",
+    "lon": "-99.127392"
   },
   {
-    "id": "CAM-05512",
+    "id": "CAM-05631",
     "direccion": "N/A",
-    "esquina": "AVENIDA PREPARATORIAS",
-    "colonia": "ZONA ESCOLAR",
+    "esquina": "C. ORIENTE 119",
+    "colonia": "GERTRUDIS SANCHEZ 2a SECC.",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
-    "boton": "SIN BOTON",
+    "boton": "CON BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.531864",
-    "lon": "-99.149784"
+    "lat": "19.466677",
+    "lon": "-99.099187"
   },
   {
     "id": "CAM-06267",
@@ -1308,40 +864,16 @@
     "lon": "-99.132286"
   },
   {
-    "id": "CAM-00496",
+    "id": "CAM-05512",
     "direccion": "N/A",
-    "esquina": "C. MANDUJANO",
-    "colonia": "SAN BARTOLO ATEPEHUACAN",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.491952",
-    "lon": "-99.142682"
-  },
-  {
-    "id": "CAM-08834",
-    "direccion": "N/A",
-    "esquina": "C. LUCIO TAPIA",
+    "esquina": "AVENIDA PREPARATORIAS",
     "colonia": "ZONA ESCOLAR",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "SIN BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.539548",
-    "lon": "-99.150659"
-  },
-  {
-    "id": "CAM-06295",
-    "direccion": "N/A",
-    "esquina": "EJE CENTRAL",
-    "colonia": "U. H. LINDAVISTA VALLEJO",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.49925",
-    "lon": "-99.150112"
+    "lat": "19.531864",
+    "lon": "-99.149784"
   },
   {
     "id": "CAM-01225",
@@ -1356,28 +888,16 @@
     "lon": "-99.14433"
   },
   {
-    "id": "CAM-05551",
+    "id": "CAM-01949",
     "direccion": "N/A",
-    "esquina": "EJE CENTRAL LAZARO CARDENAS",
-    "colonia": "VALLE DEL TEPEYAC",
+    "esquina": "AV.602",
+    "colonia": "U.H. SAN JUAN DE ARAGON 3RA. SECC.",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
-    "boton": "CON BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.489204",
-    "lon": "-99.144161"
-  },
-  {
-    "id": "CAM-01860",
-    "direccion": "N/A",
-    "esquina": "C. TECNOLOGIA DE EXPLORACION",
-    "colonia": "SOLIDARIDAD NACIONAL",
-    "alcaldia": "GUSTAVO A. MADERO",
-    "poste": "9m",
-    "boton": "CON BOTON",
+    "boton": "SIN BOTON",
     "altavoz": "SIN ALTAVOZ",
-    "lat": "19.532189",
-    "lon": "-99.152983"
+    "lat": "19.451387",
+    "lon": "-99.07818"
   },
   {
     "id": "CAM-01859",
@@ -1404,16 +924,16 @@
     "lon": "-99.120305"
   },
   {
-    "id": "CAM-08723",
+    "id": "CAM-08575",
     "direccion": "N/A",
-    "esquina": "ENTRE C. PONIENTE 152 Y C. NORTE 23-A",
-    "colonia": "U.H. LINDAVISTA VALLEJO",
+    "esquina": "ENTRE C. GABRIEL HERRERA Y C. PINO SUAREZ",
+    "colonia": "ZONA ESCOLAR",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "SIN BOTON",
-    "altavoz": "CON ALTAVOZ",
-    "lat": "19.496118",
-    "lon": "-99.14795"
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.538459",
+    "lon": "-99.145806"
   },
   {
     "id": "CAM-01939",
@@ -1428,16 +948,844 @@
     "lon": "-99.083757"
   },
   {
-    "id": "CAM-08575",
+    "id": "CAM-08750",
     "direccion": "N/A",
-    "esquina": "ENTRE C. GABRIEL HERRERA Y C. PINO SUAREZ",
+    "esquina": "ESTADO DE BAJA CALIFORNIA NORTE",
+    "colonia": "PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.482408",
+    "lon": "-99.075298"
+  },
+  {
+    "id": "CAM-08832",
+    "direccion": "N/A",
+    "esquina": "C. PINO SUAREZ",
     "colonia": "ZONA ESCOLAR",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
     "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.539551",
+    "lon": "-99.147856"
+  },
+  {
+    "id": "CAM-01251",
+    "direccion": "N/A",
+    "esquina": "AV. RICARTE",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.489739",
+    "lon": "-99.142103"
+  },
+  {
+    "id": "CAM-06374",
+    "direccion": "N/A",
+    "esquina": "ENTRE CALZ. TICOMAN Y C. CANDELARIA",
+    "colonia": "SAN JUAN TICOMAN BARRIO (LA CANDELARIA BARRIO TICOMAN)",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.519224",
+    "lon": "-99.134666"
+  },
+  {
+    "id": "CAM-08433",
+    "direccion": "N/A",
+    "esquina": "ENTRE ANDADOR 33 DEL TEMOLUCO Y AVENIDA DE LA INSULA",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
     "altavoz": "SIN ALTAVOZ",
-    "lat": "19.538459",
-    "lon": "-99.145806"
+    "lat": "19.526398",
+    "lon": "-99.152333"
+  },
+  {
+    "id": "CAM-06320",
+    "direccion": "N/A",
+    "esquina": "CJON. WASHINGTON",
+    "colonia": "BARRIO SAN JUAN Y GUADALUPE TICOMAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.520804",
+    "lon": "-99.131117"
+  },
+  {
+    "id": "CAM-08573",
+    "direccion": "N/A",
+    "esquina": "ENTRE AV PREPARATORIAS Y EMILIANO ZAPATA",
+    "colonia": "ZONA ESCOLAR ORIENTE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.537087",
+    "lon": "-99.144241"
+  },
+  {
+    "id": "CAM-06233",
+    "direccion": "N/A",
+    "esquina": "ENTRE RIO SAN JAVIER Y ANDADOR LA SIERRA",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.528972",
+    "lon": "-99.151563"
+  },
+  {
+    "id": "CAM-08375",
+    "direccion": "N/A",
+    "esquina": "AVENIDA 517",
+    "colonia": "U. H. SAN JUAN DE ARAGON 1RA. SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.462158",
+    "lon": "-99.091372"
+  },
+  {
+    "id": "CAM-08438",
+    "direccion": "N/A",
+    "esquina": "ANDADOR 45 DEL TEMOLUCO",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.528738",
+    "lon": "-99.153641"
+  },
+  {
+    "id": "CAM-08468",
+    "direccion": "N/A",
+    "esquina": "4° ANDADOR RIO SAN JOAQUIN",
+    "colonia": "COL.: U.H. EL ARBOLILLO 1",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.531986",
+    "lon": "-99.148726"
+  },
+  {
+    "id": "CAM-06309",
+    "direccion": "N/A",
+    "esquina": "AV. CALDAS",
+    "colonia": "VALLE DE TEPEYAC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.487995",
+    "lon": "-99.14111"
+  },
+  {
+    "id": "CAM-01223",
+    "direccion": "N/A",
+    "esquina": "AV. 17 DE MAYO",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.492694",
+    "lon": "-99.142496"
+  },
+  {
+    "id": "CAM-01071",
+    "direccion": "N/A",
+    "esquina": "AV. DE LA INSULA",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.527769",
+    "lon": "-99.151401"
+  },
+  {
+    "id": "CAM-01601",
+    "direccion": "N/A",
+    "esquina": "1RA. CDA. AMISTAD",
+    "colonia": "AMPL. PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.481044",
+    "lon": "-99.077008"
+  },
+  {
+    "id": "CAM-01646",
+    "direccion": "N/A",
+    "esquina": "C. NORTE 82 B",
+    "colonia": "GERTRUDIS SANCHEZ 2A SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.46279",
+    "lon": "-99.102081"
+  },
+  {
+    "id": "CAM-06220",
+    "direccion": "N/A",
+    "esquina": "ENTRE CALZ. TICOMAN  Y  CJON. CAÑADA",
+    "colonia": "BARRIO LA CANDELARIA TICOMAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.519282",
+    "lon": "-99.133512"
+  },
+  {
+    "id": "CAM-06273",
+    "direccion": "N/A",
+    "esquina": "ENTRE AV. DE LA MAREJADA Y AND. 37",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.528771",
+    "lon": "-99.152067"
+  },
+  {
+    "id": "CAM-08346",
+    "direccion": "N/A",
+    "esquina": "C. CAMINO DE LA UNION",
+    "colonia": "PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.482616",
+    "lon": "-99.07627"
+  },
+  {
+    "id": "CAM-05542",
+    "direccion": "N/A",
+    "esquina": "C. NORTE 82-B",
+    "colonia": "GERTRUDIS SANCHEZ  2DA. SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.464935",
+    "lon": "-99.101293"
+  },
+  {
+    "id": "CAM-00513",
+    "direccion": "N/A",
+    "esquina": "5TA CDA. AV. 565",
+    "colonia": "U. H. SAN JUAN DE ARAGON 2DA SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.455193",
+    "lon": "-99.081088"
+  },
+  {
+    "id": "CAM-08839",
+    "direccion": "N/A",
+    "esquina": "C. TORRES QUINTERO",
+    "colonia": "ZONA ESCOLAR",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.541024",
+    "lon": "-99.148058"
+  },
+  {
+    "id": "CAM-01075",
+    "direccion": "N/A",
+    "esquina": "NORTE 31 A",
+    "colonia": "U. H. LINDAVISTA VALLEJO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.495606",
+    "lon": "-99.150067"
+  },
+  {
+    "id": "CAM-08511",
+    "direccion": "N/A",
+    "esquina": "LEON GUZMAN",
+    "colonia": "CONSTITUCION DE LA REPUBLICA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.484682",
+    "lon": "-99.100446"
+  },
+  {
+    "id": "CAM-07555",
+    "direccion": "N/A",
+    "esquina": "MATEO ECHAIZ",
+    "colonia": "CONSTITUCION DE LA REPUBLICA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.485363",
+    "lon": "-99.102042"
+  },
+  {
+    "id": "CAM-07445",
+    "direccion": "N/A",
+    "esquina": "EJE 3 OTE. AV. ING. EDUARDO MOLINA",
+    "colonia": "GERTRUDIS SANCHEZ 2DA. SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.465608",
+    "lon": "-99.103207"
+  },
+  {
+    "id": "CAM-00936",
+    "direccion": "N/A",
+    "esquina": "5TA. CDA. AV. 507",
+    "colonia": "U. H. SAN JUAN DE ARAGÓN 1ra.SECCIÓN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.463513",
+    "lon": "-99.09275"
+  },
+  {
+    "id": "CAM-01020",
+    "direccion": "N/A",
+    "esquina": "C. CAMINO CENTRAL SUR",
+    "colonia": "CAMPESTRE ARAGON",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.485641",
+    "lon": "-99.078464"
+  },
+  {
+    "id": "CAM-08422",
+    "direccion": "N/A",
+    "esquina": "PRIVADA DE LOPEZ MATEOS",
+    "colonia": "ZONA ESCOLAR",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.538512",
+    "lon": "-99.14735"
+  },
+  {
+    "id": "CAM-08362",
+    "direccion": "N/A",
+    "esquina": "C. RICARTE",
+    "colonia": "VALLE DEL TEPEYAC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.488968",
+    "lon": "-99.138967"
+  },
+  {
+    "id": "CAM-01851",
+    "direccion": "N/A",
+    "esquina": "AV. OCEANIA",
+    "colonia": "SAN JUAN DE ARAGON 3a SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.450157",
+    "lon": "-99.080409"
+  },
+  {
+    "id": "CAM-01931",
+    "direccion": "N/A",
+    "esquina": "C. CANDELARIA",
+    "colonia": "CANDELARIA TICOMAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.520525",
+    "lon": "-99.135525"
+  },
+  {
+    "id": "CAM-08800",
+    "direccion": "N/A",
+    "esquina": "ENTRE CARRETERA TENAYUCA - CHALMITA Y VIRGINIA FABREGAS",
+    "colonia": "U.H. AIDE SOLIS",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.53329",
+    "lon": "-99.145772"
+  },
+  {
+    "id": "CAM-05520",
+    "direccion": "N/A",
+    "esquina": "C. 314",
+    "colonia": "NUEVA ATZACOALCO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.499455",
+    "lon": "-99.081758"
+  },
+  {
+    "id": "CAM-08532",
+    "direccion": "N/A",
+    "esquina": "ENTRE AVENIDA EMILIANO ZAPATA Y AVENIDA PREPARATORIAS",
+    "colonia": "EL ARBOLILLO II CROC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.535468",
+    "lon": "-99.145812"
+  },
+  {
+    "id": "CAM-01829",
+    "direccion": "N/A",
+    "esquina": "C. 16 DE SEPTIEMBRE DE 1823",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.495215",
+    "lon": "-99.145957"
+  },
+  {
+    "id": "CAM-08565",
+    "direccion": "N/A",
+    "esquina": "NORTE 80 A",
+    "colonia": "GERTRUDIS SANCHEZ 2A. SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.462061",
+    "lon": "-99.103682"
+  },
+  {
+    "id": "CAM-01625",
+    "direccion": "N/A",
+    "esquina": "AV. 503",
+    "colonia": "U. H. SAN JUAN DE ARAGÓN 1ra.SECCIÓN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.466265",
+    "lon": "-99.093175"
+  },
+  {
+    "id": "CAM-01598",
+    "direccion": "N/A",
+    "esquina": "C. ESTADO DE BAJA CALIFORNIA SUR",
+    "colonia": "AMPLIACION LA PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.480884",
+    "lon": "-99.076465"
+  },
+  {
+    "id": "CAM-08678",
+    "direccion": "N/A",
+    "esquina": "CALLE 319",
+    "colonia": "NUEVA ATZACOALCO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.500524",
+    "lon": "-99.084055"
+  },
+  {
+    "id": "CAM-08699",
+    "direccion": "N/A",
+    "esquina": "EDO DE CHIHUAHUA",
+    "colonia": "LA PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.484524",
+    "lon": "-99.073527"
+  },
+  {
+    "id": "CAM-01595",
+    "direccion": "N/A",
+    "esquina": "C. CONSTITUCION DE LA REPUBLICA",
+    "colonia": "PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.482025",
+    "lon": "-99.073935"
+  },
+  {
+    "id": "CAM-01948",
+    "direccion": "N/A",
+    "esquina": "AV. 506",
+    "colonia": "BOSQUE DE SAN JUAN DE ARAGON",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.451721",
+    "lon": "-99.079687"
+  },
+  {
+    "id": "CAM-08439",
+    "direccion": "N/A",
+    "esquina": "AND. 25 DEL TEMOLUCO",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.527159",
+    "lon": "-99.149961"
+  },
+  {
+    "id": "CAM-01596",
+    "direccion": "N/A",
+    "esquina": "C. ESTADO DE TLAXCALA",
+    "colonia": "CAMPESTRE ARAGON",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.48385",
+    "lon": "-99.075975"
+  },
+  {
+    "id": "CAM-08466",
+    "direccion": "N/A",
+    "esquina": "2DO DE RIO SAN JOAQUIN",
+    "colonia": "EL ARBOLILLO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.529916",
+    "lon": "-99.14962"
+  },
+  {
+    "id": "CAM-08705",
+    "direccion": "N/A",
+    "esquina": "C. ESTADO DE SINALOA",
+    "colonia": "PROVIDENCIA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.483051",
+    "lon": "-99.073564"
+  },
+  {
+    "id": "CAM-01578",
+    "direccion": "N/A",
+    "esquina": "C. LEON GUZMAN",
+    "colonia": "CONSTITUCION DE LA REPUBLICA",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.484146",
+    "lon": "-99.100303"
+  },
+  {
+    "id": "CAM-01694",
+    "direccion": "N/A",
+    "esquina": "C. 45 METROS",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.49161",
+    "lon": "-99.141352"
+  },
+  {
+    "id": "CAM-01063",
+    "direccion": "N/A",
+    "esquina": "ENTRE AV. PREPARATORIAS Y AV. EMILIANO ZAPATA",
+    "colonia": "U.H. EL ARBOLILLO 2 C.T.M.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.535985",
+    "lon": "-99.147074"
+  },
+  {
+    "id": "CAM-08437",
+    "direccion": "N/A",
+    "esquina": "ENTRE AVENIDA DE LAS BRISAS Y C. RIO SAN JAVIER",
+    "colonia": "ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.52956",
+    "lon": "-99.15348"
+  },
+  {
+    "id": "CAM-08533",
+    "direccion": "N/A",
+    "esquina": "ENTRE AVENIDA PREPARATORIAS Y AVENIDA EMILIANO ZAPATA",
+    "colonia": "EL ARBOLILLO II CROC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.535179",
+    "lon": "-99.144888"
+  },
+  {
+    "id": "CAM-01801",
+    "direccion": "N/A",
+    "esquina": "CARRETERA TENAYUCA-CHALMITA",
+    "colonia": "ZONA ESCOLAR",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.534603",
+    "lon": "-99.148729"
+  },
+  {
+    "id": "CAM-01536",
+    "direccion": "N/A",
+    "esquina": "AV. ING. JOSE LORETO FABELA",
+    "colonia": "U. H. SAN JUAN DE ARAGON 2DA. SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.454981",
+    "lon": "-99.07936"
+  },
+  {
+    "id": "CAM-08263",
+    "direccion": "N/A",
+    "esquina": "C. MOCTEZUMA",
+    "colonia": "CHURUBUSCO TEPEYAC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.487441",
+    "lon": "-99.138784"
+  },
+  {
+    "id": "CAM-01902",
+    "direccion": "N/A",
+    "esquina": "AV. ACUEDUCTO",
+    "colonia": "SAN PEDRO ZACATENCO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.501803",
+    "lon": "-99.117993"
+  },
+  {
+    "id": "CAM-06238",
+    "direccion": "N/A",
+    "esquina": "C. 311",
+    "colonia": "NUEVA ATZACOALCO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.499151",
+    "lon": "-99.08659"
+  },
+  {
+    "id": "CAM-08789",
+    "direccion": "N/A",
+    "esquina": "C. RIO SAN JAVIER",
+    "colonia": "U.H. ACUEDUCTO DE GUADALUPE",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.529877",
+    "lon": "-99.152785"
+  },
+  {
+    "id": "CAM-01839",
+    "direccion": "N/A",
+    "esquina": "AV. FORTUNA",
+    "colonia": "MAGDALENA DE LAS SALINAS",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.486232",
+    "lon": "-99.142986"
+  },
+  {
+    "id": "CAM-01086",
+    "direccion": "N/A",
+    "esquina": "AV. RIO DE LOS REMEDIOS",
+    "colonia": "LAGUNA DE TICOMAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.517733",
+    "lon": "-99.128889"
+  },
+  {
+    "id": "CAM-05600",
+    "direccion": "N/A",
+    "esquina": "C. EJIDO",
+    "colonia": "25 DE JULIO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.496481",
+    "lon": "-99.082719"
+  },
+  {
+    "id": "CAM-08288",
+    "direccion": "N/A",
+    "esquina": "C. ORIENTE 103",
+    "colonia": "GERTRUDIS SANCHEZ 2A SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.460617",
+    "lon": "-99.09965"
+  },
+  {
+    "id": "CAM-08566",
+    "direccion": "N/A",
+    "esquina": "NORTE 82",
+    "colonia": "GERTRUDIS SANCHEZ 2A. SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.463037",
+    "lon": "-99.102806"
+  },
+  {
+    "id": "CAM-00496",
+    "direccion": "N/A",
+    "esquina": "C. MANDUJANO",
+    "colonia": "SAN BARTOLO ATEPEHUACAN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.491952",
+    "lon": "-99.142682"
+  },
+  {
+    "id": "CAM-05551",
+    "direccion": "N/A",
+    "esquina": "EJE CENTRAL LAZARO CARDENAS",
+    "colonia": "VALLE DEL TEPEYAC",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.489204",
+    "lon": "-99.144161"
+  },
+  {
+    "id": "CAM-06295",
+    "direccion": "N/A",
+    "esquina": "EJE CENTRAL",
+    "colonia": "U. H. LINDAVISTA VALLEJO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.49925",
+    "lon": "-99.150112"
+  },
+  {
+    "id": "CAM-08834",
+    "direccion": "N/A",
+    "esquina": "C. LUCIO TAPIA",
+    "colonia": "ZONA ESCOLAR",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.539548",
+    "lon": "-99.150659"
+  },
+  {
+    "id": "CAM-01860",
+    "direccion": "N/A",
+    "esquina": "C. TECNOLOGIA DE EXPLORACION",
+    "colonia": "SOLIDARIDAD NACIONAL",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "SIN ALTAVOZ",
+    "lat": "19.532189",
+    "lon": "-99.152983"
+  },
+  {
+    "id": "CAM-08723",
+    "direccion": "N/A",
+    "esquina": "ENTRE C. PONIENTE 152 Y C. NORTE 23-A",
+    "colonia": "U.H. LINDAVISTA VALLEJO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.496118",
+    "lon": "-99.14795"
+  },
+  {
+    "id": "CAM-01850",
+    "direccion": "N/A",
+    "esquina": "AV. 503",
+    "colonia": "U. H. SAN JUAN DE ARAGÓN 1ra.SECCIÓN",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.463128",
+    "lon": "-99.094573"
   },
   {
     "id": "CAM-01033",
@@ -1452,16 +1800,16 @@
     "lon": "-99.085901"
   },
   {
-    "id": "CAM-08722",
+    "id": "CAM-01947",
     "direccion": "N/A",
-    "esquina": "C. PONIENTE 146",
-    "colonia": "U.H. LINDAVISTA VALLEJO",
+    "esquina": "AV. JOSE LORETO FABELA",
+    "colonia": "U.H. SAN JUAN DE ARAGON 2DA. SECC.",
     "alcaldia": "GUSTAVO A. MADERO",
     "poste": "9m",
-    "boton": "CON BOTON",
+    "boton": "SIN BOTON",
     "altavoz": "CON ALTAVOZ",
-    "lat": "19.497679",
-    "lon": "-99.15082"
+    "lat": "19.456818",
+    "lon": "-99.080631"
   },
   {
     "id": "CAM-08478",
@@ -1474,5 +1822,17 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.483889",
     "lon": "-99.078796"
+  },
+  {
+    "id": "CAM-08722",
+    "direccion": "N/A",
+    "esquina": "C. PONIENTE 146",
+    "colonia": "U.H. LINDAVISTA VALLEJO",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.497679",
+    "lon": "-99.15082"
   }
 ]
