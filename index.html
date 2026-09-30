@@ -233,6 +233,25 @@
         </section>
     </div>
 
+    <div id="location-update-modal" class="modal-backdrop is-hidden" role="presentation">
+        <section class="profile-modal confirm-modal" role="dialog" aria-modal="true" aria-labelledby="location-update-title">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">Ubicación frecuente</p>
+                    <h2 id="location-update-title">Actualizar ubicación</h2>
+                </div>
+                <button id="cancel-location-update-close" class="close-button" type="button" aria-label="Cerrar confirmación">×</button>
+            </div>
+            <p id="location-update-message" class="confirm-message"></p>
+            <div class="confirm-actions">
+                <button id="cancel-location-update" class="button button-secondary" type="button">Cancelar</button>
+                <button id="confirm-location-update" class="button button-primary" type="button">Confirmar</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="app-toast" class="app-toast is-hidden" role="status" aria-live="polite"></div>
+
     <script src="config.js"></script>
     <script src="app.js"></script>
     <script>
