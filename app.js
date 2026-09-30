@@ -290,7 +290,12 @@ async function loadGoogleMap() {
         directionsService = new DirectionsService();
         directionsRenderer = new DirectionsRenderer({
             map: mapInstance,
-            suppressMarkers: false
+            suppressMarkers: false,
+            polylineOptions: {
+                strokeColor: "#4285F4",
+                strokeWeight: 6,
+                strokeOpacity: 0.8
+            }
         });
         inicializarAutocomplete(Autocomplete);
         updateMapPosition(); //[cite: 2]
@@ -329,6 +334,10 @@ function cerrarModalRuta() {
     if (modal) modal.classList.add("is-hidden");
 }
 
+function showRouteMessage(message) {
+    document.getElementById("route-message").textContent = message;
+}
+
 function manejarFormularioRuta(event) {
     event.preventDefault();
     trazarRuta(document.getElementById("destination-input").value);
@@ -340,13 +349,13 @@ function inicializarAutocomplete(Autocomplete) {
     autocomplete = new Autocomplete(document.getElementById("destination-input"), {
         types: ["geocode", "establishment"],
         componentRestrictions: { country: "mx" },
-        fields: ["geometry", "formatted_address", "name"]
+        fields: ["geometry", "formatted_address", "name", "place_id"]
     });
 
     autocomplete.addListener("place_changed", () => {
         const place = autocomplete.getPlace();
 
-        if (place.geometry && place.geometry.location) {
+        if (place && (place.geometry || place.place_id)) {
             selectedPlace = place;
             return;
         }
@@ -365,7 +374,7 @@ function actualizarControlRecorrido() {
 
     if (isTripActive) {
         title.textContent = "Finalizar recorrido";
-        label.textContent = "Ruta activa";
+        label.textContent = "Finalizar recorrido";
         return;
     }
 
@@ -374,45 +383,56 @@ function actualizarControlRecorrido() {
 }
 
 function trazarRuta(destino) {
-    const destination = typeof destino === "string" ? destino.trim() : destino;
-    const message = document.getElementById("route-message");
-
-    if (!destination) {
-        message.textContent = "Ingresa un destino para trazar la ruta.";
-        return;
-    }
-
     if (!directionsService || !directionsRenderer) {
-        message.textContent = "El mapa todavía está cargando. Intenta de nuevo en un momento.";
+        showRouteMessage("El mapa todavía está cargando. Intenta de nuevo en un momento.");
         return;
     }
 
-    const origin = currentPosition
+    let destinationTarget = null;
+
+    if (selectedPlace && selectedPlace.geometry) {
+        destinationTarget = selectedPlace.geometry.location;
+    } else if (selectedPlace && selectedPlace.place_id) {
+        destinationTarget = { placeId: selectedPlace.place_id };
+    } else {
+        const textVal = document.getElementById("destination-input").value.trim();
+
+        if (!textVal) {
+            return showRouteMessage("Escribe o selecciona un destino.");
+        }
+
+        destinationTarget = `${textVal}, México`;
+    }
+
+    const originPos = currentPosition
         ? { lat: currentPosition.lat, lng: currentPosition.lng }
         : defaultPosition;
-    const routeDestination = selectedPlace?.geometry?.location || destination;
-    const destinationLabel = selectedPlace?.formatted_address
-        || selectedPlace?.name
-        || (typeof destination === "string" ? destination : "Destino seleccionado");
 
     directionsService.route({
-        origin,
-        destination: routeDestination,
-        travelMode: window.google.maps.TravelMode.WALKING
+        origin: originPos,
+        destination: destinationTarget,
+        travelMode: window.google.maps.TravelMode.DRIVING
     }, (response, status) => {
-        if (status !== "OK") {
-            message.textContent = "No se encontró una ruta para ese destino.";
-            console.error("No se pudo trazar la ruta:", status);
+        if (status === "OK") {
+            const destinationName = selectedPlace?.name || "Destino seleccionado";
+
+            directionsRenderer.setDirections(response);
+            isTripActive = true;
+            currentDestination = destinationTarget;
+
+            document.getElementById("route-modal").classList.add("is-hidden");
+            document.getElementById("trip-title").textContent = `Recorrido activo hacia: ${destinationName}`;
+            document.getElementById("trip-control-button").classList.add("is-active");
+            document.getElementById("trip-control-label").textContent = "Finalizar recorrido";
+            actualizarControlRecorrido();
+
+            showDashboardMessage("Recorrido iniciado. Monitoreo en vivo activado.");
+            selectedPlace = null;
             return;
         }
 
-        directionsRenderer.setDirections(response);
-        isTripActive = true;
-        currentDestination = destination;
-        document.getElementById("trip-title").textContent = `Recorrido activo hacia: ${destinationLabel}`;
-        actualizarControlRecorrido();
-        cerrarModalRuta();
-        showDashboardMessage(`Ruta trazada hacia ${destinationLabel}.`);
+        console.error("Error en DirectionsService:", status);
+        showRouteMessage("No se pudo calcular la ruta. Intenta seleccionar otra opción de la lista.");
     });
 }
 
@@ -512,8 +532,6 @@ function usarRutaFrecuente(routeKey) {
 
     trazarRuta(savedRoute.address);
 }
-
-
 
 function loadMapsScript() {
     if (window.google?.maps?.importLibrary) return Promise.resolve();
