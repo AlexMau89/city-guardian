@@ -8,6 +8,8 @@ const ZONAS_RIESGO = [
 
 let zonasDibujadas = [];
 let zonasVisibles = false;
+let camarasMarkers = [];
+let camarasVisibles = true;
 
 const STORAGE = {
     users: "rs_usuarios",
@@ -294,6 +296,8 @@ async function loadGoogleMap() {
             mapTypeControl: false //[cite: 2]
         });
 
+        cargarCamarasC5(mapInstance);
+
         locationMarker = new window.google.maps.Marker({ //[cite: 2]
             map: mapInstance, //[cite: 2]
             position: initialPosition, //[cite: 2]
@@ -318,6 +322,72 @@ async function loadGoogleMap() {
         if (placeholder) placeholder.classList.remove("is-hidden"); //[cite: 2, 4]
         showDashboardMessage("No se pudo cargar el mapa. Revisa la clave y las restricciones de Google Maps."); //[cite: 2]
     }
+}
+
+async function cargarCamarasC5(map) {
+    if (!map || !camarasVisibles) return;
+
+    camarasMarkers.forEach(marker => marker.setMap(null));
+    camarasMarkers = [];
+
+    try {
+        const response = await fetch("./camaras.json");
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const camaras = await response.json();
+        const infoWindow = new window.google.maps.InfoWindow();
+
+        camaras.forEach(cam => {
+            const lat = parseFloat(cam.lat);
+            const lng = parseFloat(cam.lon);
+
+            if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+            const tieneBoton = cam.boton && !cam.boton.toUpperCase().includes("SIN");
+            const color = tieneBoton ? "#00E676" : "#FF9800";
+            const center = { lat, lng };
+            const circle = new window.google.maps.Circle({
+                strokeColor: color,
+                strokeOpacity: 0.9,
+                strokeWeight: 2,
+                fillColor: color,
+                fillOpacity: 0.6,
+                map,
+                center,
+                radius: 35
+            });
+
+            circle.addListener("click", () => {
+                const content = document.createElement("div");
+                content.innerHTML = `
+                    <strong>Cámara C5</strong>
+                    <div>ID: ${escapeHtml(cam.id)}</div>
+                    <div>Esquina: ${escapeHtml(cam.esquina)}</div>
+                    <div>Colonia: ${escapeHtml(cam.colonia)}</div>
+                    <div>Botón: ${escapeHtml(cam.boton)}</div>
+                    <div>Altavoz: ${escapeHtml(cam.altavoz)}</div>
+                `;
+                infoWindow.setContent(content);
+                infoWindow.setPosition(center);
+                infoWindow.open(map);
+            });
+
+            camarasMarkers.push(circle);
+        });
+    } catch (error) {
+        console.error("No se pudieron cargar las cámaras del C5:", error);
+    }
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
 
 function manejarControlRecorrido() {
