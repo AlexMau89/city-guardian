@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#060b11">
+    <meta name="description" content="Guardian: consola administrativa de monitoreo y seguridad.">
+    <title>Guardian | Consola Administrativa</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --canvas: #060b11;
+            --surface: #0d1724;
+            --surface-raised: #142235;
+            --surface-soft: #101d2d;
+            --line: #1e324d;
+            --primary: #2575fc;
+            --primary-soft: rgba(37, 117, 252, 0.14);
+            --ink: #f0f4f8;
+            --muted: #8fa0b5;
+            --subtle: #5c6f87;
+            --danger: #d32f2f;
+            --danger-soft: rgba(211, 47, 47, 0.14);
+            --amber: #c59a4a;
+            --amber-soft: rgba(197, 154, 74, 0.14);
+            --success: #3a9d73;
+            --success-soft: rgba(58, 157, 115, 0.14);
+            --shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+        }
+
+        * { box-sizing: border-box; }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: var(--canvas);
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        button,
+        input { font: inherit; }
+
+        button { cursor: pointer; }
+
+        .is-hidden { display: none !important; }
+
+        .login-shell {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .login-panel {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            max-width: 430px;
+            padding: 34px;
+            width: 100%;
+        }
+
+        .brand {
+            align-items: center;
+            display: flex;
+            gap: 12px;
+        }
+
+        .brand-mark {
+            align-items: center;
+            background: var(--primary);
+            border-radius: 8px;
+            color: var(--ink);
+            display: flex;
+            font-size: 18px;
+            font-weight: 900;
+            height: 44px;
+            justify-content: center;
+            width: 44px;
+        }
+
+        .eyebrow {
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.11em;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        h1,
+        h2,
+        h3,
+        p { margin: 0; }
+
+        .login-panel h1 {
+            font-size: 26px;
+            margin-top: 28px;
+        }
+
+        .login-copy {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 9px 0 26px;
+        }
+
+        .field {
+            display: grid;
+            gap: 7px;
+            margin-bottom: 16px;
+        }
+
+        .field span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .field input,
+        .search-input {
+            background: #09131f;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: var(--ink);
+            min-height: 45px;
+            outline: 0;
+            padding: 11px 12px;
+            width: 100%;
+        }
+
+        .field input:focus,
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-soft);
+        }
+
+        .button {
+            align-items: center;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            display: inline-flex;
+            font-size: 13px;
+            font-weight: 800;
+            gap: 8px;
+            justify-content: center;
+            min-height: 42px;
+            padding: 10px 14px;
+        }
+
+        .button-primary {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .button-primary:hover { background: #1d68d8; }
+
+        .button-quiet {
+            background: transparent;
+            border-color: var(--line);
+            color: var(--muted);
+        }
+
+        .button-quiet:hover {
+            background: var(--surface-raised);
+            color: var(--ink);
+        }
+
+        .login-message {
+            color: #ff8c92;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-top: 13px;
+            min-height: 18px;
+        }
+
+        .demo-note {
+            border-left: 2px solid var(--amber);
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.45;
+            margin-top: 23px;
+            padding-left: 11px;
+        }
+
+        .demo-note strong { color: var(--ink); }
+
+        .admin-shell {
+            display: grid;
+            grid-template-columns: 244px minmax(0, 1fr);
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: #08111c;
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+        }
+
+        .sidebar .brand { padding: 0 8px; }
+
+        .sidebar-nav {
+            display: grid;
+            gap: 5px;
+            margin-top: 42px;
+        }
+
+        .nav-button {
+            align-items: center;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            color: var(--muted);
+            display: flex;
+            font-size: 13px;
+            font-weight: 700;
+            gap: 11px;
+            min-height: 43px;
+            padding: 10px 12px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .nav-button:hover,
+        .nav-button.is-active {
+            background: var(--surface-raised);
+            border-color: var(--line);
+            color: var(--ink);
+        }
+
+        .nav-symbol {
+            color: var(--primary);
+            font-size: 16px;
+            text-align: center;
+            width: 18px;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid var(--line);
+            color: var(--subtle);
+            font-size: 11px;
+            line-height: 1.5;
+            margin-top: auto;
+            padding: 16px 8px 0;
+        }
+
+        .workspace {
+            min-width: 0;
+            padding: 24px clamp(18px, 3vw, 42px) 42px;
+        }
+
+        .workspace-header {
+            align-items: flex-start;
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin-bottom: 26px;
+        }
+
+        .workspace-header h1 {
+            font-size: clamp(24px, 3vw, 32px);
+            margin-top: 6px;
+        }
+
+        .workspace-header p:last-child {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .header-actions {
+            align-items: center;
+            display: flex;
+            gap: 12px;
+        }
+
+        .system-status {
+            align-items: center;
+            color: #9bd5ba;
+            display: flex;
+            font-size: 12px;
+            font-weight: 700;
+            gap: 7px;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            background: var(--success);
+            border-radius: 50%;
+            height: 8px;
+            width: 8px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            margin-bottom: 18px;
+        }
+
+        .metric,
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .metric {
+            min-height: 126px;
+            padding: 18px;
+        }
+
+        .metric-label {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: 800;
+            margin-top: 17px;
+        }
+
+        .metric-detail {
+            color: var(--subtle);
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.8fr);
+        }
+
+        .panel {
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .panel-heading {
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            gap: 14px;
+            justify-content: space-between;
+            min-height: 66px;
+            padding: 14px 18px;
+        }
+
+        .panel-heading h2 {
+            font-size: 15px;
+        }
+
+        .panel-heading p {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .panel-body { padding: 18px; }
+
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            border-collapse: collapse;
+            min-width: 620px;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border-bottom: 1px solid rgba(30, 50, 77, 0.72);
+            padding: 12px 10px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            color: var(--subtle);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        td {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        td:first-child {
+            color: var(--ink);
+            font-weight: 800;
+        }
+
+        tr:last-child td { border-bottom: 0; }
+
+        .tag {
+            border: 1px solid currentColor;
+            border-radius: 999px;
+            display: inline-flex;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 7px;
+        }
+
+        .tag-success { color: #9bd5ba; }
+        .tag-warning { color: #e0bf7f; }
+        .tag-danger { color: #ff8c92; }
+
+        .zone-list,
+        .alert-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .zone-item,
+        .alert-item {
+            background: var(--surface-soft);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 13px;
+        }
+
+        .zone-item {
+            align-items: center;
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .zone-item strong,
+        .alert-item strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .zone-item span,
+        .alert-item span {
+            color: var(--muted);
+            display: block;
+            font-size: 11px;
+            line-height: 1.45;
+            margin-top: 4px;
+        }
+
+        .zone-level {
+            color: #e0bf7f;
+            font-size: 10px;
+            font-weight: 800;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .alert-item {
+            border-left: 3px solid var(--danger);
+        }
+
+        .alert-item.warning { border-left-color: var(--amber); }
+
+        .alert-meta {
+            align-items: center;
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+        }
+
+        .alert-time {
+            color: var(--subtle) !important;
+            font-size: 10px !important;
+            margin: 0 !important;
+        }
+
+        .empty-state {
+            color: var(--muted);
+            font-size: 12px;
+            padding: 22px 0;
+            text-align: center;
+        }
+
+        .view-toolbar {
+            align-items: center;
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .search-input { max-width: 280px; }
+
+        .section-view { display: none; }
+        .section-view.is-active { display: block; }
+
+        .map-preview {
+            background:
+                linear-gradient(rgba(30, 50, 77, 0.38) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 50, 77, 0.38) 1px, transparent 1px),
+                #09131f;
+            background-size: 42px 42px;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            min-height: 230px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-preview::before,
+        .map-preview::after {
+            background: rgba(37, 117, 252, 0.18);
+            content: "";
+            height: 2px;
+            left: -10%;
+            position: absolute;
+            transform: rotate(-22deg);
+            width: 125%;
+        }
+
+        .map-preview::before { top: 42%; }
+        .map-preview::after { top: 67%; transform: rotate(13deg); }
+
+        .map-point {
+            background: var(--danger);
+            border: 3px solid rgba(240, 244, 248, 0.86);
+            border-radius: 50%;
+            box-shadow: 0 0 0 7px rgba(211, 47, 47, 0.2);
+            height: 14px;
+            position: absolute;
+            width: 14px;
+            z-index: 1;
+        }
+
+        .map-point.one { left: 23%; top: 34%; }
+        .map-point.two { left: 64%; top: 57%; }
+        .map-point.three { left: 46%; top: 76%; }
+
+        .map-label {
+            bottom: 12px;
+            color: var(--muted);
+            font-size: 10px;
+            left: 12px;
+            position: absolute;
+            z-index: 1;
+        }
+
+        @media (max-width: 1100px) {
+            .metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 760px) {
+            .admin-shell { display: block; }
+            .sidebar {
+                border-bottom: 1px solid var(--line);
+                border-right: 0;
+                padding: 14px 16px;
+            }
+            .sidebar-nav {
+                display: flex;
+                gap: 6px;
+                margin-top: 18px;
+                overflow-x: auto;
+            }
+            .nav-button {
+                flex: 0 0 auto;
+                width: auto;
+            }
+            .sidebar-footer { display: none; }
+            .workspace { padding: 22px 16px 34px; }
+            .workspace-header { display: block; }
+            .header-actions { justify-content: space-between; margin-top: 18px; }
+            .metrics-grid { gap: 10px; }
+            .metric { min-height: 110px; padding: 14px; }
+            .metric-value { font-size: 25px; margin-top: 12px; }
+            .panel-heading { align-items: flex-start; flex-direction: column; }
+            .panel-heading .search-input { max-width: none; }
+            .login-panel { padding: 25px 20px; }
+        }
+
+        @media (max-width: 420px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .header-actions { align-items: flex-start; flex-direction: column; }
+            .system-status { order: 2; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="admin-login" class="login-shell" aria-labelledby="admin-login-title">
+            <div class="login-panel">
+                <div class="brand">
+                    <div class="brand-mark" aria-hidden="true">G</div>
+                    <div>
+                        <p class="eyebrow">Guardian</p>
+                        <p style="color: var(--muted); font-size: 12px; margin-top: 3px;">Consola institucional</p>
+                    </div>
+                </div>
+
+                <h1 id="admin-login-title">Acceso administrativo</h1>
+                <p class="login-copy">Ingresa a la consola de monitoreo para consultar el estado operativo de la plataforma.</p>
+
+                <form id="admin-login-form" novalidate>
+                    <label class="field">
+                        <span>Correo administrativo</span>
+                        <input id="admin-email" type="email" autocomplete="username" value="admin@guardian.net" required>
+                    </label>
+                    <label class="field">
+                        <span>Contraseña</span>
+                        <input id="admin-password" type="password" autocomplete="current-password" value="admin" required>
+                    </label>
+                    <button class="button button-primary" type="submit">Acceder a la consola <span aria-hidden="true">→</span></button>
+                    <p id="admin-login-message" class="login-message" role="alert"></p>
+                </form>
+
+                <p class="demo-note"><strong>Entorno de demostración.</strong> La autenticación y los indicadores de esta consola son estáticos.</p>
+            </div>
+        </section>
+
+        <section id="admin-app" class="admin-shell is-hidden" aria-label="Consola administrativa Guardian">
+            <aside class="sidebar">
+                <div class="brand">
+                    <div class="brand-mark" aria-hidden="true">G</div>
+                    <div>
+                        <p class="eyebrow">Guardian</p>
+                        <p style="color: var(--muted); font-size: 12px; margin-top: 3px;">Administración</p>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav" aria-label="Secciones administrativas">
+                    <button class="nav-button is-active" type="button" data-view="overview"><span class="nav-symbol" aria-hidden="true">▦</span>Resumen operativo</button>
+                    <button class="nav-button" type="button" data-view="cameras"><span class="nav-symbol" aria-hidden="true">◉</span>Cámaras C5</button>
+                    <button class="nav-button" type="button" data-view="zones"><span class="nav-symbol" aria-hidden="true">△</span>Zonas de riesgo</button>
+                    <button class="nav-button" type="button" data-view="alerts"><span class="nav-symbol" aria-hidden="true">!</span>Alertas demo</button>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <p>Guardian Admin v1.0.0</p>
+                    <p>Datos de demostración · actualización local</p>
+                </div>
+            </aside>
+
+            <section class="workspace">
+                <header class="workspace-header">
+                    <div>
+                        <p class="eyebrow">Centro de control</p>
+                        <h1 id="view-title">Resumen operativo</h1>
+                        <p id="view-description">Indicadores principales de monitoreo personal y respuesta.</p>
+                    </div>
+                    <div class="header-actions">
+                        <div class="system-status"><span class="status-dot" aria-hidden="true"></span>Sistema operativo</div>
+                        <button id="admin-logout" class="button button-quiet" type="button">Cerrar sesión</button>
+                    </div>
+                </header>
+
+                <section id="view-overview" class="section-view is-active" aria-labelledby="view-title">
+                    <div class="metrics-grid">
+                        <article class="metric">
+                            <p class="metric-label">Cámaras C5 registradas</p>
+                            <p id="metric-cameras" class="metric-value">—</p>
+                            <p id="metric-cameras-detail" class="metric-detail">Cargando inventario</p>
+                        </article>
+                        <article class="metric">
+                            <p class="metric-label">Zonas de riesgo</p>
+                            <p id="metric-zones" class="metric-value">5</p>
+                            <p class="metric-detail">Cobertura prioritaria</p>
+                        </article>
+                        <article class="metric">
+                            <p class="metric-label">Alertas no atendidas</p>
+                            <p id="metric-alerts" class="metric-value">3</p>
+                            <p class="metric-detail">Simulación operativa</p>
+                        </article>
+                        <article class="metric">
+                            <p class="metric-label">Usuarios monitoreados</p>
+                            <p class="metric-value">24</p>
+                            <p class="metric-detail">Estado estable</p>
+                        </article>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <article class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h2>Distribución de infraestructura C5</h2>
+                                    <p>Vista esquemática de puntos operativos</p>
+                                </div>
+                                <span class="tag tag-success">ACTIVA</span>
+                            </div>
+                            <div class="panel-body">
+                                <div class="map-preview" aria-label="Mapa esquemático de cámaras C5">
+                                    <span class="map-point one" title="Punto C5 01"></span>
+                                    <span class="map-point two" title="Punto C5 02"></span>
+                                    <span class="map-point three" title="Punto C5 03"></span>
+                                    <span class="map-label">Ciudad de México · representación de demo</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h2>Zonas prioritarias</h2>
+                                    <p>Monitoreo territorial simulado</p>
+                                </div>
+                            </div>
+                            <div id="overview-zones" class="panel-body zone-list"></div>
+                        </article>
+
+                        <article class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h2>Actividad reciente</h2>
+                                    <p>Eventos de seguridad de demostración</p>
+                                </div>
+                                <span class="tag tag-warning">SIMULADO</span>
+                            </div>
+                            <div id="overview-alerts" class="panel-body alert-list"></div>
+                        </article>
+
+                        <article class="panel">
+                            <div class="panel-heading">
+                                <div>
+                                    <h2>Integridad de servicios</h2>
+                                    <p>Estado de módulos críticos</p>
+                                </div>
+                            </div>
+                            <div class="panel-body alert-list">
+                                <div class="zone-item"><div><strong>Geolocalización</strong><span>Captura GPS disponible</span></div><span class="tag tag-success">OK</span></div>
+                                <div class="zone-item"><div><strong>Central de emergencias</strong><span>Canal institucional activo</span></div><span class="tag tag-success">OK</span></div>
+                                <div class="zone-item"><div><strong>Notificaciones</strong><span>Configuración de demostración</span></div><span class="tag tag-warning">DEMO</span></div>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="view-cameras" class="section-view" aria-labelledby="view-title">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>Inventario de cámaras C5</h2>
+                                <p id="camera-count-label">Cargando registros desde camaras.json</p>
+                            </div>
+                            <input id="camera-search" class="search-input" type="search" placeholder="Buscar cámara o alcaldía" aria-label="Buscar cámara o alcaldía">
+                        </div>
+                        <div class="panel-body table-wrap">
+                            <table>
+                                <thead>
+                                    <tr><th>ID</th><th>Ubicación</th><th>Alcaldía</th><th>Botón</th><th>Altavoz</th><th>Coordenadas</th></tr>
+                                </thead>
+                                <tbody id="camera-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="view-zones" class="section-view" aria-labelledby="view-title">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>Zonas de riesgo configuradas</h2>
+                                <p>Catálogo operativo utilizado por el monitoreo Guardian</p>
+                            </div>
+                        </div>
+                        <div id="zones-grid" class="panel-body zone-list"></div>
+                    </div>
+                </section>
+
+                <section id="view-alerts" class="section-view" aria-labelledby="view-title">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>Registro de alertas</h2>
+                                <p>Eventos estáticos para presentación visual</p>
+                            </div>
+                            <span class="tag tag-warning">DEMO</span>
+                        </div>
+                        <div id="alerts-grid" class="panel-body alert-list"></div>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        (() => {
+            const DEMO_CREDENTIALS = Object.freeze({
+                email: "admin@guardian.net",
+                password: "admin"
+            });
+            const ADMIN_SESSION_KEY = "guardian_admin_session";
+            const ZONAS_RIESGO = [
+                { nombre: "GAM (Gabriel Hernández / La Cienega)", lat: 19.4850, lng: -99.1120, radio: 1000, nivel: "Alto" },
+                { nombre: "Tepito / Morelos", lat: 19.4440, lng: -99.1250, radio: 800, nivel: "Muy Alto" },
+                { nombre: "Doctores / Buenos Aires", lat: 19.4180, lng: -99.1480, radio: 900, nivel: "Medio-Alto" },
+                { nombre: "Iztapalapa Centro", lat: 19.3580, lng: -99.0920, radio: 1500, nivel: "Alto" },
+                { nombre: "Ecatepec (Límite GAM)", lat: 19.5350, lng: -99.0250, radio: 1800, nivel: "Alto" }
+            ];
+            const DEMO_ALERTS = [
+                { type: "BOTON_PANICO", user: "Mariana López", location: "Tepito / Morelos", time: "Hace 04 min", level: "ALTA" },
+                { type: "DESVIO_REITERADO", user: "Carlos Ramírez", location: "GAM", time: "Hace 11 min", level: "MEDIA" },
+                { type: "BOTON_PANICO", user: "Ana Martínez", location: "Doctores / Buenos Aires", time: "Hace 18 min", level: "ALTA" }
+            ];
+
+            let cameras = [];
+
+            const byId = id => document.getElementById(id);
+            const escapeHtml = value => String(value ?? "—")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
+
+            function showAdminApp() {
+                byId("admin-login").classList.add("is-hidden");
+                byId("admin-app").classList.remove("is-hidden");
+                renderZones();
+                renderAlerts();
+                loadCameras();
+            }
+
+            function handleLogin(event) {
+                event.preventDefault();
+                const email = byId("admin-email").value.trim().toLowerCase();
+                const password = byId("admin-password").value;
+                const message = byId("admin-login-message");
+
+                if (email !== DEMO_CREDENTIALS.email || password !== DEMO_CREDENTIALS.password) {
+                    message.textContent = "Credenciales administrativas incorrectas.";
+                    return;
+                }
+
+                sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
+                message.textContent = "";
+                showAdminApp();
+            }
+
+            function logout() {
+                sessionStorage.removeItem(ADMIN_SESSION_KEY);
+                byId("admin-app").classList.add("is-hidden");
+                byId("admin-login").classList.remove("is-hidden");
+                byId("admin-password").value = "";
+                byId("admin-email").focus();
+            }
+
+            function zoneMarkup(zone) {
+                const levelClass = zone.nivel === "Muy Alto" ? "tag-danger" : "tag-warning";
+                return `<div class="zone-item"><div><strong>${escapeHtml(zone.nombre)}</strong><span>Radio operativo: ${escapeHtml(zone.radio)} m · ${escapeHtml(zone.lat)}, ${escapeHtml(zone.lng)}</span></div><span class="zone-level ${levelClass}">${escapeHtml(zone.nivel.toUpperCase())}</span></div>`;
+            }
+
+            function renderZones() {
+                const markup = ZONAS_RIESGO.map(zoneMarkup).join("");
+                byId("overview-zones").innerHTML = markup;
+                byId("zones-grid").innerHTML = markup;
+                byId("metric-zones").textContent = ZONAS_RIESGO.length;
+            }
+
+            function alertMarkup(alert) {
+                const warning = alert.level !== "ALTA" ? " warning" : "";
+                return `<div class="alert-item${warning}"><div class="alert-meta"><strong>${escapeHtml(alert.type)}</strong><span class="tag ${alert.level === "ALTA" ? "tag-danger" : "tag-warning"}">${escapeHtml(alert.level)}</span></div><span>${escapeHtml(alert.user)} · ${escapeHtml(alert.location)}</span><span class="alert-time">${escapeHtml(alert.time)} · Estado: NO ATENDIDA</span></div>`;
+            }
+
+            function renderAlerts() {
+                const markup = DEMO_ALERTS.map(alertMarkup).join("");
+                byId("overview-alerts").innerHTML = markup;
+                byId("alerts-grid").innerHTML = markup;
+                byId("metric-alerts").textContent = DEMO_ALERTS.length;
+            }
+
+            function cameraStatus(value) {
+                return String(value || "").toUpperCase().includes("CON")
+                    ? `<span class="tag tag-success">${escapeHtml(value)}</span>`
+                    : `<span class="tag tag-warning">${escapeHtml(value || "SIN DATO")}</span>`;
+            }
+
+            function renderCameras(filter = "") {
+                const query = filter.trim().toLowerCase();
+                const filtered = cameras.filter(camera => [camera.id, camera.esquina, camera.colonia, camera.alcaldia]
+                    .some(value => String(value || "").toLowerCase().includes(query)));
+
+                byId("camera-table-body").innerHTML = filtered.length
+                    ? filtered.map(camera => `<tr><td>${escapeHtml(camera.id)}</td><td>${escapeHtml(camera.esquina || camera.direccion)}</td><td>${escapeHtml(camera.alcaldia)}</td><td>${cameraStatus(camera.boton)}</td><td>${cameraStatus(camera.altavoz)}</td><td>${escapeHtml(camera.lat)}, ${escapeHtml(camera.lon)}</td></tr>`).join("")
+                    : `<tr><td colspan="6"><div class="empty-state">No hay cámaras que coincidan con la búsqueda.</div></td></tr>`;
+            }
+
+            async function loadCameras() {
+                try {
+                    const response = await fetch("./camaras.json", { cache: "no-store" });
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    const data = await response.json();
+                    cameras = Array.isArray(data) ? data : [];
+                } catch (error) {
+                    console.warn("No se pudo cargar camaras.json; se muestra inventario simulado.", error);
+                    cameras = [
+                        { id: "CAM-DEMO-01", esquina: "Av. Ricarte", alcaldia: "Gustavo A. Madero", boton: "CON BOTON", altavoz: "CON ALTAVOZ", lat: "19.490201", lon: "-99.144695" },
+                        { id: "CAM-DEMO-02", esquina: "C. 312", alcaldia: "Gustavo A. Madero", boton: "SIN BOTON", altavoz: "CON ALTAVOZ", lat: "19.498739", lon: "-99.085684" }
+                    ];
+                }
+
+                byId("metric-cameras").textContent = cameras.length;
+                byId("metric-cameras-detail").textContent = `${cameras.filter(camera => String(camera.boton).includes("CON")).length} con botón de emergencia`;
+                byId("camera-count-label").textContent = `${cameras.length} registros disponibles · fuente camaras.json`;
+                renderCameras(byId("camera-search").value);
+            }
+
+            function switchView(viewName) {
+                const titles = {
+                    overview: ["Resumen operativo", "Indicadores principales de monitoreo personal y respuesta."],
+                    cameras: ["Cámaras C5", "Inventario operativo cargado desde camaras.json."],
+                    zones: ["Zonas de riesgo", "Catálogo territorial utilizado por la simulación."],
+                    alerts: ["Alertas demo", "Eventos estáticos para demostración de la consola."]
+                };
+                document.querySelectorAll(".nav-button").forEach(button => button.classList.toggle("is-active", button.dataset.view === viewName));
+                document.querySelectorAll(".section-view").forEach(view => view.classList.toggle("is-active", view.id === `view-${viewName}`));
+                byId("view-title").textContent = titles[viewName][0];
+                byId("view-description").textContent = titles[viewName][1];
+            }
+
+            byId("admin-login-form").addEventListener("submit", handleLogin);
+            byId("admin-logout").addEventListener("click", logout);
+            byId("camera-search").addEventListener("input", event => renderCameras(event.target.value));
+            document.querySelectorAll(".nav-button").forEach(button => button.addEventListener("click", () => switchView(button.dataset.view)));
+
+            if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "active") showAdminApp();
+        })();
+    </script>
+</body>
+</html>
