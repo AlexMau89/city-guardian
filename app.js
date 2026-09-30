@@ -128,6 +128,11 @@ const VALIDATION = Object.freeze({
     password: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/
 });
 
+const ADMIN_DEMO_CREDENTIALS = Object.freeze({
+    email: "admin@guardian.net",
+    password: "Admin1234"
+});
+
 function validateFormFields(fields) {
     let isValid = true;
 
@@ -221,6 +226,17 @@ async function iniciarSesion(event) {
 
     if (!isValid) {
         showMessage(message, "Revisa los campos marcados antes de continuar.");
+        return;
+    }
+
+    if (identifier === ADMIN_DEMO_CREDENTIALS.email) {
+        if (password !== ADMIN_DEMO_CREDENTIALS.password) {
+            showMessage(message, "La contraseña no coincide.");
+            return;
+        }
+
+        sessionStorage.setItem("guardian_admin_session", "active");
+        window.location.href = "admin.html";
         return;
     }
 

@@ -1,11 +1,14 @@
+import hashlib
+from uuid import uuid4
 from typing import Optional
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import inspect, text
 from sqlalchemy.orm import Session
 
-from .database import get_db
-from .models import Tutor
+from .database import Base, SessionLocal, engine, get_db
+from .models import Tutor, Usuario
 from .schemas import TutorCreate, TutorResponse
 
 
@@ -18,6 +21,66 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+ADMIN_EMAIL = "admin@guardian.net"
+ADMIN_PASSWORD = "Admin1234"
+
+
+def _hash_password(password: str) -> str:
+    """Mantiene compatibilidad con el SHA-256 usado por la PWA local."""
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+
+
+def _ensure_user_role_column() -> None:
+    inspector = inspect(engine)
+    if not inspector.has_table("usuarios"):
+        return
+
+    columns = {column["name"] for column in inspector.get_columns("usuarios")}
+    if "rol" not in columns:
+        with engine.begin() as connection:
+            connection.execute(
+                text("ALTER TABLE usuarios ADD COLUMN rol VARCHAR(30) NOT NULL DEFAULT 'usuario'")
+            )
+
+
+@app.on_event("startup")
+def seed_admin_user() -> None:
+    """Crea el administrador demo una sola vez al iniciar la API."""
+    Base.metadata.create_all(bind=engine)
+    _ensure_user_role_column()
+    db = SessionLocal()
+
+    try:
+        admin = db.query(Usuario).filter(Usuario.email == ADMIN_EMAIL).first()
+        if admin is None:
+            db.add(
+                Usuario(
+                    id_usuario=str(uuid4()),
+                    nombre_completo="Administrador Guardian",
+                    telefono="0000000000",
+                    email=ADMIN_EMAIL,
+                    password_hash=_hash_password(ADMIN_PASSWORD),
+                    push_token=None,
+                    dispositivo_modelo="Guardian Admin",
+                    app_version="1.0.0",
+                    rol="admin",
+                )
+            )
+            db.commit()
+            print(f"[Guardian] Usuario administrador creado: {ADMIN_EMAIL}")
+        elif admin.rol != "admin":
+            admin.rol = "admin"
+            db.commit()
+            print(f"[Guardian] Rol admin confirmado: {ADMIN_EMAIL}")
+        else:
+            print(f"[Guardian] Usuario administrador ya existe: {ADMIN_EMAIL}")
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
 
 
 def _tutor_values(payload: TutorCreate) -> dict:
