@@ -847,10 +847,7 @@
 
             function logout() {
                 sessionStorage.removeItem(ADMIN_SESSION_KEY);
-                byId("admin-app").classList.add("is-hidden");
-                byId("admin-login").classList.remove("is-hidden");
-                byId("admin-password").value = "";
-                byId("admin-email").focus();
+                window.location.href = "index.html";
             }
 
             function zoneMarkup(zone) {
