@@ -216,38 +216,46 @@ function setLocationStatus(text, live) {
 }
 
 async function loadGoogleMap() {
-    if (!config.GOOGLE_MAPS_API_KEY) {
-        document.getElementById("map-placeholder").classList.remove("is-hidden");
+    const placeholder = document.getElementById("map-placeholder"); //[cite: 4]
+
+    if (!config.GOOGLE_MAPS_API_KEY) { //[cite: 2, 3]
+        if (placeholder) placeholder.classList.remove("is-hidden"); //[cite: 2, 4]
         return;
     }
 
     try {
-        await loadMapsScript();
-        const { Map } = await window.google.maps.importLibrary("maps");
-        const initialPosition = currentPosition || defaultPosition;
-        mapInstance = new Map(document.getElementById("map"), {
-            center: initialPosition,
-            zoom: currentPosition ? 17 : 12,
-            disableDefaultUI: true,
-            zoomControl: true,
-            fullscreenControl: false,
-            streetViewControl: false,
-            clickableIcons: false,
-            mapTypeControl: false
+        await loadMapsScript(); //[cite: 2]
+        const { Map } = await window.google.maps.importLibrary("maps"); //[cite: 2]
+        const initialPosition = currentPosition || defaultPosition; //[cite: 2]
+
+        // Ocultamos el placeholder ANTES de inicializar el mapa para no perder su referencia[cite: 2, 4]
+        if (placeholder) placeholder.classList.add("is-hidden"); //[cite: 2, 4]
+
+        mapInstance = new Map(document.getElementById("map"), { //[cite: 2, 4]
+            center: initialPosition, //[cite: 2]
+            zoom: currentPosition ? 17 : 12, //[cite: 2]
+            disableDefaultUI: true, //[cite: 2]
+            zoomControl: true, //[cite: 2]
+            fullscreenControl: false, //[cite: 2]
+            streetViewControl: false, //[cite: 2]
+            clickableIcons: false, //[cite: 2]
+            mapTypeControl: false //[cite: 2]
         });
 
-        document.getElementById("map-placeholder").classList.add("is-hidden");
-        locationMarker = new window.google.maps.Marker({
-            map: mapInstance,
-            position: initialPosition,
-            title: "Tu ubicación"
+        locationMarker = new window.google.maps.Marker({ //[cite: 2]
+            map: mapInstance, //[cite: 2]
+            position: initialPosition, //[cite: 2]
+            title: "Tu ubicación" //[cite: 2]
         });
-        updateMapPosition();
+        updateMapPosition(); //[cite: 2]
     } catch (error) {
-        console.error("No se pudo cargar Google Maps:", error);
-        showDashboardMessage("No se pudo cargar el mapa. Revisa la clave y las restricciones de Google Maps.");
+        console.error("No se pudo cargar Google Maps:", error); //[cite: 2]
+        if (placeholder) placeholder.classList.remove("is-hidden"); //[cite: 2, 4]
+        showDashboardMessage("No se pudo cargar el mapa. Revisa la clave y las restricciones de Google Maps."); //[cite: 2]
     }
 }
+
+
 
 function loadMapsScript() {
     if (window.google?.maps?.importLibrary) return Promise.resolve();
@@ -267,10 +275,11 @@ function loadMapsScript() {
 }
 
 function updateMapPosition() {
-    if (!currentPosition || !mapInstance) return;
-    const position = { lat: currentPosition.lat, lng: currentPosition.lng };
-    locationMarker.setPosition(position);
-    mapInstance.panTo(position);
+    // Validamos también locationMarker para evitar el error de setPosition null[cite: 2]
+    if (!currentPosition || !mapInstance || !locationMarker) return; //[cite: 2]
+    const position = { lat: currentPosition.lat, lng: currentPosition.lng }; //[cite: 2]
+    locationMarker.setPosition(position); //[cite: 2]
+    mapInstance.panTo(position); //[cite: 2]
 }
 
 function centrarMapa() {
