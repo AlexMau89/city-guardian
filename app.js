@@ -34,6 +34,7 @@ let currentDestination = null;
 let simulationInterval = null;
 let simulationPath = [];
 let simulationIndex = 0;
+let isSimulating = false;
 let autocomplete = null;
 let selectedPlace = null;
 let geocoder = null;
@@ -241,6 +242,8 @@ function stopLocationTracking() {
 }
 
 function updateLocation(position) {
+    if (isSimulating && !position.isSimulated) return;
+
     currentPosition = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
@@ -666,6 +669,7 @@ async function trazarRuta(destino, frequentRouteKey = null) {
 function iniciarSimulacion() {
     if (!simulationPath.length) return;
 
+    isSimulating = true;
     clearInterval(simulationInterval);
     simulationIndex = 0;
     simulationInterval = setInterval(() => {
@@ -679,14 +683,26 @@ function iniciarSimulacion() {
         const point = simulationPath[simulationIndex];
         const lat = point.lat();
         const lng = point.lng();
-
-        updateLocation({
+        const simPosition = {
             coords: {
                 latitude: lat,
                 longitude: lng,
-                accuracy: 10
-            }
-        });
+                accuracy: 5
+            },
+            isSimulated: true
+        };
+
+        currentPosition = {
+            lat,
+            lng,
+            accuracy: 5,
+            speed: 0,
+            capturedAt: new Date().toISOString()
+        };
+
+        updateLocation(simPosition);
+        if (locationMarker) locationMarker.setPosition({ lat, lng });
+        if (mapInstance) mapInstance.panTo({ lat, lng });
 
         simulationIndex++;
     }, 1500);
@@ -695,24 +711,45 @@ function iniciarSimulacion() {
 function simularDesvio() {
     clearInterval(simulationInterval);
     simulationInterval = null;
+    isSimulating = true;
 
+    const basePosition = currentPosition || defaultPosition;
+    const offRoutePosition = {
+        coords: {
+            latitude: basePosition.lat + 0.0040,
+            longitude: basePosition.lng - 0.0040,
+            accuracy: 10
+        },
+        isSimulated: true
+    };
+
+    updateLocation(offRoutePosition);
     if (currentPosition) {
-        const offLat = currentPosition.lat + 0.0035;
-        const offLng = currentPosition.lng - 0.0035;
-
-        updateLocation({
-            coords: {
-                latitude: offLat,
-                longitude: offLng,
-                accuracy: 15
-            }
-        });
-
-        showDashboardMessage("⚠️ ALERTA DE SEGURIDAD: Desvío detectado. Enviando notificación a los tutores.");
+        verificarEstadoRuta(currentPosition.lat, currentPosition.lng);
     }
 }
 
+function verificarEstadoRuta(userLat, userLng) {
+    if (!isTripActive || !simulationPath.length) return false;
+    if (!Number.isFinite(userLat) || !Number.isFinite(userLng)) return false;
+
+    const distanciaMinimaKm = simulationPath.reduce((minDistance, point) => {
+        const pointLat = typeof point.lat === "function" ? point.lat() : point.lat;
+        const pointLng = typeof point.lng === "function" ? point.lng() : point.lng;
+
+        if (!Number.isFinite(pointLat) || !Number.isFinite(pointLng)) return minDistance;
+        return Math.min(minDistance, calcularDistanciaKm(userLat, userLng, pointLat, pointLng));
+    }, Number.POSITIVE_INFINITY);
+
+    if (distanciaMinimaKm <= 0.35) return false;
+
+    setLocationStatus("Desvío detectado", false);
+    showDashboardMessage("⚠️ ALERTA DE SEGURIDAD: Desvío detectado. Enviando notificación a los tutores.");
+    return true;
+}
+
 function finalizarRuta() {
+    isSimulating = false;
     clearInterval(simulationInterval);
     simulationInterval = null;
 

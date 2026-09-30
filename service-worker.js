@@ -1,4 +1,4 @@
-const CACHE_NAME = "rumbo-seguro-v12";
+const CACHE_NAME = "rumbo-seguro-v13";
 
 const FILES_TO_CACHE = [
     "./",
