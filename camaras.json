@@ -36,6 +36,18 @@
     "lon": "-99.148816"
   },
   {
+    "id": "CAM-00490",
+    "direccion": "N/A",
+    "esquina": "EJE 5 NORTE AV 412",
+    "colonia": "U.H. SAN JUAN DE ARAGON VI SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.462717",
+    "lon": "-99.062513"
+  },
+  {
     "id": "CAM-01076",
     "direccion": "N/A",
     "esquina": "NORTE 23 A",
@@ -312,6 +324,18 @@
     "lon": "-99.147599"
   },
   {
+    "id": "CAM-01616",
+    "direccion": "N/A",
+    "esquina": "C. 1531",
+    "colonia": "U. H. SAN JUAN DE ARAGON VI SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.468329",
+    "lon": "-99.063533"
+  },
+  {
     "id": "CAM-01256",
     "direccion": "N/A",
     "esquina": "2a DE 565",
@@ -346,6 +370,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.541934",
     "lon": "-99.150346"
+  },
+  {
+    "id": "CAM-08769",
+    "direccion": "N/A",
+    "esquina": "AVENIDA 414",
+    "colonia": "U. H. SAN JUAN DE ARAGON VI SECC.",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "SIN BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.467564",
+    "lon": "-99.065916"
   },
   {
     "id": "CAM-05557",
@@ -480,6 +516,18 @@
     "lon": "-99.097158"
   },
   {
+    "id": "CAM-07697",
+    "direccion": "N/A",
+    "esquina": "C. 1533",
+    "colonia": "U. H. SAN JUAN DE ARGON VI SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.467181",
+    "lon": "-99.065019"
+  },
+  {
     "id": "CAM-08833",
     "direccion": "N/A",
     "esquina": "C. GABINO BARREDA",
@@ -538,6 +586,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.462041",
     "lon": "-99.100013"
+  },
+  {
+    "id": "CAM-01491",
+    "direccion": "N/A",
+    "esquina": "C. 414A",
+    "colonia": "U. H. SAN JUAN DE ARGON VI SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.468225",
+    "lon": "-99.064533"
   },
   {
     "id": "CAM-07462",
@@ -694,6 +754,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.5404",
     "lon": "-99.148476"
+  },
+  {
+    "id": "CAM-04833",
+    "direccion": "N/A",
+    "esquina": "C. 1541",
+    "colonia": "U. H. SAN JUAN DE ARGON VI SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.465991",
+    "lon": "-99.063683"
   },
   {
     "id": "CAM-01059",
@@ -922,6 +994,18 @@
     "altavoz": "CON ALTAVOZ",
     "lat": "19.497301",
     "lon": "-99.120305"
+  },
+  {
+    "id": "CAM-01257",
+    "direccion": "N/A",
+    "esquina": "AV. 414-A",
+    "colonia": "U. H. SAN JUAN DE ARGON VI SECCION",
+    "alcaldia": "GUSTAVO A. MADERO",
+    "poste": "9m",
+    "boton": "CON BOTON",
+    "altavoz": "CON ALTAVOZ",
+    "lat": "19.466567",
+    "lon": "-99.065268"
   },
   {
     "id": "CAM-08575",
