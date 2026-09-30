@@ -1250,7 +1250,7 @@ async function cargarTutor() {
 
     if (apiBaseUrl) {
         try {
-            const response = await fetch(`${apiBaseUrl}/tutores/${encodeURIComponent(usuarioId)}`);
+            const response = await fetch(getApiUrl(`/tutores/${encodeURIComponent(usuarioId)}`));
             if (response.ok) {
                 tutor = await response.json();
                 if (tutor) saveTutor(tutor);
@@ -1298,7 +1298,7 @@ async function guardarTutor(event) {
     try {
         const apiBaseUrl = getApiBaseUrl();
         if (apiBaseUrl) {
-            const response = await fetch(`${apiBaseUrl}/tutores/${encodeURIComponent(tutor.id_usuario)}`, {
+            const response = await fetch(getApiUrl(`/tutores/${encodeURIComponent(tutor.id_usuario)}`), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(tutor)
@@ -1396,7 +1396,7 @@ async function guardarPerfil(event) {
 
 async function sendToApi(path, payload, method = "POST", requireOk = false) {
     try {
-        const response = await fetch(`${getApiBaseUrl()}${path}`, {
+        const response = await fetch(getApiUrl(path), {
             method,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -1411,6 +1411,20 @@ async function sendToApi(path, payload, method = "POST", requireOk = false) {
 
 function getApiBaseUrl() {
     return String(config.API_BASE_URL || "").replace(/\/$/, "");
+}
+
+function getApiUrl(path) {
+    const baseUrl = getApiBaseUrl();
+    const rawPath = String(path || "");
+    const apiPath = rawPath.startsWith("/api")
+        ? rawPath
+        : `/api${rawPath.startsWith("/") ? rawPath : `/${rawPath}`}`;
+
+    if (baseUrl.endsWith("/api") && apiPath.startsWith("/api")) {
+        return `${baseUrl}${apiPath.slice(4)}`;
+    }
+
+    return `${baseUrl}${apiPath}`;
 }
 
 function createUser(data) {

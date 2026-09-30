@@ -1,6 +1,17 @@
 import "dotenv/config";
 
 const TELEGRAM_API_URL = "https://api.telegram.org";
+const TELEGRAM_TEST_CHAT_ID = "8457757691";
+
+export function getTelegramConfiguration() {
+    const token = String(process.env.TELEGRAM_BOT_TOKEN || "").trim();
+    const defaultChatId = String(process.env.TELEGRAM_DEFAULT_CHAT_ID || "").trim();
+
+    return {
+        tokenConfigured: Boolean(token),
+        defaultChatId: defaultChatId || null
+    };
+}
 
 function escapeHtml(value) {
     return String(value ?? "No disponible")
@@ -25,13 +36,13 @@ function normalizeCoordinate(value) {
     return Number.isFinite(coordinate) ? coordinate : null;
 }
 
-function locationLink(lat, lon) {
+export function locationLink(lat, lon) {
     const normalizedLat = normalizeCoordinate(lat);
     const normalizedLon = normalizeCoordinate(lon);
     if (normalizedLat === null || normalizedLon === null) return "No disponible";
 
     const coordinates = `${normalizedLat},${normalizedLon}`;
-    const href = `https://www.google.com/maps?q=${encodeURIComponent(coordinates)}`;
+    const href = `https://www.google.com/maps?q=${coordinates}`;
     return `<a href="${escapeHtml(href)}">${escapeHtml(coordinates)}</a>`;
 }
 
@@ -58,23 +69,26 @@ function currentDateTime() {
     }).format(new Date());
 }
 
-async function sendTelegramMessage(text, chatIdTutor) {
+function createTelegramError(response, payload) {
+    const statusCode = payload?.error_code || response.status;
+    const description = payload?.description || `Respuesta HTTP ${response.status} sin descripción.`;
+    const error = new Error(`Telegram API error ${statusCode}: ${description}`);
+    error.statusCode = statusCode;
+    error.telegramDescription = description;
+    return error;
+}
+
+async function telegramRequest(method, body = {}) {
     const token = String(process.env.TELEGRAM_BOT_TOKEN || "").trim();
     if (!token) throw new Error("TELEGRAM_BOT_TOKEN no está configurado.");
 
-    const chatId = resolveChatId(chatIdTutor);
-    const endpoint = `${TELEGRAM_API_URL}/bot${encodeURIComponent(token)}/sendMessage`;
+    const endpoint = `${TELEGRAM_API_URL}/bot${encodeURIComponent(token)}/${method}`;
 
     try {
         const response = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                chat_id: chatId,
-                text,
-                parse_mode: "HTML",
-                disable_web_page_preview: false
-            })
+            body: JSON.stringify(body)
         });
 
         const rawBody = await response.text();
@@ -85,20 +99,53 @@ async function sendTelegramMessage(text, chatIdTutor) {
             payload = { ok: false, description: rawBody || "Respuesta inválida de Telegram." };
         }
 
-        if (!response.ok || payload.ok !== true) {
-            throw new Error(payload.description || `Telegram respondió con HTTP ${response.status}.`);
-        }
-
-        return {
-            ok: true,
-            chatId,
-            messageId: payload.result?.message_id ?? null,
-            telegram: payload
-        };
+        if (!response.ok || payload.ok !== true) throw createTelegramError(response, payload);
+        return payload;
     } catch (error) {
-        console.error("[Guardian Telegram] No se pudo enviar la notificación:", error.message);
+        console.error(`[Guardian Telegram] Error en ${method}:`, error.message);
         throw error;
     }
+}
+
+export async function sendTelegramMessage(text, chatIdTutor) {
+    const chatId = resolveChatId(chatIdTutor);
+    const payload = await telegramRequest("sendMessage", {
+        chat_id: chatId,
+        text,
+        parse_mode: "HTML",
+        disable_web_page_preview: false
+    });
+
+    return {
+        ok: true,
+        chatId,
+        messageId: payload.result?.message_id ?? null,
+        telegram: payload
+    };
+}
+
+export async function getTelegramUpdates({ offset, limit = 100 } = {}) {
+    const body = {
+        limit: Math.min(Math.max(Number(limit) || 100, 1), 100),
+        timeout: 0
+    };
+    if (offset !== undefined && offset !== null && String(offset).trim() !== "") {
+        body.offset = Number(offset);
+    }
+
+    const payload = await telegramRequest("getUpdates", body);
+    return Array.isArray(payload.result) ? payload.result : [];
+}
+
+export async function notificarMensajePrueba(chatIdTutor = TELEGRAM_TEST_CHAT_ID) {
+    const text = [
+        "✅ <b>Guardian: prueba de Telegram exitosa</b>",
+        "",
+        "El canal de notificaciones está configurado correctamente.",
+        `⏰ <b>Hora:</b> ${escapeHtml(currentDateTime())}`
+    ].join("\n");
+
+    return sendTelegramMessage(text, chatIdTutor);
 }
 
 export async function notificarAlertaPanico(datosAlerta = {}) {
