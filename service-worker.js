@@ -1,10 +1,12 @@
-const CACHE_NAME = "city-guardian-v2";
+const CACHE_NAME = "rumbo-seguro-v3";
 
 const FILES_TO_CACHE = [
     "./",
     "./index.html",
     "./styles.css",
-    "./app.js"
+    "./app.js",
+    "./config.js",
+    "./manifest.json"
 ];
 
 self.addEventListener("install", event => {

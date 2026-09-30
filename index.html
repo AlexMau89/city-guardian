@@ -2,89 +2,186 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#09131f">
+    <meta name="description" content="Rumbo Seguro: monitoreo de ubicación y asistencia durante tus viajes.">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <title>City Guardian</title>
-
     <link rel="stylesheet" href="styles.css">
+    <title>Rumbo Seguro</title>
 </head>
 
 <body>
+    <main class="app-shell">
+        <section id="auth-view" class="auth-view view" aria-labelledby="brand-title">
+            <header class="brand-lockup">
+                <div class="brand-mark" aria-hidden="true">RS</div>
+                <div>
+                    <p class="eyebrow">City Guardian</p>
+                    <h1 id="brand-title">Rumbo Seguro</h1>
+                </div>
+            </header>
 
-    <main class="app">
+            <p class="auth-intro">Tu ruta acompañada, tu ubicación protegida.</p>
 
-        <!-- LOGO HEADER -->
-        <div class="logo">
-            🛡️
-        </div>
-
-        <h1>RUMBO SEGURO</h1>
-
-        <p class="subtitle">
-             seguridad inteligente para tu viaje
-        </p>
-
-        <!-- VISTA 1: LOGIN -->
-        <section id="login-view" class="card view">
-            <h2>Iniciar Sesión</h2>
-            <p class="login-desc">Ingresa tus credenciales para iniciar el monitoreo de rutas en tiempo real.</p>
-
-            <form id="login-form" onsubmit="iniciarSesion(event)">
-                <div class="input-group">
-                    <label for="usuario">Usuario / Correo</label>
-                    <input type="text" id="usuario" placeholder="ej. guardian@seguridad.com" required autocomplete="username">
+            <div class="auth-panel">
+                <div class="auth-tabs" role="tablist" aria-label="Acceso a la cuenta">
+                    <button class="auth-tab is-active" type="button" role="tab" aria-selected="true" data-auth-tab="login">Iniciar sesión</button>
+                    <button class="auth-tab" type="button" role="tab" aria-selected="false" data-auth-tab="register">Crear cuenta</button>
                 </div>
 
-                <div class="input-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
-                </div>
+                <form id="login-form" class="auth-form" novalidate>
+                    <div class="section-heading">
+                        <p class="eyebrow">Bienvenido de vuelta</p>
+                        <h2>Ingresa a tu recorrido</h2>
+                    </div>
 
-                <button type="submit" class="btn-primary">
-                    Ingresar al Sistema
-                </button>
-            </form>
-        </section>
+                    <label class="field">
+                        <span>Correo o teléfono</span>
+                        <input id="login-identifier" name="identifier" type="text" placeholder="tu@correo.com" autocomplete="username" required>
+                    </label>
 
-        <!-- VISTA 2: DASHBOARD (Oculta por defecto) -->
-        <section id="dashboard-view" class="card view hidden">
-            <div class="status">
-                <span class="status-dot"></span>
-                Sistema activo
+                    <label class="field">
+                        <span>Contraseña</span>
+                        <input id="login-password" name="password" type="password" placeholder="Tu contraseña" autocomplete="current-password" required>
+                    </label>
+
+                    <button class="button button-primary" type="submit">Entrar a mi cuenta <span aria-hidden="true">→</span></button>
+                    <p id="login-message" class="form-message" role="alert"></p>
+                </form>
+
+                <form id="register-form" class="auth-form is-hidden" novalidate>
+                    <div class="section-heading">
+                        <p class="eyebrow">Primera vez aquí</p>
+                        <h2>Crea tu cuenta</h2>
+                    </div>
+
+                    <label class="field">
+                        <span>Nombre completo</span>
+                        <input id="register-name" name="name" type="text" placeholder="Nombre y apellidos" autocomplete="name" required>
+                    </label>
+
+                    <div class="field-row">
+                        <label class="field">
+                            <span>Teléfono</span>
+                            <input id="register-phone" name="phone" type="tel" placeholder="55 0000 0000" autocomplete="tel" required>
+                        </label>
+                        <label class="field">
+                            <span>Correo</span>
+                            <input id="register-email" name="email" type="email" placeholder="tu@correo.com" autocomplete="email" required>
+                        </label>
+                    </div>
+
+                    <label class="field">
+                        <span>Contraseña</span>
+                        <input id="register-password" name="password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required>
+                    </label>
+
+                    <label class="field">
+                        <span>Repite tu contraseña</span>
+                        <input id="register-password-confirm" name="passwordConfirm" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" minlength="6" required>
+                    </label>
+
+                    <button class="button button-primary" type="submit">Crear mi cuenta <span aria-hidden="true">→</span></button>
+                    <p id="register-message" class="form-message" role="alert"></p>
+                </form>
             </div>
 
-            <h2 id="bienvenida-text" style="margin-top: 15px;">Hola 👋</h2>
-
-            <p>
-                Tu dispositivo está listo para monitorear cambios de velocidad, giros y pérdida de conexión.
-            </p>
-
-            <button class="btn-primary" onclick="mostrarMensaje()">
-                ▶️ Iniciar Monitoreo
-            </button>
-
-            <button class="emergency" onclick="emergencia()">
-                🚨 Emergencia
-            </button>
-
-            <button class="btn-logout" onclick="cerrarSesion()">
-                Cerrar Sesión
-            </button>
+            <p class="auth-footnote">Modo respaldo local activo · versión <span id="app-version"></span></p>
         </section>
 
-        <p id="mensaje"></p>
+        <section id="dashboard-view" class="dashboard-view view is-hidden" aria-label="Panel principal">
+            <header class="dashboard-header">
+                <div class="brand-lockup brand-lockup-small">
+                    <div class="brand-mark" aria-hidden="true">RS</div>
+                    <div>
+                        <p class="eyebrow">Rumbo Seguro</p>
+                        <p class="dashboard-greeting" id="dashboard-greeting">Tu recorrido</p>
+                    </div>
+                </div>
+                <button id="profile-button" class="avatar-button" type="button" aria-label="Abrir perfil" title="Abrir perfil">
+                    <span id="profile-initials">RS</span>
+                </button>
+            </header>
 
+            <div class="map-wrap">
+                <div id="map" class="map-canvas" aria-label="Mapa de tu ubicación actual">
+                    <div id="map-placeholder" class="map-placeholder">
+                        <div class="placeholder-icon" aria-hidden="true">⌖</div>
+                        <strong>Mapa listo para conectarse</strong>
+                        <p>Agrega tu clave restringida de Google Maps para ver tu ubicación.</p>
+                    </div>
+                </div>
+                <div class="map-status" id="location-status" role="status">
+                    <span class="status-dot"></span>
+                    <span>Solicitando ubicación…</span>
+                </div>
+                <button id="recenter-button" class="map-control" type="button" aria-label="Centrar en mi ubicación" title="Centrar en mi ubicación">◎</button>
+            </div>
+
+            <section class="trip-info" aria-label="Estado del recorrido">
+                <div>
+                    <p class="eyebrow">Monitoreo activo</p>
+                    <h2 id="trip-title">Tu ubicación está protegida</h2>
+                </div>
+                <div class="coordinates" id="coordinates">Ubicación pendiente</div>
+            </section>
+
+            <section class="action-area" aria-label="Acciones de asistencia">
+                <button id="panic-button" class="button panic-button" type="button">
+                    <span class="action-icon" aria-hidden="true">!</span>
+                    <span><strong>Botón de pánico</strong><small>Enviar alerta con mi ubicación</small></span>
+                </button>
+                <a id="call-button" class="button call-button" href="tel:911">
+                    <span class="action-icon" aria-hidden="true">☎</span>
+                    <span><strong>Llamar a emergencias</strong><small id="call-label">911</small></span>
+                </a>
+            </section>
+
+            <p id="dashboard-message" class="dashboard-message" role="status"></p>
+        </section>
     </main>
 
+    <div id="profile-modal" class="modal-backdrop is-hidden" role="presentation">
+        <section class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title">
+            <div class="modal-header">
+                <div>
+                    <p class="eyebrow">Mi cuenta</p>
+                    <h2 id="profile-title">Perfil del usuario</h2>
+                </div>
+                <button id="close-profile-button" class="close-button" type="button" aria-label="Cerrar perfil">×</button>
+            </div>
+
+            <form id="profile-form" class="profile-form" novalidate>
+                <label class="field">
+                    <span>Nombre completo</span>
+                    <input id="profile-name" type="text" required autocomplete="name">
+                </label>
+                <label class="field">
+                    <span>Teléfono</span>
+                    <input id="profile-phone" type="tel" required autocomplete="tel">
+                </label>
+                <label class="field">
+                    <span>Correo</span>
+                    <input id="profile-email" type="email" required autocomplete="email">
+                </label>
+                <label class="field">
+                    <span>Modelo del dispositivo</span>
+                    <input id="profile-device" type="text" placeholder="Opcional" autocomplete="off">
+                </label>
+                <button class="button button-primary" type="submit">Guardar cambios</button>
+                <p id="profile-message" class="form-message" role="status"></p>
+            </form>
+
+            <button id="logout-button" class="button button-secondary" type="button">Cerrar sesión</button>
+        </section>
+    </div>
+
+    <script src="config.js"></script>
     <script src="app.js"></script>
     <script>
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("service-worker.js")
-            .then(() => console.log("Service Worker registrado"))
-            .catch(error => console.error("Error:", error));
-    }
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js").catch(error => console.error("Error del service worker:", error));
+        }
     </script>
-
 </body>
 </html>
