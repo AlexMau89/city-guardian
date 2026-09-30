@@ -12,7 +12,8 @@ let zonasVisibles = false;
 const STORAGE = {
     users: "rs_usuarios",
     session: "rs_sesion",
-    alerts: "rs_alertas"
+    alerts: "rs_alertas",
+    frequentRoutes: "rs_rutas_frecuentes"
 };
 
 const config = window.APP_CONFIG || {};
@@ -28,6 +29,8 @@ let directionsService = null;
 let directionsRenderer = null;
 let isTripActive = false;
 let currentDestination = null;
+let autocomplete = null;
+let selectedPlace = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("app-version").textContent = config.APP_VERSION || "0.3.0";
@@ -49,7 +52,13 @@ function bindEvents() {
     document.getElementById("route-form").addEventListener("submit", manejarFormularioRuta);
     document.getElementById("close-route-button").addEventListener("click", cerrarModalRuta);
     document.querySelectorAll(".frequent-route-btn").forEach(button => {
-        button.addEventListener("click", () => trazarRuta(button.dataset.destination));
+        button.addEventListener("click", () => usarRutaFrecuente(button.closest(".frequent-route-item").dataset.routeKey));
+    });
+    document.querySelectorAll(".frequent-route-save-btn").forEach(button => {
+        button.addEventListener("click", () => guardarRutaFrecuente(button.dataset.routeKey));
+    });
+    document.getElementById("destination-input").addEventListener("input", () => {
+        selectedPlace = null;
     });
     document.getElementById("recenter-button").addEventListener("click", centrarMapa);
     document.getElementById("profile-button").addEventListener("click", abrirPerfil);
@@ -256,6 +265,7 @@ async function loadGoogleMap() {
         await loadMapsScript(); //[cite: 2]
         const { Map } = await window.google.maps.importLibrary("maps"); //[cite: 2]
         const { DirectionsService, DirectionsRenderer } = await window.google.maps.importLibrary("routes");
+        const { Autocomplete } = await window.google.maps.importLibrary("places");
         const initialPosition = currentPosition || defaultPosition; //[cite: 2]
 
         // Ocultamos el placeholder ANTES de inicializar el mapa para no perder su referencia[cite: 2, 4]
@@ -282,6 +292,7 @@ async function loadGoogleMap() {
             map: mapInstance,
             suppressMarkers: false
         });
+        inicializarAutocomplete(Autocomplete);
         updateMapPosition(); //[cite: 2]
         actualizarZonasCercanas();
     } catch (error) {
@@ -305,7 +316,10 @@ function abrirModalRuta() {
     const message = document.getElementById("route-message");
     const input = document.getElementById("destination-input");
 
+    selectedPlace = null;
+    input.value = "";
     message.textContent = "";
+    actualizarRutasFrecuentes();
     modal.classList.remove("is-hidden");
     window.setTimeout(() => input.focus(), 0);
 }
@@ -318,6 +332,27 @@ function cerrarModalRuta() {
 function manejarFormularioRuta(event) {
     event.preventDefault();
     trazarRuta(document.getElementById("destination-input").value);
+}
+
+function inicializarAutocomplete(Autocomplete) {
+    if (autocomplete) return;
+
+    autocomplete = new Autocomplete(document.getElementById("destination-input"), {
+        types: ["geocode", "establishment"],
+        componentRestrictions: { country: "mx" },
+        fields: ["geometry", "formatted_address", "name"]
+    });
+
+    autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+
+        if (place.geometry && place.geometry.location) {
+            selectedPlace = place;
+            return;
+        }
+
+        selectedPlace = null;
+    });
 }
 
 function actualizarControlRecorrido() {
@@ -355,13 +390,14 @@ function trazarRuta(destino) {
     const origin = currentPosition
         ? { lat: currentPosition.lat, lng: currentPosition.lng }
         : defaultPosition;
-    const destinationLabel = typeof destination === "string"
-        ? destination
-        : destination.name || "Destino seleccionado";
+    const routeDestination = selectedPlace?.geometry?.location || destination;
+    const destinationLabel = selectedPlace?.formatted_address
+        || selectedPlace?.name
+        || (typeof destination === "string" ? destination : "Destino seleccionado");
 
     directionsService.route({
         origin,
-        destination,
+        destination: routeDestination,
         travelMode: window.google.maps.TravelMode.WALKING
     }, (response, status) => {
         if (status !== "OK") {
@@ -387,8 +423,94 @@ function finalizarRuta() {
 
     isTripActive = false;
     currentDestination = null;
+    selectedPlace = null;
     actualizarControlRecorrido();
     document.getElementById("trip-title").textContent = "Tu ubicación está protegida";
+}
+
+function getFrequentRoutes() {
+    return readJson(STORAGE.frequentRoutes, {});
+}
+
+function saveFrequentRoutes(routes) {
+    localStorage.setItem(STORAGE.frequentRoutes, JSON.stringify(routes));
+}
+
+function actualizarRutasFrecuentes() {
+    const routes = getFrequentRoutes();
+
+    document.querySelectorAll(".frequent-route-item").forEach(item => {
+        const route = routes[item.dataset.routeKey];
+        const address = item.querySelector(".frequent-route-address");
+        const saveButton = item.querySelector(".frequent-route-save-btn");
+
+        address.textContent = route?.address || "Sin configurar";
+        saveButton.textContent = route ? "Actualizar actual" : "Guardar actual";
+    });
+}
+
+function guardarRutaFrecuente(routeKey) {
+    if (!currentPosition) {
+        document.getElementById("route-message").textContent = "Aún no tenemos tu ubicación actual.";
+        return;
+    }
+
+    const routes = getFrequentRoutes();
+    const lat = currentPosition.lat;
+    const lng = currentPosition.lng;
+
+    routes[routeKey] = {
+        address: `Ubicación actual (${lat.toFixed(5)}, ${lng.toFixed(5)})`,
+        lat,
+        lng,
+        updatedAt: new Date().toISOString()
+    };
+
+    saveFrequentRoutes(routes);
+    actualizarRutasFrecuentes();
+    document.getElementById("route-message").textContent = "Ubicación guardada correctamente.";
+}
+
+function usarRutaFrecuente(routeKey) {
+    const routes = getFrequentRoutes();
+    const savedRoute = routes[routeKey];
+
+    if (!savedRoute) {
+        const label = document.querySelector(`[data-route-key="${routeKey}"] .frequent-route-btn`).textContent;
+        const address = window.prompt(`Ingresa la dirección para ${label}:`);
+
+        if (!address?.trim()) return;
+
+        const updatedRoutes = getFrequentRoutes();
+        updatedRoutes[routeKey] = {
+            address: address.trim(),
+            updatedAt: new Date().toISOString()
+        };
+        saveFrequentRoutes(updatedRoutes);
+        actualizarRutasFrecuentes();
+        document.getElementById("destination-input").value = address.trim();
+        selectedPlace = null;
+        trazarRuta(address.trim());
+        return;
+    }
+
+    document.getElementById("destination-input").value = savedRoute.address;
+
+    if (Number.isFinite(savedRoute.lat) && Number.isFinite(savedRoute.lng)) {
+        selectedPlace = {
+            formatted_address: savedRoute.address,
+            geometry: {
+                location: {
+                    lat: savedRoute.lat,
+                    lng: savedRoute.lng
+                }
+            }
+        };
+    } else {
+        selectedPlace = null;
+    }
+
+    trazarRuta(savedRoute.address);
 }
 
 
@@ -402,7 +524,7 @@ function loadMapsScript() {
         const script = document.createElement("script");
         script.async = true;
         script.defer = true;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(config.GOOGLE_MAPS_API_KEY)}&v=weekly&loading=async&callback=__rumboSeguroMapsReady`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(config.GOOGLE_MAPS_API_KEY)}&v=weekly&loading=async&libraries=places&callback=__rumboSeguroMapsReady`;
         script.onerror = () => reject(new Error("Google Maps no respondió"));
         document.head.appendChild(script);
     });

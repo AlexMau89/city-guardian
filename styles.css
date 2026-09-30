@@ -551,8 +551,10 @@ h1 {
 }
 
 #trip-control-button {
+    justify-content: flex-start;
     margin-left: 18px;
     margin-right: 18px;
+    text-align: left;
     width: calc(100% - 36px);
 }
 
@@ -578,7 +580,23 @@ h1 {
 .frequent-route-list {
     display: grid;
     gap: 8px;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
+}
+
+.frequent-route-item {
+    align-items: center;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.frequent-route-address {
+    color: var(--muted);
+    font-size: 10px;
+    grid-column: 1 / -1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .frequent-route-btn {
@@ -589,6 +607,7 @@ h1 {
     cursor: pointer;
     min-height: 48px;
     padding: 10px 8px;
+    text-align: left;
     transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }
 
@@ -600,14 +619,91 @@ h1 {
     transform: translateY(1px);
 }
 
+.frequent-route-save-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 11px;
+    min-height: 38px;
+    padding: 8px 10px;
+    white-space: nowrap;
+}
+
+.frequent-route-save-btn:hover {
+    border-color: var(--amber);
+    color: var(--ink);
+}
+
+.destination-input-wrap {
+    align-items: center;
+    display: flex;
+    position: relative;
+}
+
+.destination-input-wrap input {
+    padding-left: 40px;
+}
+
+.destination-search-icon {
+    color: var(--muted);
+    font-size: 22px;
+    left: 13px;
+    line-height: 1;
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+}
+
+.pac-container {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    color: var(--ink);
+    font-family: inherit;
+    margin-top: 4px;
+    overflow: hidden;
+    z-index: 9999 !important;
+}
+
+.pac-item {
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    cursor: pointer;
+    padding: 10px 12px;
+}
+
+.pac-item:first-child {
+    border-top: 0;
+}
+
+.pac-item:hover,
+.pac-item-selected {
+    background: var(--surface-raised);
+}
+
+.pac-item-query {
+    color: var(--ink);
+}
+
+.pac-matched {
+    color: var(--teal);
+}
+
 .route-form {
     display: grid;
     gap: 2px;
 }
 
 @media (max-width: 440px) {
-    .frequent-route-list {
+    .frequent-route-item {
         grid-template-columns: 1fr;
+    }
+
+    .frequent-route-save-btn {
+        width: 100%;
     }
 }
 

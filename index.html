@@ -120,7 +120,10 @@
 
             <button id="trip-control-button" class="button button-primary" type="button" style="margin-bottom: 12px;">
                 <span aria-hidden="true">🚀</span>
-                <span><strong>Iniciar recorrido</strong><small id="trip-control-label">Seleccionar destino</small></span>
+                <div style="display: flex; flex-direction: column; text-align: left;">
+                    <strong>Iniciar recorrido</strong>
+                    <small id="trip-control-label" style="opacity: 0.8; font-weight: normal;">Seleccionar destino</small>
+                </div>
             </button>
 
             <section class="trip-info" aria-label="Estado del recorrido">
@@ -198,16 +201,31 @@
             <div class="route-options">
                 <p class="eyebrow">Rutas frecuentes</p>
                 <div class="frequent-route-list">
-                    <button class="frequent-route-btn" type="button" data-destination="Universidad Nacional Autónoma de México, Ciudad de México">Escuela / Universidad</button>
-                    <button class="frequent-route-btn" type="button" data-destination="Casa, Ciudad de México">Casa</button>
-                    <button class="frequent-route-btn" type="button" data-destination="Trabajo, Ciudad de México">Trabajo</button>
+                    <div class="frequent-route-item" data-route-key="school">
+                        <button class="frequent-route-btn" type="button">Escuela / Universidad</button>
+                        <button class="frequent-route-save-btn" type="button" data-route-key="school">Guardar actual</button>
+                        <small class="frequent-route-address">Sin configurar</small>
+                    </div>
+                    <div class="frequent-route-item" data-route-key="home">
+                        <button class="frequent-route-btn" type="button">Casa</button>
+                        <button class="frequent-route-save-btn" type="button" data-route-key="home">Guardar actual</button>
+                        <small class="frequent-route-address">Sin configurar</small>
+                    </div>
+                    <div class="frequent-route-item" data-route-key="work">
+                        <button class="frequent-route-btn" type="button">Trabajo</button>
+                        <button class="frequent-route-save-btn" type="button" data-route-key="work">Guardar actual</button>
+                        <small class="frequent-route-address">Sin configurar</small>
+                    </div>
                 </div>
             </div>
 
             <form id="route-form" class="route-form" novalidate>
                 <label class="field">
                     <span>Destino</span>
-                    <input id="destination-input" type="text" placeholder="Ingresa una dirección o destino" autocomplete="street-address" required>
+                    <div class="destination-input-wrap">
+                        <span class="destination-search-icon" aria-hidden="true">⌕</span>
+                        <input id="destination-input" type="text" placeholder="Ingresa una dirección o destino" autocomplete="street-address" required>
+                    </div>
                 </label>
                 <button class="button button-primary" type="submit">Trazar Ruta <span aria-hidden="true">→</span></button>
                 <p id="route-message" class="form-message" role="alert"></p>
