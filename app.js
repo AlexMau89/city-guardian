@@ -35,6 +35,7 @@ let simulationInterval = null;
 let simulationPath = [];
 let simulationIndex = 0;
 let isSimulating = false;
+let deviationCount = 0;
 let autocomplete = null;
 let selectedPlace = null;
 let geocoder = null;
@@ -625,6 +626,8 @@ async function trazarRuta(destino, frequentRouteKey = null) {
             directionsRenderer.setDirections(response);
             isTripActive = true;
             currentDestination = destinationTarget;
+            deviationCount = 0;
+            document.getElementById("dashboard-view")?.classList.remove("high-alert");
 
             const route = response.routes[0];
             if (route && route.overview_path) {
@@ -714,19 +717,58 @@ function simularDesvio() {
     isSimulating = true;
 
     const basePosition = currentPosition || defaultPosition;
-    const offRoutePosition = {
+    const posicionDesviada = {
+        lat: basePosition.lat + 0.0030,
+        lng: basePosition.lng - 0.0030
+    };
+
+    updateLocation({
         coords: {
-            latitude: basePosition.lat + 0.0040,
-            longitude: basePosition.lng - 0.0040,
+            latitude: posicionDesviada.lat,
+            longitude: posicionDesviada.lng,
             accuracy: 10
         },
         isSimulated: true
-    };
+    });
+    recalcularYEscalarAlerta(posicionDesviada);
+}
 
-    updateLocation(offRoutePosition);
-    if (currentPosition) {
-        verificarEstadoRuta(currentPosition.lat, currentPosition.lng);
+function recalcularYEscalarAlerta(nuevaPosicion) {
+    deviationCount++;
+
+    if (deviationCount === 1) {
+        showDashboardMessage("🟡 Reenrutando... Nueva ruta calculada.");
+    } else if (deviationCount === 2) {
+        showDashboardMessage("🟠 ADVERTENCIA: Segundo desvío detectado. Notificando a tutores.");
+        navigator.vibrate?.([200, 100, 200]);
+    } else if (deviationCount >= 3) {
+        showDashboardMessage("🔴 🚨 ALERTA CRÍTICA: 3 desvíos reincidentes. Activando protocolo de emergencia.");
+        document.getElementById("dashboard-view")?.classList.add("high-alert");
+        navigator.vibrate?.([500, 200, 500, 200, 500]);
     }
+
+    if (!directionsService || !directionsRenderer || !currentDestination) {
+        console.error("No se puede recalcular la ruta: faltan servicios o destino.");
+        return;
+    }
+
+    directionsService.route({
+        origin: { lat: nuevaPosicion.lat, lng: nuevaPosicion.lng },
+        destination: currentDestination,
+        travelMode: window.google.maps.TravelMode.DRIVING
+    }, (response, status) => {
+        if (status === "OK") {
+            directionsRenderer.setDirections(response);
+            const route = response.routes[0];
+            if (route && route.overview_path) {
+                simulationPath = route.overview_path;
+                simulationIndex = 0;
+            }
+            return;
+        }
+
+        console.error("No se pudo recalcular la ruta:", status);
+    });
 }
 
 function verificarEstadoRuta(userLat, userLng) {
@@ -752,6 +794,8 @@ function finalizarRuta() {
     isSimulating = false;
     clearInterval(simulationInterval);
     simulationInterval = null;
+    deviationCount = 0;
+    document.getElementById("dashboard-view")?.classList.remove("high-alert");
 
     if (directionsRenderer) {
         directionsRenderer.setDirections({ routes: [] });
