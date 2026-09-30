@@ -732,6 +732,16 @@ h1 {
     z-index: 10001;
 }
 
+#simulation-controls {
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+
+#simulation-controls .button {
+    flex: 1 1 220px;
+    width: auto;
+}
+
 @media (max-width: 440px) {
     .frequent-route-item {
         grid-template-columns: 1fr;
@@ -743,6 +753,15 @@ h1 {
 
     .confirm-actions {
         grid-template-columns: 1fr;
+    }
+
+    #simulation-controls {
+        flex-direction: column;
+    }
+
+    #simulation-controls .button {
+        flex-basis: auto;
+        width: 100%;
     }
 }
 

@@ -31,6 +31,9 @@ let directionsService = null;
 let directionsRenderer = null;
 let isTripActive = false;
 let currentDestination = null;
+let simulationInterval = null;
+let simulationPath = [];
+let simulationIndex = 0;
 let autocomplete = null;
 let selectedPlace = null;
 let geocoder = null;
@@ -55,6 +58,8 @@ function bindEvents() {
     document.getElementById("panic-button").addEventListener("click", enviarAlertaPanic);
     document.getElementById("zones-button").addEventListener("click", toggleZonasCriticas);
     document.getElementById("trip-control-button").addEventListener("click", manejarControlRecorrido);
+    document.getElementById("sim-start-btn").addEventListener("click", iniciarSimulacion);
+    document.getElementById("sim-deviate-btn").addEventListener("click", simularDesvio);
     document.getElementById("route-form").addEventListener("submit", manejarFormularioRuta);
     document.getElementById("close-route-button").addEventListener("click", cerrarModalRuta);
     document.querySelectorAll(".frequent-route-btn").forEach(button => {
@@ -618,6 +623,12 @@ async function trazarRuta(destino, frequentRouteKey = null) {
             isTripActive = true;
             currentDestination = destinationTarget;
 
+            const route = response.routes[0];
+            if (route && route.overview_path) {
+                simulationPath = route.overview_path;
+            }
+            document.getElementById("simulation-controls").classList.remove("is-hidden");
+
             if (frequentRouteKey && geocodedResult) {
                 const coordinates = obtenerLatLngLiteral(geocodedResult.geometry.location);
                 if (coordinates) {
@@ -652,7 +663,59 @@ async function trazarRuta(destino, frequentRouteKey = null) {
     }
 }
 
+function iniciarSimulacion() {
+    if (!simulationPath.length) return;
+
+    clearInterval(simulationInterval);
+    simulationIndex = 0;
+    simulationInterval = setInterval(() => {
+        if (simulationIndex >= simulationPath.length) {
+            clearInterval(simulationInterval);
+            simulationInterval = null;
+            showDashboardMessage("🏁 Simulación finalizada: Has llegado a tu destino.");
+            return;
+        }
+
+        const point = simulationPath[simulationIndex];
+        const lat = point.lat();
+        const lng = point.lng();
+
+        updateLocation({
+            coords: {
+                latitude: lat,
+                longitude: lng,
+                accuracy: 10
+            }
+        });
+
+        simulationIndex++;
+    }, 1500);
+}
+
+function simularDesvio() {
+    clearInterval(simulationInterval);
+    simulationInterval = null;
+
+    if (currentPosition) {
+        const offLat = currentPosition.lat + 0.0035;
+        const offLng = currentPosition.lng - 0.0035;
+
+        updateLocation({
+            coords: {
+                latitude: offLat,
+                longitude: offLng,
+                accuracy: 15
+            }
+        });
+
+        showDashboardMessage("⚠️ ALERTA DE SEGURIDAD: Desvío detectado. Enviando notificación a los tutores.");
+    }
+}
+
 function finalizarRuta() {
+    clearInterval(simulationInterval);
+    simulationInterval = null;
+
     if (directionsRenderer) {
         directionsRenderer.setDirections({ routes: [] });
     }
@@ -660,6 +723,9 @@ function finalizarRuta() {
     isTripActive = false;
     currentDestination = null;
     selectedPlace = null;
+    document.getElementById("simulation-controls").classList.add("is-hidden");
+    simulationPath = [];
+    simulationIndex = 0;
     actualizarControlRecorrido();
     document.getElementById("trip-title").textContent = "Tu ubicación está protegida";
 }
