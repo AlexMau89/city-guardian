@@ -1,3 +1,13 @@
+const ZONAS_RIESGO = [
+    { id: "gam", nombre: "GAM (Gabriel Hernández / La Cienega)", lat: 19.4850, lng: -99.1120, radio: 1000, nivel: "Alto" },
+    { id: "tepito", nombre: "Tepito / Morelos", lat: 19.4440, lng: -99.1250, radio: 800, nivel: "Muy Alto" },
+    { id: "doctores", nombre: "Doctores / Buenos Aires", lat: 19.4180, lng: -99.1480, radio: 900, nivel: "Medio-Alto" },
+    { id: "iztapalapa", nombre: "Iztapalapa Centro", lat: 19.3580, lng: -99.0920, radio: 1500, nivel: "Alto" },
+    { id: "ecatepec", nombre: "Ecatepec (Límite GAM)", lat: 19.5350, lng: -99.0250, radio: 1800, nivel: "Alto" }
+];
+
+let zonasDibujadas = [];
+
 const STORAGE = {
     users: "rs_usuarios",
     session: "rs_sesion",
@@ -198,6 +208,8 @@ function updateLocation(position) {
     setLocationStatus("Ubicación en vivo", true);
     document.getElementById("coordinates").textContent = `${currentPosition.lat.toFixed(5)}, ${currentPosition.lng.toFixed(5)} · ±${currentPosition.accuracy} m`;
     updateMapPosition();
+
+    actualizarZonasCercanas(currentPosition.lat, currentPosition.lng);
 }
 
 function handleLocationError(error) {
@@ -447,4 +459,55 @@ function showDashboardMessage(message) {
     showDashboardMessage.timeout = window.setTimeout(() => {
         element.textContent = "";
     }, 7000);
+}
+
+// --- FUNCIONES DE DETECCIÓN DE ZONAS CERCANAS ---
+
+function calcularDistanciaKm(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+function actualizarZonasCercanas(userLat, userLng) {
+    if (!mapInstance) return;
+
+    // Limpiar círculos dibujados anteriormente
+    zonasDibujadas.forEach(circle => circle.setMap(null));
+    zonasDibujadas = [];
+
+    let zonaCercanaDetectada = null;
+
+    ZONAS_RIESGO.forEach(zona => {
+        const distanciaKm = calcularDistanciaKm(userLat, userLng, zona.lat, zona.lng);
+
+        // Dibuja en el mapa si la zona está a menos de 10 km del usuario
+        if (distanciaKm <= 10.0) {
+            const circle = new google.maps.Circle({
+                strokeColor: "#FF2D55",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF2D55",
+                fillOpacity: 0.35,
+                map: mapInstance,
+                center: { lat: zona.lat, lng: zona.lng },
+                radius: zona.radio
+            });
+
+            zonasDibujadas.push(circle);
+
+            // Si el usuario está físicamente dentro del radio de la zona
+            if (distanciaKm * 1000 <= zona.radio) {
+                zonaCercanaDetectada = zona;
+            }
+        }
+    });
+
+    if (zonaCercanaDetectada) {
+        showDashboardMessage(`⚠️ ATENCIÓN: Te encuentras dentro de una zona de riesgo: ${zonaCercanaDetectada.nombre}`);
+    }
 }
