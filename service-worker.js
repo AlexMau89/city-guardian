@@ -1,4 +1,4 @@
-const CACHE_NAME = "guardian-v1";
+const CACHE_NAME = "guardian-v2";
 
 const FILES_TO_CACHE = [
     "./",

@@ -215,6 +215,34 @@
                 <p id="profile-message" class="form-message" role="status"></p>
             </form>
 
+            <section class="tutor-section" aria-labelledby="tutor-title">
+                <div class="section-heading">
+                    <p class="eyebrow">Contacto de confianza</p>
+                    <h3 id="tutor-title">Datos del Tutor / Contacto de Confianza</h3>
+                </div>
+
+                <form id="tutor-form" class="tutor-form" novalidate>
+                    <label class="field">
+                        <span>Nombre completo del tutor</span>
+                        <input type="text" id="tutor-nombre" placeholder="Nombre completo del tutor" required autocomplete="name">
+                    </label>
+                    <label class="field">
+                        <span>Teléfono</span>
+                        <input type="tel" id="tutor-telefono" placeholder="Número de teléfono" required autocomplete="tel">
+                    </label>
+                    <label class="field">
+                        <span>Parentesco</span>
+                        <input type="text" id="tutor-parentesco" placeholder="Parentesco (ej. Padre, Madre, Tutor)" autocomplete="off">
+                    </label>
+                    <label class="field">
+                        <span>Correo electrónico</span>
+                        <input type="email" id="tutor-email" placeholder="Correo electrónico (opcional)" autocomplete="email">
+                    </label>
+                    <button class="button button-primary" type="submit" id="btn-guardar-tutor">Guardar Datos del Tutor</button>
+                    <p id="tutor-message" class="form-message" role="status"></p>
+                </form>
+            </section>
+
             <button id="logout-button" class="button button-secondary" type="button">Cerrar sesión</button>
         </section>
     </div>

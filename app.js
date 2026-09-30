@@ -64,6 +64,8 @@ function bindEvents() {
     document.getElementById("login-form").addEventListener("submit", iniciarSesion);
     document.getElementById("register-form").addEventListener("submit", registrarUsuario);
     document.getElementById("profile-form").addEventListener("submit", guardarPerfil);
+    const tutorForm = document.getElementById("tutor-form");
+    if (tutorForm) tutorForm.addEventListener("submit", guardarTutor);
     document.getElementById("panic-button").addEventListener("click", enviarAlertaPanic);
     document.getElementById("zones-button").addEventListener("click", toggleZonasCriticas);
     document.getElementById("trip-control-button").addEventListener("click", manejarControlRecorrido);
@@ -131,7 +133,10 @@ function validateFormFields(fields) {
 
     fields.forEach(fieldConfig => {
         const input = document.getElementById(fieldConfig.id);
-        if (!input) return;
+        if (!input) {
+            isValid = false;
+            return;
+        }
 
         const value = input.value.trim();
         const error = validateFieldValue(value, fieldConfig.type, fieldConfig.required !== false);
@@ -205,8 +210,8 @@ function clearFieldError(input) {
 
 async function iniciarSesion(event) {
     event.preventDefault();
-    const identifier = document.getElementById("login-identifier").value.trim().toLowerCase();
-    const password = document.getElementById("login-password").value;
+    const identifier = readInputValue("login-identifier").toLowerCase();
+    const password = readInputValue("login-password", false);
     const message = document.getElementById("login-message");
 
     const isValid = validateFormFields([
@@ -242,13 +247,13 @@ async function iniciarSesion(event) {
 
 async function registrarUsuario(event) {
     event.preventDefault();
-    const nombres = document.getElementById("register-nombres").value.trim();
-    const apellidoPaterno = document.getElementById("register-paterno").value.trim();
-    const apellidoMaterno = document.getElementById("register-materno").value.trim();
-    const phone = document.getElementById("register-phone").value.trim();
-    const email = document.getElementById("register-email").value.trim().toLowerCase();
-    const password = document.getElementById("register-password").value;
-    const confirmation = document.getElementById("register-password-confirm").value;
+    const nombres = readInputValue("register-nombres");
+    const apellidoPaterno = readInputValue("register-paterno");
+    const apellidoMaterno = readInputValue("register-materno");
+    const phone = readInputValue("register-phone");
+    const email = readInputValue("register-email").toLowerCase();
+    const password = readInputValue("register-password", false);
+    const confirmation = readInputValue("register-password-confirm", false);
     const message = document.getElementById("register-message");
 
     const isValid = validateFormFields([
@@ -1177,10 +1182,104 @@ function getOneLocation() {
     });
 }
 
-function abrirPerfil() {
+async function abrirPerfil() {
     fillProfileForm();
-    document.getElementById("profile-modal").classList.remove("is-hidden");
-    document.getElementById("profile-nombres").focus();
+    const modal = document.getElementById("profile-modal");
+    const firstNameInput = document.getElementById("profile-nombres");
+    modal?.classList.remove("is-hidden");
+    firstNameInput?.focus();
+    await cargarTutor();
+}
+
+async function cargarTutor() {
+    const usuarioId = activeUser?.id_usuario;
+    if (!usuarioId) return;
+
+    let tutor = obtenerTutorLocal(usuarioId);
+    const apiBaseUrl = getApiBaseUrl();
+
+    if (apiBaseUrl) {
+        try {
+            const response = await fetch(`${apiBaseUrl}/tutores/${encodeURIComponent(usuarioId)}`);
+            if (response.ok) {
+                tutor = await response.json();
+                if (tutor) saveTutor(tutor);
+            } else if (response.status !== 404) {
+                throw new Error(`GET /tutores respondió ${response.status}`);
+            }
+        } catch (error) {
+            console.warn("No se pudo cargar el tutor desde la API; se usa el respaldo local.", error);
+        }
+    }
+
+    llenarFormularioTutor(tutor);
+}
+
+function llenarFormularioTutor(tutor) {
+    setInputValue("tutor-nombre", tutor?.nombre || "");
+    setInputValue("tutor-telefono", tutor?.telefono || "");
+    setInputValue("tutor-parentesco", tutor?.parentesco || "");
+    setInputValue("tutor-email", tutor?.email || "");
+}
+
+async function guardarTutor(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("tutor-message");
+    const isValid = validateFormFields([
+        { id: "tutor-nombre", type: "name", required: true },
+        { id: "tutor-telefono", type: "phone", required: true },
+        { id: "tutor-email", type: "email", required: false }
+    ]);
+
+    if (!isValid || !activeUser?.id_usuario) {
+        showMessage(message, "Revisa los campos del tutor antes de guardar.");
+        return;
+    }
+
+    const tutor = {
+        id_usuario: String(activeUser.id_usuario),
+        nombre: readInputValue("tutor-nombre"),
+        telefono: normalizePhone(readInputValue("tutor-telefono")),
+        parentesco: readInputValue("tutor-parentesco") || null,
+        email: readInputValue("tutor-email").toLowerCase() || null
+    };
+
+    try {
+        const apiBaseUrl = getApiBaseUrl();
+        if (apiBaseUrl) {
+            const response = await fetch(`${apiBaseUrl}/tutores/${encodeURIComponent(tutor.id_usuario)}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(tutor)
+            });
+
+            if (!response.ok) throw new Error(`PUT /tutores respondió ${response.status}`);
+            const savedTutor = await response.json();
+            saveTutor(savedTutor || tutor);
+        } else {
+            saveTutor(tutor);
+        }
+
+        showMessage(message, "Datos del tutor guardados correctamente.");
+        showToast("Datos del tutor guardados correctamente.");
+    } catch (error) {
+        saveTutor(tutor);
+        showMessage(message, "API no disponible. Datos del tutor guardados localmente.");
+        showToast("Tutor guardado en respaldo local.");
+        console.warn("No se pudo guardar el tutor en la API.", error);
+    }
+}
+
+function readInputValue(id, trim = true) {
+    const input = document.getElementById(id);
+    if (!input) return "";
+    return trim ? input.value.trim() : input.value;
+}
+
+function setInputValue(id, value) {
+    const input = document.getElementById(id);
+    if (input) input.value = value ?? "";
 }
 
 function cerrarPerfil() {
@@ -1215,12 +1314,12 @@ async function guardarPerfil(event) {
 
     const updated = {
         ...activeUser,
-        nombres: document.getElementById("profile-nombres").value.trim(),
-        apellido_paterno: document.getElementById("profile-paterno").value.trim(),
-        apellido_materno: document.getElementById("profile-materno").value.trim(),
-        telefono: normalizePhone(document.getElementById("profile-phone").value),
-        email: document.getElementById("profile-email").value.trim().toLowerCase(),
-        dispositivo_modelo: document.getElementById("profile-device").value.trim()
+        nombres: readInputValue("profile-nombres"),
+        apellido_paterno: readInputValue("profile-paterno"),
+        apellido_materno: readInputValue("profile-materno"),
+        telefono: normalizePhone(readInputValue("profile-phone")),
+        email: readInputValue("profile-email").toLowerCase(),
+        dispositivo_modelo: readInputValue("profile-device")
     };
 
     const duplicate = getUsers().some(user =>
@@ -1247,7 +1346,7 @@ async function guardarPerfil(event) {
 
 async function sendToApi(path, payload, method = "POST") {
     try {
-        await fetch(`${config.API_BASE_URL.replace(/\/$/, "")}${path}`, {
+        await fetch(`${getApiBaseUrl()}${path}`, {
             method,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -1255,6 +1354,10 @@ async function sendToApi(path, payload, method = "POST") {
     } catch (error) {
         console.error("La API no está disponible:", error);
     }
+}
+
+function getApiBaseUrl() {
+    return String(config.API_BASE_URL || "").replace(/\/$/, "");
 }
 
 function createUser(data) {
@@ -1401,23 +1504,37 @@ function registrarAlerta(data = {}) {
 }
 
 function createTutor(data = {}) {
+    const id = data.id || data.id_tutor || createId();
     return {
-        id_tutor: data.id_tutor || createId(),
-        nombre_completo: data.nombre_completo || "",
+        id,
+        id_usuario: data.id_usuario ? String(data.id_usuario) : null,
+        nombre: data.nombre || data.nombre_completo || "",
         telefono: data.telefono || "",
-        email: data.email || "",
-        relacion: data.relacion || "",
+        parentesco: data.parentesco || data.relacion || "",
+        email: data.email || null,
         permisos: Array.isArray(data.permisos) ? data.permisos : []
     };
 }
 
 function getTutors() {
-    return readJson(STORAGE.tutors, []).map(createTutor);
+    return readJson(STORAGE.tutors, [])
+        .map(createTutor)
+        .filter(tutor => !tutor.id_usuario || tutor.id_usuario === String(activeUser?.id_usuario));
 }
 
 function saveTutor(tutor) {
-    const tutors = getTutors().filter(item => item.id_tutor !== tutor.id_tutor);
-    localStorage.setItem(STORAGE.tutors, JSON.stringify([...tutors, createTutor(tutor)]));
+    const normalized = createTutor({
+        ...tutor,
+        id_usuario: tutor.id_usuario || activeUser?.id_usuario
+    });
+    const stored = readJson(STORAGE.tutors, []);
+    const otherUsersTutors = stored.filter(item => String(item.id_usuario || "") !== normalized.id_usuario);
+    const currentUserTutors = getTutors().filter(item => item.id !== normalized.id);
+    localStorage.setItem(STORAGE.tutors, JSON.stringify([...otherUsersTutors, ...currentUserTutors, normalized]));
+}
+
+function obtenerTutorLocal(usuarioId) {
+    return getTutors().find(tutor => tutor.id_usuario === String(usuarioId)) || null;
 }
 
 function associateTutor(tutorId, permissions = []) {
@@ -1471,7 +1588,7 @@ function getInitials(name) {
 }
 
 function showMessage(element, message) {
-    element.textContent = message;
+    if (element) element.textContent = message;
 }
 
 function showDashboardMessage(message) {
