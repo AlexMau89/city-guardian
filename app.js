@@ -294,7 +294,7 @@ async function loadGoogleMap() {
             polylineOptions: {
                 strokeColor: "#4285F4",
                 strokeWeight: 6,
-                strokeOpacity: 0.8
+                strokeOpacity: 0.85
             }
         });
         inicializarAutocomplete(Autocomplete);
@@ -476,6 +476,12 @@ function guardarRutaFrecuente(routeKey) {
     }
 
     const routes = getFrequentRoutes();
+
+    if (routes[routeKey]) {
+        const confirmar = confirm("¿Estás seguro de que deseas actualizar esta ubicación con tu posición actual?");
+        if (!confirmar) return;
+    }
+
     const lat = currentPosition.lat;
     const lng = currentPosition.lng;
 
