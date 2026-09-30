@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#09131f">
-    <meta name="description" content="Rumbo Seguro: monitoreo de ubicación y asistencia durante tus viajes.">
+    <meta name="theme-color" content="#060b11">
+    <meta name="description" content="Guardian: sistema institucional de monitoreo personal, ubicación y asistencia durante tus viajes.">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
-    <title>Rumbo Seguro</title>
+    <title>Guardian | Sistema de Monitoreo Personal</title>
 </head>
 
 <body>
     <main class="app-shell">
         <section id="auth-view" class="auth-view view" aria-labelledby="brand-title">
             <header class="brand-lockup">
-                <div class="brand-mark" aria-hidden="true">RS</div>
+                <div class="brand-mark" aria-hidden="true">G</div>
                 <div>
-                    <p class="eyebrow">City Guardian</p>
-                    <h1 id="brand-title">Rumbo Seguro</h1>
+                    <p class="eyebrow">Guardian</p>
+                    <h1 id="brand-title">Guardian</h1>
                 </div>
             </header>
 
-            <p class="auth-intro">Tu ruta acompañada, tu ubicación protegida.</p>
+            <p class="auth-intro">Sistema de Monitoreo Personal</p>
 
             <div class="auth-panel">
                 <div class="auth-tabs" role="tablist" aria-label="Acceso a la cuenta">
@@ -32,20 +32,20 @@
                 <form id="login-form" class="auth-form" novalidate>
                     <div class="section-heading">
                         <p class="eyebrow">Bienvenido de vuelta</p>
-                        <h2>Ingresa a tu recorrido</h2>
+                        <h2>Acceso al sistema</h2>
                     </div>
 
                     <label class="field">
                         <span>Correo o teléfono</span>
-                        <input id="login-identifier" name="identifier" type="text" placeholder="tu@correo.com" autocomplete="username" required>
+                        <input id="login-identifier" name="email" type="text" placeholder="Correo o teléfono" autocomplete="username" required>
                     </label>
 
                     <label class="field">
                         <span>Contraseña</span>
-                        <input id="login-password" name="password" type="password" placeholder="Tu contraseña" autocomplete="current-password" required>
+                        <input id="login-password" name="password_hash" type="password" placeholder="Contraseña" autocomplete="current-password" required>
                     </label>
 
-                    <button class="button button-primary" type="submit">Entrar a mi cuenta <span aria-hidden="true">→</span></button>
+                    <button class="button button-primary" type="submit">Iniciar sesión <span aria-hidden="true">→</span></button>
                     <p id="login-message" class="form-message" role="alert"></p>
                 </form>
 
@@ -57,13 +57,13 @@
 
                     <label class="field">
                         <span>Nombre completo</span>
-                        <input id="register-name" name="name" type="text" placeholder="Nombre y apellidos" autocomplete="name" required>
+                        <input id="register-name" name="nombre_completo" type="text" placeholder="Nombre y apellidos" autocomplete="name" required>
                     </label>
 
                     <div class="field-row">
                         <label class="field">
                             <span>Teléfono</span>
-                            <input id="register-phone" name="phone" type="tel" placeholder="55 0000 0000" autocomplete="tel" required>
+                            <input id="register-phone" name="telefono" type="tel" placeholder="55 0000 0000" autocomplete="tel" required>
                         </label>
                         <label class="field">
                             <span>Correo</span>
@@ -73,42 +73,42 @@
 
                     <label class="field">
                         <span>Contraseña</span>
-                        <input id="register-password" name="password" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required>
+                        <input id="register-password" name="password_hash" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required>
                     </label>
 
                     <label class="field">
                         <span>Repite tu contraseña</span>
-                        <input id="register-password-confirm" name="passwordConfirm" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" minlength="6" required>
+                        <input id="register-password-confirm" name="password_confirm" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" minlength="6" required>
                     </label>
 
-                    <button class="button button-primary" type="submit">Crear mi cuenta <span aria-hidden="true">→</span></button>
+                    <button class="button button-primary" type="submit">Registrar usuario <span aria-hidden="true">→</span></button>
                     <p id="register-message" class="form-message" role="alert"></p>
                 </form>
             </div>
 
-            <p class="auth-footnote">Modo respaldo local activo · versión <span id="app-version"></span></p>
+            <p class="auth-footnote">Persistencia local de respaldo · versión <span id="app-version"></span></p>
         </section>
 
         <section id="dashboard-view" class="dashboard-view view is-hidden" aria-label="Panel principal">
             <header class="dashboard-header">
                 <div class="brand-lockup brand-lockup-small">
-                    <div class="brand-mark" aria-hidden="true">RS</div>
+                    <div class="brand-mark" aria-hidden="true">G</div>
                     <div>
-                        <p class="eyebrow">Rumbo Seguro</p>
-                        <p class="dashboard-greeting" id="dashboard-greeting">Tu recorrido</p>
+                        <p class="eyebrow">Guardian</p>
+                        <p class="dashboard-greeting" id="dashboard-greeting">Monitoreo personal</p>
                     </div>
                 </div>
                 <button id="profile-button" class="avatar-button" type="button" aria-label="Abrir perfil" title="Abrir perfil">
-                    <span id="profile-initials">RS</span>
+                    <span id="profile-initials">G</span>
                 </button>
             </header>
 
             <div class="map-wrap">
-                <div id="map" class="map-canvas" aria-label="Mapa de tu ubicación actual">
+                <div id="map" class="map-canvas" aria-label="Mapa de ubicación en tiempo real">
                     <div id="map-placeholder" class="map-placeholder">
                         <div class="placeholder-icon" aria-hidden="true">⌖</div>
-                        <strong>Mapa listo para conectarse</strong>
-                        <p>Agrega tu clave restringida de Google Maps para ver tu ubicación.</p>
+                        <strong>Mapa de monitoreo disponible</strong>
+                        <p>Configura una clave restringida de Google Maps para habilitar la telemetría cartográfica.</p>
                     </div>
                 </div>
                 <div class="map-status" id="location-status" role="status">
@@ -120,41 +120,41 @@
 
             <div id="simulation-controls" class="is-hidden" style="margin: 10px 18px; display: flex; gap: 8px;">
                 <button id="sim-start-btn" class="button button-primary" type="button" style="min-height: 40px; font-size: 12px;">
-                    ▶️ Simular paso a paso
+                    Simular telemetría
                 </button>
                 <button id="sim-deviate-btn" class="button button-secondary" type="button" style="min-height: 40px; font-size: 12px; border-color: var(--amber); color: var(--amber);">
-                    ⚠️ Simular desvío
+                    Simular desvío
                 </button>
             </div>
 
             <button id="trip-control-button" class="button button-primary" type="button" style="margin-bottom: 12px;">
-                <span aria-hidden="true">🚀</span>
+                <span aria-hidden="true">+</span>
                 <div style="display: flex; flex-direction: column; text-align: left;">
-                    <strong>Iniciar recorrido</strong>
+                    <strong>Iniciar monitoreo de viaje</strong>
                     <small id="trip-control-label" style="opacity: 0.8; font-weight: normal;">Seleccionar destino</small>
                 </div>
             </button>
 
             <section class="trip-info" aria-label="Estado del recorrido">
                 <div>
-                    <p class="eyebrow">Monitoreo activo</p>
-                    <h2 id="trip-title">Tu ubicación está protegida</h2>
+                    <p class="eyebrow">Estado operativo</p>
+                    <h2 id="trip-title">Monitoreo personal disponible</h2>
                 </div>
                 <div class="coordinates" id="coordinates">Ubicación pendiente</div>
             </section>
 
-            <section class="action-area" aria-label="Acciones de asistencia">
+            <section class="action-area" aria-label="Central de emergencias y seguridad">
                 <button id="panic-button" class="button panic-button" type="button">
                     <span class="action-icon" aria-hidden="true">!</span>
-                    <span><strong>Botón de pánico</strong><small>Enviar alerta con mi ubicación</small></span>
+                    <span><strong>Botón de pánico</strong><small>Registrar alerta con ubicación</small></span>
                 </button>
                 <a id="call-button" class="button call-button" href="tel:911">
                     <span class="action-icon" aria-hidden="true">☎</span>
-                    <span><strong>Llamar a emergencias</strong><small id="call-label">911</small></span>
+                    <span><strong>Central de emergencias</strong><small id="call-label">911</small></span>
                 </a>
                 <button id="zones-button" class="button zones-button" type="button">
                     <span class="action-icon" aria-hidden="true">⚠️</span>
-                    <span><strong>Zonas críticas</strong><small id="zones-label">Mostrar áreas de riesgo</small></span>
+                    <span><strong>Zonas de riesgo</strong><small id="zones-label">Mostrar áreas de riesgo</small></span>
                 </button>
             </section>
 
@@ -175,19 +175,19 @@
             <form id="profile-form" class="profile-form" novalidate>
                 <label class="field">
                     <span>Nombre completo</span>
-                    <input id="profile-name" type="text" required autocomplete="name">
+                    <input id="profile-name" name="nombre_completo" type="text" required autocomplete="name">
                 </label>
                 <label class="field">
                     <span>Teléfono</span>
-                    <input id="profile-phone" type="tel" required autocomplete="tel">
+                    <input id="profile-phone" name="telefono" type="tel" required autocomplete="tel">
                 </label>
                 <label class="field">
                     <span>Correo</span>
-                    <input id="profile-email" type="email" required autocomplete="email">
+                    <input id="profile-email" name="email" type="email" required autocomplete="email">
                 </label>
                 <label class="field">
                     <span>Modelo del dispositivo</span>
-                    <input id="profile-device" type="text" placeholder="Opcional" autocomplete="off">
+                    <input id="profile-device" name="dispositivo_modelo" type="text" placeholder="Opcional" autocomplete="off">
                 </label>
                 <button class="button button-primary" type="submit">Guardar cambios</button>
                 <p id="profile-message" class="form-message" role="status"></p>
@@ -201,29 +201,29 @@
         <section class="profile-modal route-modal" role="dialog" aria-modal="true" aria-labelledby="route-title">
             <div class="modal-header">
                 <div>
-                    <p class="eyebrow">Monitoreo de ruta</p>
-                    <h2 id="route-title">Iniciar un nuevo recorrido</h2>
+                    <p class="eyebrow">Monitoreo de viaje</p>
+                    <h2 id="route-title">Configurar nuevo monitoreo</h2>
                 </div>
                 <button id="close-route-button" class="close-button" type="button" aria-label="Cerrar selección de ruta">×</button>
             </div>
 
             <div class="route-options">
-                <p class="eyebrow">Rutas frecuentes</p>
-                <div class="frequent-route-list">
-                    <div class="frequent-route-item" data-route-key="school">
-                        <button class="frequent-route-btn" type="button">Escuela / Universidad</button>
-                        <button class="frequent-route-save-btn" type="button" data-route-key="school">Guardar actual</button>
-                        <small class="frequent-route-address">Sin configurar</small>
+                <p class="eyebrow">Lugares guardados</p>
+                <div class="saved-place-list">
+                    <div class="saved-place-item" data-place-key="school">
+                        <button class="saved-place-btn" type="button">Escuela / Universidad</button>
+                        <button class="saved-place-save-btn" type="button" data-place-key="school">Guardar actual</button>
+                        <small class="saved-place-address">Sin configurar</small>
                     </div>
-                    <div class="frequent-route-item" data-route-key="home">
-                        <button class="frequent-route-btn" type="button">Casa</button>
-                        <button class="frequent-route-save-btn" type="button" data-route-key="home">Guardar actual</button>
-                        <small class="frequent-route-address">Sin configurar</small>
+                    <div class="saved-place-item" data-place-key="home">
+                        <button class="saved-place-btn" type="button">Casa</button>
+                        <button class="saved-place-save-btn" type="button" data-place-key="home">Guardar actual</button>
+                        <small class="saved-place-address">Sin configurar</small>
                     </div>
-                    <div class="frequent-route-item" data-route-key="work">
-                        <button class="frequent-route-btn" type="button">Trabajo</button>
-                        <button class="frequent-route-save-btn" type="button" data-route-key="work">Guardar actual</button>
-                        <small class="frequent-route-address">Sin configurar</small>
+                    <div class="saved-place-item" data-place-key="work">
+                        <button class="saved-place-btn" type="button">Trabajo</button>
+                        <button class="saved-place-save-btn" type="button" data-place-key="work">Guardar actual</button>
+                        <small class="saved-place-address">Sin configurar</small>
                     </div>
                 </div>
             </div>
@@ -236,7 +236,7 @@
                         <input id="destination-input" type="text" placeholder="Ingresa una dirección o destino" autocomplete="street-address" required>
                     </div>
                 </label>
-                <button class="button button-primary" type="submit">Trazar Ruta <span aria-hidden="true">→</span></button>
+                <button class="button button-primary" type="submit">Iniciar monitoreo <span aria-hidden="true">→</span></button>
                 <p id="route-message" class="form-message" role="alert"></p>
             </form>
         </section>
@@ -246,8 +246,8 @@
         <section class="profile-modal confirm-modal" role="dialog" aria-modal="true" aria-labelledby="location-update-title">
             <div class="modal-header">
                 <div>
-                    <p class="eyebrow">Ubicación frecuente</p>
-                    <h2 id="location-update-title">Actualizar ubicación</h2>
+                    <p class="eyebrow">Lugar guardado</p>
+                    <h2 id="location-update-title">Actualizar lugar</h2>
                 </div>
                 <button id="cancel-location-update-close" class="close-button" type="button" aria-label="Cerrar confirmación">×</button>
             </div>

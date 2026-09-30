@@ -1,16 +1,16 @@
 :root {
     color-scheme: dark;
-    --ink: #f6f8fb;
-    --muted: #9aa9ba;
-    --subtle: #647386;
-    --line: #243244;
-    --surface: #111d2b;
-    --surface-raised: #172638;
-    --canvas: #09131f;
-    --teal: #31d3b7;
-    --amber: #f2b84b;
-    --danger: #ff5b65;
-    --shadow: 0 18px 45px rgba(0, 0, 0, 0.26);
+    --ink: #f0f4f8;
+    --muted: #8fa0b5;
+    --subtle: #5c6f87;
+    --line: #1e324d;
+    --surface: #0d1724;
+    --surface-raised: #142235;
+    --canvas: #060b11;
+    --primary: #2575fc;
+    --amber: #b48a3c;
+    --danger: #d32f2f;
+    --shadow: 0 18px 45px rgba(0, 0, 0, 0.38);
 }
 
 * {
@@ -75,9 +75,9 @@ a {
 
 .brand-mark {
     align-items: center;
-    background: var(--teal);
+    background: var(--primary);
     border-radius: 8px;
-    color: #062c2a;
+    color: var(--ink);
     display: flex;
     font-size: 17px;
     font-weight: 900;
@@ -94,7 +94,7 @@ a {
 }
 
 .eyebrow {
-    color: var(--teal);
+    color: var(--primary);
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.11em;
@@ -187,7 +187,7 @@ h1 {
 }
 
 .field input {
-    background: #0b1623;
+    background: #09131f;
     border: 1px solid var(--line);
     border-radius: 6px;
     color: var(--ink);
@@ -202,8 +202,8 @@ h1 {
 }
 
 .field input:focus {
-    border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(49, 211, 183, 0.12);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.16);
 }
 
 .button {
@@ -225,13 +225,13 @@ h1 {
 }
 
 .button-primary {
-    background: var(--teal);
-    color: #062c2a;
+    background: var(--primary);
+    color: var(--ink);
     font-weight: 850;
 }
 
 .button-primary:hover {
-    background: #5ae2c9;
+    background: #3d8bff;
 }
 
 .button-secondary {
@@ -307,7 +307,7 @@ h1 {
 }
 
 .map-canvas {
-    background: #c9d3d4;
+    background: #0a1420;
     height: min(61vh, 600px);
     min-height: 380px;
     overflow: hidden;
@@ -317,7 +317,7 @@ h1 {
 
 .map-placeholder {
     align-items: center;
-    background: #162735;
+    background: #0b1623;
     color: var(--ink);
     display: flex;
     flex-direction: column;
@@ -336,9 +336,9 @@ h1 {
 
 .placeholder-icon {
     align-items: center;
-    border: 1px solid var(--teal);
+    border: 1px solid var(--primary);
     border-radius: 50%;
-    color: var(--teal);
+    color: var(--primary);
     display: flex;
     font-size: 26px;
     height: 60px;
@@ -349,7 +349,7 @@ h1 {
 
 .map-status {
     align-items: center;
-    background: rgba(9, 19, 31, 0.9);
+    background: rgba(6, 11, 17, 0.94);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 5px;
     display: flex;
@@ -369,8 +369,8 @@ h1 {
 }
 
 .status-dot.is-live {
-    background: var(--teal);
-    box-shadow: 0 0 0 4px rgba(49, 211, 183, 0.15);
+    background: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 117, 252, 0.18);
 }
 
 .map-control {
@@ -420,11 +420,11 @@ h1 {
 
 .panic-button {
     background: var(--danger);
-    color: #350b12;
+    color: var(--ink);
 }
 
 .panic-button:hover {
-    background: #ff777e;
+    background: #e04a4f;
 }
 
 .call-button {
@@ -434,7 +434,7 @@ h1 {
 }
 
 .call-button:hover {
-    border-color: var(--teal);
+    border-color: var(--primary);
 }
 
 .action-icon {
@@ -547,7 +547,7 @@ h1 {
 .zones-button.is-active {
     background: var(--amber);
     border-color: var(--amber);
-    color: #2b1f00;
+    color: #0a0f16;
 }
 
 #trip-control-button {
@@ -560,11 +560,11 @@ h1 {
 
 #trip-control-button.is-active {
     background: var(--danger);
-    color: #350b12;
+    color: var(--ink);
 }
 
 #trip-control-button.is-active:hover {
-    background: #ff777e;
+    background: #e04a4f;
 }
 
 .route-modal {
@@ -577,20 +577,20 @@ h1 {
     margin-bottom: 22px;
 }
 
-.frequent-route-list {
+.saved-place-list {
     display: grid;
     gap: 8px;
     grid-template-columns: 1fr;
 }
 
-.frequent-route-item {
+.saved-place-item {
     align-items: center;
     display: grid;
     gap: 8px;
     grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.frequent-route-address {
+.saved-place-address {
     color: var(--muted);
     font-size: 10px;
     grid-column: 1 / -1;
@@ -599,7 +599,7 @@ h1 {
     white-space: nowrap;
 }
 
-.frequent-route-btn {
+.saved-place-btn {
     background: var(--surface-raised);
     border: 1px solid var(--line);
     border-radius: 6px;
@@ -611,15 +611,15 @@ h1 {
     transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }
 
-.frequent-route-btn:hover {
-    border-color: var(--teal);
+.saved-place-btn:hover {
+    border-color: var(--primary);
 }
 
-.frequent-route-btn:active {
+.saved-place-btn:active {
     transform: translateY(1px);
 }
 
-.frequent-route-save-btn {
+.saved-place-save-btn {
     background: transparent;
     border: 1px solid var(--line);
     border-radius: 6px;
@@ -631,7 +631,7 @@ h1 {
     white-space: nowrap;
 }
 
-.frequent-route-save-btn:hover {
+.saved-place-save-btn:hover {
     border-color: var(--amber);
     color: var(--ink);
 }
@@ -689,7 +689,7 @@ h1 {
 }
 
 .pac-matched {
-    color: var(--teal);
+    color: var(--primary);
 }
 
 .route-form {
@@ -716,7 +716,7 @@ h1 {
 
 .app-toast {
     background: var(--surface-raised);
-    border: 1px solid var(--teal);
+    border: 1px solid var(--primary);
     border-radius: 7px;
     bottom: max(20px, env(safe-area-inset-bottom));
     box-shadow: var(--shadow);
@@ -743,11 +743,11 @@ h1 {
 }
 
 @media (max-width: 440px) {
-    .frequent-route-item {
+    .saved-place-item {
         grid-template-columns: 1fr;
     }
 
-    .frequent-route-save-btn {
+    .saved-place-save-btn {
         width: 100%;
     }
 

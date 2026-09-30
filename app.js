@@ -12,10 +12,14 @@ let camarasMarkers = [];
 let camarasVisibles = true;
 
 const STORAGE = {
-    users: "rs_usuarios",
-    session: "rs_sesion",
-    alerts: "rs_alertas",
-    frequentRoutes: "rs_rutas_frecuentes"
+    users: "guardian_usuarios",
+    session: "guardian_sesion",
+    alerts: "guardian_alertas",
+    savedPlaces: "guardian_lugares_guardados",
+    trips: "guardian_viajes",
+    locationHistory: "guardian_historial_ubicaciones",
+    tutors: "guardian_tutores",
+    userTutors: "guardian_usuarios_tutores"
 };
 
 const config = window.APP_CONFIG || {};
@@ -40,11 +44,14 @@ let autocomplete = null;
 let selectedPlace = null;
 let geocoder = null;
 let routeRequestInFlight = false;
-let pendingFrequentRouteUpdate = null;
+let pendingSavedPlaceUpdate = null;
+let currentTrip = null;
+let c5Postes = [];
+let deviationAlertSent = false;
 let toastTimer = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("app-version").textContent = config.APP_VERSION || "0.3.0";
+    document.getElementById("app-version").textContent = config.APP_VERSION || "1.0.0";
     bindEvents();
     restoreSession();
 });
@@ -64,11 +71,11 @@ function bindEvents() {
     document.getElementById("sim-deviate-btn").addEventListener("click", simularDesvio);
     document.getElementById("route-form").addEventListener("submit", manejarFormularioRuta);
     document.getElementById("close-route-button").addEventListener("click", cerrarModalRuta);
-    document.querySelectorAll(".frequent-route-btn").forEach(button => {
-        button.addEventListener("click", () => usarRutaFrecuente(button.closest(".frequent-route-item").dataset.routeKey));
+    document.querySelectorAll(".saved-place-btn").forEach(button => {
+        button.addEventListener("click", () => usarLugarGuardado(button.closest(".saved-place-item").dataset.placeKey));
     });
-    document.querySelectorAll(".frequent-route-save-btn").forEach(button => {
-        button.addEventListener("click", () => guardarRutaFrecuente(button.dataset.routeKey));
+    document.querySelectorAll(".saved-place-save-btn").forEach(button => {
+        button.addEventListener("click", () => guardarLugarGuardado(button.dataset.placeKey));
     });
     document.getElementById("destination-input").addEventListener("input", () => {
         selectedPlace = null;
@@ -94,19 +101,7 @@ function bindEvents() {
 function restoreSession() {
     const savedSession = readJson(STORAGE.session, null);
     if (savedSession) {
-        activeUser = savedSession;
-        mostrarDashboard();
-        return;
-    }
-
-    // Compatibility with the first prototype, which stored only the username.
-    const oldUser = localStorage.getItem("cg_usuario");
-    if (oldUser) {
-        activeUser = createUser({
-            name: oldUser,
-            email: oldUser.includes("@") ? oldUser : "",
-            phone: ""
-        });
+        activeUser = normalizeUser(savedSession);
         saveSession();
         mostrarDashboard();
     }
@@ -136,7 +131,7 @@ async function iniciarSesion(event) {
     }
 
     const user = getUsers().find(item =>
-        item.email.toLowerCase() === identifier || normalizePhone(item.phone) === normalizePhone(identifier)
+        String(item.email || "").toLowerCase() === identifier || normalizePhone(item.telefono) === normalizePhone(identifier)
     );
 
     if (!user) {
@@ -144,7 +139,7 @@ async function iniciarSesion(event) {
         return;
     }
 
-    if (!user || user.passwordHash !== await hashPassword(password)) {
+    if (!user || user.password_hash !== await hashPassword(password)) {
         showMessage(message, "La contraseña no coincide.");
         return;
     }
@@ -181,13 +176,13 @@ async function registrarUsuario(event) {
     }
 
     const users = getUsers();
-    const duplicate = users.some(item => item.email.toLowerCase() === email || normalizePhone(item.phone) === normalizePhone(phone));
+    const duplicate = users.some(item => String(item.email || "").toLowerCase() === email || normalizePhone(item.telefono) === normalizePhone(phone));
     if (duplicate) {
         showMessage(message, "Ya existe una cuenta con ese correo o teléfono.");
         return;
     }
 
-    activeUser = createUser({ name, phone, email, passwordHash: await hashPassword(password) });
+    activeUser = createUser({ nombre_completo: name, telefono: phone, email, password_hash: await hashPassword(password) });
     saveUsers([...users, activeUser]);
     saveSession();
     document.getElementById("register-form").reset();
@@ -198,8 +193,8 @@ async function registrarUsuario(event) {
 function mostrarDashboard() {
     document.getElementById("auth-view").classList.add("is-hidden");
     document.getElementById("dashboard-view").classList.remove("is-hidden");
-    document.getElementById("dashboard-greeting").textContent = `Hola, ${activeUser.name || "usuario"}`;
-    document.getElementById("profile-initials").textContent = getInitials(activeUser.name);
+    document.getElementById("dashboard-greeting").textContent = `Usuario: ${activeUser.nombre_completo || "Sin identificar"}`;
+    document.getElementById("profile-initials").textContent = getInitials(activeUser.nombre_completo);
     document.getElementById("call-button").href = `tel:${config.EMERGENCY_PHONE || "911"}`;
     document.getElementById("call-label").textContent = config.EMERGENCY_PHONE || "911";
     fillProfileForm();
@@ -214,7 +209,6 @@ function cerrarSesion() {
     cerrarConfirmacionActualizacion();
     activeUser = null;
     localStorage.removeItem(STORAGE.session);
-    localStorage.removeItem("cg_usuario");
     cerrarPerfil();
     document.getElementById("dashboard-view").classList.add("is-hidden");
     document.getElementById("auth-view").classList.remove("is-hidden");
@@ -248,8 +242,8 @@ function updateLocation(position) {
     currentPosition = {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-        accuracy: Math.round(position.coords.accuracy),
-        speed: position.coords.speed || 0,
+        accuracy: Number.isFinite(position.coords.accuracy) ? Math.round(position.coords.accuracy) : null,
+        speed: Number.isFinite(position.coords.speed) ? position.coords.speed : 0,
         capturedAt: new Date().toISOString()
     };
 
@@ -257,7 +251,13 @@ function updateLocation(position) {
     document.getElementById("coordinates").textContent = `${currentPosition.lat.toFixed(5)}, ${currentPosition.lng.toFixed(5)} · ±${currentPosition.accuracy} m`;
     updateMapPosition();
 
+    registrarPuntoUbicacion(currentPosition);
+
     actualizarZonasCercanas(currentPosition.lat, currentPosition.lng);
+
+    if (isTripActive && !position.isSimulated && verificarEstadoRuta(currentPosition.lat, currentPosition.lng)) {
+        recalcularYEscalarAlerta(currentPosition);
+    }
 }
 
 function handleLocationError(error) {
@@ -317,7 +317,7 @@ async function loadGoogleMap() {
             map: mapInstance,
             suppressMarkers: false,
             polylineOptions: {
-                strokeColor: "#4285F4",
+                strokeColor: "#2575fc",
                 strokeWeight: 6,
                 strokeOpacity: 0.85
             }
@@ -346,6 +346,7 @@ async function cargarCamarasC5(map) {
         }
 
         const camaras = await response.json();
+        c5Postes = Array.isArray(camaras) ? camaras : [];
         const infoWindow = new window.google.maps.InfoWindow();
 
         camaras.forEach(cam => {
@@ -355,7 +356,7 @@ async function cargarCamarasC5(map) {
             if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
 
             const tieneBoton = cam.boton && !cam.boton.toUpperCase().includes("SIN");
-            const color = tieneBoton ? "#00E676" : "#FF9800";
+            const color = tieneBoton ? "#2575fc" : "#b48a3c";
             const center = { lat, lng };
             const circle = new window.google.maps.Circle({
                 strokeColor: color,
@@ -416,7 +417,7 @@ function abrirModalRuta() {
     selectedPlace = null;
     input.value = "";
     message.textContent = "";
-    actualizarRutasFrecuentes();
+    actualizarLugaresGuardados();
     modal.classList.remove("is-hidden");
     window.setTimeout(() => input.focus(), 0);
 }
@@ -565,7 +566,7 @@ function obtenerLatLngLiteral(location) {
     return { lat, lng };
 }
 
-async function trazarRuta(destino, frequentRouteKey = null) {
+async function trazarRuta(destino, savedPlaceKey = null) {
     if (!directionsService || !directionsRenderer) {
         showRouteMessage("El mapa todavía está cargando. Intenta de nuevo en un momento.");
         return;
@@ -635,20 +636,42 @@ async function trazarRuta(destino, frequentRouteKey = null) {
             }
             document.getElementById("simulation-controls").classList.remove("is-hidden");
 
-            if (frequentRouteKey && geocodedResult) {
+            if (savedPlaceKey && geocodedResult) {
                 const coordinates = obtenerLatLngLiteral(geocodedResult.geometry.location);
                 if (coordinates) {
-                    const routes = getFrequentRoutes();
-                    routes[frequentRouteKey] = {
-                        ...routes[frequentRouteKey],
-                        address: geocodedResult.formatted_address || destinationName,
-                        ...coordinates,
-                        updatedAt: new Date().toISOString()
+                    const label = getPlaceLabel(savedPlaceKey);
+                    const places = getSavedPlaces();
+                    const previous = getSavedPlace(savedPlaceKey);
+                    const savedPlace = {
+                        id_lugar: previous?.id_lugar || createId(),
+                        id_usuario: activeUser?.id_usuario || null,
+                        etiqueta: label,
+                        direccion_texto: geocodedResult.formatted_address || destinationName,
+                        lat: coordinates.lat,
+                        lon: coordinates.lng,
+                        creado_en: previous?.creado_en || new Date().toISOString()
                     };
-                    saveFrequentRoutes(routes);
-                    actualizarRutasFrecuentes();
+                    saveSavedPlaces([...places.filter(place => place.etiqueta !== label), savedPlace]);
+                    actualizarLugaresGuardados();
                 }
             }
+
+            currentTrip = crearViaje({
+                nombre_destino: destinationName,
+                origen_lat: originPos.lat,
+                origen_lon: originPos.lng,
+                destino_lat: obtenerLatLngLiteral(destinationTarget)?.lat || null,
+                destino_lon: obtenerLatLngLiteral(destinationTarget)?.lng || null,
+                ruta_oficial: (route?.overview_path || []).map(point => ({
+                    lat: typeof point.lat === "function" ? point.lat() : point.lat,
+                    lon: typeof point.lng === "function" ? point.lng() : point.lng
+                })),
+                eta_original: route?.legs?.[0]?.duration?.value || null,
+                distancia_total_metros: route?.legs?.[0]?.distance?.value || null
+            });
+            deviationAlertSent = false;
+            saveTrip(currentTrip);
+            if (config.API_BASE_URL) sendToApi("/viajes", currentTrip);
 
             document.getElementById("route-modal").classList.add("is-hidden");
             document.getElementById("trip-title").textContent = `Recorrido activo hacia: ${destinationName}`;
@@ -679,7 +702,7 @@ function iniciarSimulacion() {
         if (simulationIndex >= simulationPath.length) {
             clearInterval(simulationInterval);
             simulationInterval = null;
-            showDashboardMessage("🏁 Simulación finalizada: Has llegado a tu destino.");
+            showDashboardMessage("Simulación finalizada: destino alcanzado.");
             return;
         }
 
@@ -736,15 +759,29 @@ function simularDesvio() {
 function recalcularYEscalarAlerta(nuevaPosicion) {
     deviationCount++;
 
+    if (currentTrip) {
+        currentTrip.contador_desvios = deviationCount;
+        if (deviationCount >= 3) currentTrip.estado = "ALERTA";
+        saveTrip(currentTrip);
+    }
+
     if (deviationCount === 1) {
-        showDashboardMessage("🟡 Reenrutando... Nueva ruta calculada.");
+        showDashboardMessage("Reenrutando. Nueva ruta calculada.");
     } else if (deviationCount === 2) {
-        showDashboardMessage("🟠 ADVERTENCIA: Segundo desvío detectado. Notificando a tutores.");
+        showDashboardMessage("Advertencia: segundo desvío detectado. Notificando a tutores.");
         navigator.vibrate?.([200, 100, 200]);
     } else if (deviationCount >= 3) {
-        showDashboardMessage("🔴 🚨 ALERTA CRÍTICA: 3 desvíos reincidentes. Activando protocolo de emergencia.");
+        showDashboardMessage("Alerta crítica: tres desvíos reiterados. Activando protocolo de emergencia.");
         document.getElementById("dashboard-view")?.classList.add("high-alert");
         navigator.vibrate?.([500, 200, 500, 200, 500]);
+        if (!deviationAlertSent) {
+            registrarAlerta({
+                tipo_alerta: "DESVIO_REITERADO",
+                nivel_gravedad: "ALTA",
+                position: nuevaPosicion
+            });
+            deviationAlertSent = true;
+        }
     }
 
     if (!directionsService || !directionsRenderer || !currentDestination) {
@@ -786,15 +823,24 @@ function verificarEstadoRuta(userLat, userLng) {
     if (distanciaMinimaKm <= 0.35) return false;
 
     setLocationStatus("Desvío detectado", false);
-    showDashboardMessage("⚠️ ALERTA DE SEGURIDAD: Desvío detectado. Enviando notificación a los tutores.");
+    showDashboardMessage("ALERTA DE SEGURIDAD: Desvío detectado. Enviando notificación a los tutores.");
     return true;
 }
 
-function finalizarRuta() {
+function finalizarRuta(finalState = "FINALIZADO") {
     isSimulating = false;
     clearInterval(simulationInterval);
     simulationInterval = null;
+    if (currentTrip && !currentTrip.fin_viaje) {
+        currentTrip.estado = currentTrip.estado === "ALERTA" ? "ALERTA" : finalState;
+        currentTrip.contador_desvios = deviationCount;
+        currentTrip.fin_viaje = new Date().toISOString();
+        saveTrip(currentTrip);
+        if (config.API_BASE_URL) sendToApi(`/viajes/${encodeURIComponent(currentTrip.id_viaje)}`, currentTrip, "PUT");
+    }
+
     deviationCount = 0;
+    deviationAlertSent = false;
     document.getElementById("dashboard-view")?.classList.remove("high-alert");
 
     if (directionsRenderer) {
@@ -808,54 +854,76 @@ function finalizarRuta() {
     simulationPath = [];
     simulationIndex = 0;
     actualizarControlRecorrido();
-    document.getElementById("trip-title").textContent = "Tu ubicación está protegida";
+    document.getElementById("trip-title").textContent = "Monitoreo personal disponible";
+    currentTrip = null;
 }
 
-function getFrequentRoutes() {
-    return readJson(STORAGE.frequentRoutes, {});
+function getSavedPlaces() {
+    const stored = readJson(STORAGE.savedPlaces, []);
+    if (Array.isArray(stored)) {
+        return stored.filter(place => !place.id_usuario || place.id_usuario === activeUser?.id_usuario);
+    }
+
+    return Object.entries(stored || {}).map(([placeKey, place]) => ({
+        id_lugar: createId(),
+        id_usuario: activeUser?.id_usuario || null,
+        etiqueta: getPlaceLabel(placeKey),
+        direccion_texto: place.address || "",
+        lat: Number.isFinite(place.lat) ? place.lat : null,
+        lon: Number.isFinite(place.lon) ? place.lon : (Number.isFinite(place.lng) ? place.lng : null),
+        creado_en: place.createdAt || place.updatedAt || new Date().toISOString()
+    }));
 }
 
-function saveFrequentRoutes(routes) {
-    localStorage.setItem(STORAGE.frequentRoutes, JSON.stringify(routes));
+function saveSavedPlaces(places) {
+    const stored = readJson(STORAGE.savedPlaces, []);
+    const otherUsersPlaces = Array.isArray(stored)
+        ? stored.filter(place => place.id_usuario && place.id_usuario !== activeUser?.id_usuario)
+        : [];
+    localStorage.setItem(STORAGE.savedPlaces, JSON.stringify([...places, ...otherUsersPlaces]));
 }
 
-function actualizarRutasFrecuentes() {
-    const routes = getFrequentRoutes();
+function getPlaceLabel(placeKey) {
+    const button = document.querySelector(`.saved-place-item[data-place-key="${placeKey}"] .saved-place-btn`);
+    return button?.textContent.trim() || "Lugar guardado";
+}
 
-    document.querySelectorAll(".frequent-route-item").forEach(item => {
-        const route = routes[item.dataset.routeKey];
-        const address = item.querySelector(".frequent-route-address");
-        const saveButton = item.querySelector(".frequent-route-save-btn");
+function getSavedPlace(placeKey) {
+    return getSavedPlaces().find(place => place.etiqueta === getPlaceLabel(placeKey));
+}
 
-        address.textContent = route?.address || "Sin configurar";
-        saveButton.textContent = route ? "Actualizar actual" : "Guardar actual";
+function actualizarLugaresGuardados() {
+    const places = getSavedPlaces();
+
+    document.querySelectorAll(".saved-place-item").forEach(item => {
+        const place = getSavedPlace(item.dataset.placeKey);
+        const address = item.querySelector(".saved-place-address");
+        const saveButton = item.querySelector(".saved-place-save-btn");
+
+        address.textContent = place?.direccion_texto || "Sin configurar";
+        saveButton.textContent = place ? "Actualizar actual" : "Guardar actual";
     });
 }
 
-function obtenerEtiquetaRuta(routeKey) {
-    const button = document.querySelector(`.frequent-route-item[data-route-key="${routeKey}"] .frequent-route-btn`);
-    return button?.textContent.trim() || "Ubicación";
-}
-
-function abrirConfirmacionActualizacion(routeKey) {
-    pendingFrequentRouteUpdate = routeKey;
+function abrirConfirmacionActualizacion(placeKey) {
+    pendingSavedPlaceUpdate = placeKey;
     document.getElementById("location-update-message").textContent =
-        `¿Deseas actualizar ${obtenerEtiquetaRuta(routeKey)} con tu ubicación actual?`;
+        `¿Deseas actualizar ${getPlaceLabel(placeKey)} con tu ubicación actual?`;
     document.getElementById("location-update-modal").classList.remove("is-hidden");
 }
 
 function cerrarConfirmacionActualizacion() {
-    pendingFrequentRouteUpdate = null;
+    pendingSavedPlaceUpdate = null;
     document.getElementById("location-update-modal").classList.add("is-hidden");
 }
 
 async function confirmarActualizacionRuta() {
-    const routeKey = pendingFrequentRouteUpdate;
+    const placeKey = pendingSavedPlaceUpdate;
     cerrarConfirmacionActualizacion();
-    if (routeKey) await guardarUbicacionFrecuente(routeKey, true);
+    if (placeKey) await persistirLugarGuardado(placeKey, true);
 }
 
-async function guardarUbicacionFrecuente(routeKey, wasUpdate = false) {
+async function persistirLugarGuardado(placeKey, wasUpdate = false) {
     const position = currentPosition || await getOneLocation();
 
     if (!position) {
@@ -864,74 +932,78 @@ async function guardarUbicacionFrecuente(routeKey, wasUpdate = false) {
         return;
     }
 
-    const routes = getFrequentRoutes();
+    const places = getSavedPlaces();
     const lat = position.lat;
     const lng = position.lng;
-    const label = obtenerEtiquetaRuta(routeKey);
-
-    routes[routeKey] = {
-        address: `Ubicación actual (${lat.toFixed(5)}, ${lng.toFixed(5)})`,
+    const label = getPlaceLabel(placeKey);
+    const savedPlace = {
+        id_lugar: getSavedPlace(placeKey)?.id_lugar || createId(),
+        id_usuario: activeUser?.id_usuario || null,
+        etiqueta: label,
+        direccion_texto: `Ubicación actual (${lat.toFixed(5)}, ${lng.toFixed(5)})`,
         lat,
-        lng,
-        updatedAt: new Date().toISOString()
+        lon: lng,
+        creado_en: getSavedPlace(placeKey)?.creado_en || new Date().toISOString()
     };
 
-    saveFrequentRoutes(routes);
-    actualizarRutasFrecuentes();
+    saveSavedPlaces([...places.filter(place => place.etiqueta !== label), savedPlace]);
+    actualizarLugaresGuardados();
     showToast(`${label} ${wasUpdate ? "actualizada" : "guardada"} correctamente.`);
 }
 
-async function guardarRutaFrecuente(routeKey) {
-    const routes = getFrequentRoutes();
-
-    if (routes[routeKey]) {
-        abrirConfirmacionActualizacion(routeKey);
+async function guardarLugarGuardado(placeKey) {
+    if (getSavedPlace(placeKey)) {
+        abrirConfirmacionActualizacion(placeKey);
         return;
     }
 
-    await guardarUbicacionFrecuente(routeKey);
+    await persistirLugarGuardado(placeKey);
 }
 
-async function usarRutaFrecuente(routeKey) {
+async function usarLugarGuardado(placeKey) {
     if (routeRequestInFlight) {
         showRouteMessage("Ya estamos calculando una ruta. Espera un momento.");
         return;
     }
 
-    const routes = getFrequentRoutes();
-    const savedRoute = routes[routeKey];
+    const savedPlace = getSavedPlace(placeKey);
 
-    if (!savedRoute) {
-        const address = window.prompt(`Ingresa la dirección para ${obtenerEtiquetaRuta(routeKey)}:`);
+    if (!savedPlace) {
+        const address = window.prompt(`Ingresa la dirección para ${getPlaceLabel(placeKey)}:`);
         if (!address?.trim()) return;
 
-        routes[routeKey] = {
-            address: address.trim(),
-            updatedAt: new Date().toISOString()
-        };
-        saveFrequentRoutes(routes);
-        actualizarRutasFrecuentes();
+        saveSavedPlaces([...getSavedPlaces(), {
+            id_lugar: createId(),
+            id_usuario: activeUser?.id_usuario || null,
+            etiqueta: getPlaceLabel(placeKey),
+            direccion_texto: address.trim(),
+            lat: null,
+            lon: null,
+            creado_en: new Date().toISOString()
+        }]);
+        actualizarLugaresGuardados();
         document.getElementById("destination-input").value = address.trim();
         selectedPlace = null;
-        await trazarRuta(address.trim(), routeKey);
+        await trazarRuta(address.trim(), placeKey);
         return;
     }
 
-    document.getElementById("destination-input").value = savedRoute.address;
+    const address = savedPlace.direccion_texto;
+    document.getElementById("destination-input").value = address;
 
-    const savedCoordinates = Number.isFinite(savedRoute.lat) && Number.isFinite(savedRoute.lng)
-        ? { lat: savedRoute.lat, lng: savedRoute.lng }
+    const savedCoordinates = Number.isFinite(savedPlace.lat) && Number.isFinite(savedPlace.lon)
+        ? { lat: savedPlace.lat, lng: savedPlace.lon }
         : null;
 
     selectedPlace = savedCoordinates
         ? {
-            name: savedRoute.address,
-            formatted_address: savedRoute.address,
+            name: savedPlace.etiqueta,
+            formatted_address: address,
             geometry: { location: savedCoordinates }
         }
         : null;
 
-    await trazarRuta(savedRoute.address, routeKey);
+    await trazarRuta(address, placeKey);
 }
 
 function loadMapsScript() {
@@ -939,11 +1011,11 @@ function loadMapsScript() {
     if (mapsLoadPromise) return mapsLoadPromise;
 
     mapsLoadPromise = new Promise((resolve, reject) => {
-        window.__rumboSeguroMapsReady = resolve;
+        window.__guardianMapsReady = resolve;
         const script = document.createElement("script");
         script.async = true;
         script.defer = true;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(config.GOOGLE_MAPS_API_KEY)}&v=weekly&loading=async&libraries=places&callback=__rumboSeguroMapsReady`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(config.GOOGLE_MAPS_API_KEY)}&v=weekly&loading=async&libraries=places&callback=__guardianMapsReady`;
         script.onerror = () => reject(new Error("Google Maps no respondió"));
         document.head.appendChild(script);
     });
@@ -970,33 +1042,28 @@ function centrarMapa() {
 
 async function enviarAlertaPanic() {
     const position = currentPosition || await getOneLocation();
-    const alert = {
-        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-        userId: activeUser?.id || null,
-        type: "BOTON_PANICO",
-        severity: "ALTA",
-        latitude: position?.lat || null,
-        longitude: position?.lng || null,
-        telemetry: position || {},
-        status: "NO_ATENDIDA",
-        createdAt: new Date().toISOString()
-    };
-
-    const alerts = readJson(STORAGE.alerts, []);
-    localStorage.setItem(STORAGE.alerts, JSON.stringify([alert, ...alerts]));
+    const alert = registrarAlerta({
+        tipo_alerta: "BOTON_PANICO",
+        nivel_gravedad: "ALTA",
+        position
+    });
     navigator.vibrate?.([180, 80, 180]);
-    showDashboardMessage(position ? "Alerta guardada con tu ubicación. Conecta el backend para enviarla a la central." : "Alerta guardada. No se obtuvo la ubicación actual.");
+    showDashboardMessage(position ? "Alerta registrada con ubicación para la Central de Emergencias." : "Alerta registrada. No se obtuvo la ubicación actual.");
 
-    if (config.API_BASE_URL) {
-        await sendToApi("/alertas", alert);
-    }
+    if (config.API_BASE_URL && alert) await sendToApi("/alertas", alert);
 }
 
 function getOneLocation() {
     return new Promise(resolve => {
         if (!navigator.geolocation) return resolve(null);
         navigator.geolocation.getCurrentPosition(
-            position => resolve({ lat: position.coords.latitude, lng: position.coords.longitude, accuracy: Math.round(position.coords.accuracy) }),
+            position => resolve({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                accuracy: Number.isFinite(position.coords.accuracy) ? Math.round(position.coords.accuracy) : null,
+                speed: Number.isFinite(position.coords.speed) ? position.coords.speed : 0,
+                capturedAt: new Date().toISOString()
+            }),
             () => resolve(null),
             { enableHighAccuracy: true, timeout: 8000, maximumAge: 10000 }
         );
@@ -1015,37 +1082,37 @@ function cerrarPerfil() {
 
 function fillProfileForm() {
     if (!activeUser) return;
-    document.getElementById("profile-name").value = activeUser.name || "";
-    document.getElementById("profile-phone").value = activeUser.phone || "";
+    document.getElementById("profile-name").value = activeUser.nombre_completo || "";
+    document.getElementById("profile-phone").value = activeUser.telefono || "";
     document.getElementById("profile-email").value = activeUser.email || "";
-    document.getElementById("profile-device").value = activeUser.deviceModel || "";
+    document.getElementById("profile-device").value = activeUser.dispositivo_modelo || "";
 }
 
 async function guardarPerfil(event) {
     event.preventDefault();
     const updated = {
         ...activeUser,
-        name: document.getElementById("profile-name").value.trim(),
-        phone: document.getElementById("profile-phone").value.trim(),
+        nombre_completo: document.getElementById("profile-name").value.trim(),
+        telefono: document.getElementById("profile-phone").value.trim(),
         email: document.getElementById("profile-email").value.trim().toLowerCase(),
-        deviceModel: document.getElementById("profile-device").value.trim()
+        dispositivo_modelo: document.getElementById("profile-device").value.trim()
     };
 
-    if (!updated.name || !updated.phone || !updated.email) {
+    if (!updated.nombre_completo || !updated.telefono || !updated.email) {
         showMessage(document.getElementById("profile-message"), "Nombre, teléfono y correo son obligatorios.");
         return;
     }
 
-    const users = getUsers().filter(user => user.id !== activeUser.id);
+    const users = getUsers().filter(user => user.id_usuario !== activeUser.id_usuario);
     saveUsers([...users, updated]);
     activeUser = updated;
     saveSession();
-    document.getElementById("dashboard-greeting").textContent = `Hola, ${activeUser.name}`;
-    document.getElementById("profile-initials").textContent = getInitials(activeUser.name);
+    document.getElementById("dashboard-greeting").textContent = `Usuario: ${activeUser.nombre_completo}`;
+    document.getElementById("profile-initials").textContent = getInitials(activeUser.nombre_completo);
     showMessage(document.getElementById("profile-message"), "Cambios guardados.");
 
-    if (config.API_BASE_URL && updated.id) {
-        await sendToApi(`/usuarios/${encodeURIComponent(updated.id)}`, updated, "PUT");
+    if (config.API_BASE_URL && updated.id_usuario) {
+        await sendToApi(`/usuarios/${encodeURIComponent(updated.id_usuario)}`, updated, "PUT");
     }
 }
 
@@ -1063,15 +1130,144 @@ async function sendToApi(path, payload, method = "POST") {
 
 function createUser(data) {
     return {
-        id: data.id || (crypto.randomUUID ? crypto.randomUUID() : `local-${Date.now()}`),
-        name: data.name || "Usuario",
-        phone: data.phone || "",
+        id_usuario: data.id_usuario || createId(),
+        nombre_completo: data.nombre_completo || "Usuario",
+        telefono: data.telefono || "",
         email: data.email || "",
-        passwordHash: data.passwordHash || "",
-        deviceModel: data.deviceModel || navigator.userAgent.slice(0, 48),
-        appVersion: config.APP_VERSION || "0.3.0",
-        createdAt: data.createdAt || new Date().toISOString()
+        password_hash: data.password_hash || "",
+        push_token: data.push_token || null,
+        dispositivo_modelo: data.dispositivo_modelo || navigator.userAgent.slice(0, 48),
+        app_version: data.app_version || config.APP_VERSION || "1.0.0",
+        creado_en: data.creado_en || new Date().toISOString()
     };
+}
+
+function normalizeUser(data) {
+    return createUser(data);
+}
+
+function createId() {
+    return crypto.randomUUID ? crypto.randomUUID() : `guardian-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function crearViaje(data = {}) {
+    return {
+        id_viaje: data.id_viaje || createId(),
+        id_usuario: data.id_usuario || activeUser?.id_usuario || null,
+        nombre_destino: data.nombre_destino || "Destino sin especificar",
+        origen_lat: data.origen_lat ?? null,
+        origen_lon: data.origen_lon ?? null,
+        destino_lat: data.destino_lat ?? null,
+        destino_lon: data.destino_lon ?? null,
+        ruta_oficial: Array.isArray(data.ruta_oficial) ? data.ruta_oficial : [],
+        eta_original: data.eta_original ?? null,
+        distancia_total_metros: data.distancia_total_metros ?? null,
+        contador_desvios: data.contador_desvios || 0,
+        estado: data.estado || "EN_CURSO",
+        inicio_viaje: data.inicio_viaje || new Date().toISOString(),
+        fin_viaje: data.fin_viaje || null
+    };
+}
+
+function getTrips() {
+    return readJson(STORAGE.trips, []).filter(trip => !trip.id_usuario || trip.id_usuario === activeUser?.id_usuario);
+}
+
+function saveTrip(trip) {
+    const stored = readJson(STORAGE.trips, []);
+    const otherUsersTrips = Array.isArray(stored)
+        ? stored.filter(item => item.id_usuario && item.id_usuario !== activeUser?.id_usuario)
+        : [];
+    const currentUserTrips = getTrips().filter(item => item.id_viaje !== trip.id_viaje);
+    localStorage.setItem(STORAGE.trips, JSON.stringify([trip, ...currentUserTrips, ...otherUsersTrips]));
+}
+
+function registrarPuntoUbicacion(position) {
+    if (!isTripActive || !currentTrip || !activeUser || !position) return;
+
+    const point = {
+        id_punto: createId(),
+        id_viaje: currentTrip.id_viaje,
+        lat: position.lat,
+        lon: position.lng,
+        velocidad_kmh: Number.isFinite(position.speed) ? Number((position.speed * 3.6).toFixed(2)) : 0,
+        precision_metros: position.accuracy,
+        fecha_hora: position.capturedAt || new Date().toISOString()
+    };
+    const points = readJson(STORAGE.locationHistory, []);
+    localStorage.setItem(STORAGE.locationHistory, JSON.stringify([point, ...points].slice(0, 2000)));
+
+    if (config.API_BASE_URL) sendToApi("/historial-ubicaciones", point);
+}
+
+function getNearestC5(position) {
+    if (!position || !c5Postes.length) return { id: null, distancia: null };
+
+    return c5Postes.reduce((nearest, camera) => {
+        const lat = Number(camera.lat);
+        const lon = Number(camera.lon);
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return nearest;
+        const distance = calcularDistanciaKm(position.lat, position.lng, lat, lon) * 1000;
+        return distance < nearest.distancia ? { id: camera.id || null, distancia: Math.round(distance) } : nearest;
+    }, { id: null, distancia: Number.POSITIVE_INFINITY });
+}
+
+function registrarAlerta(data = {}) {
+    const position = data.position || currentPosition;
+    const nearestC5 = getNearestC5(position);
+    const alert = {
+        id_alerta: createId(),
+        id_viaje: currentTrip?.id_viaje || null,
+        tipo_alerta: data.tipo_alerta || "BOTON_PANICO",
+        nivel_gravedad: data.nivel_gravedad || "ALTA",
+        lat_incidente: position?.lat ?? null,
+        lon_incidente: position?.lng ?? null,
+        c5_poste_cercano_id: nearestC5.id,
+        c5_distancia_metros: Number.isFinite(nearestC5.distancia) ? nearestC5.distancia : null,
+        telemetria_snapshot: {
+            posicion: position || null,
+            viaje: currentTrip || null,
+            registrado_en: new Date().toISOString()
+        },
+        estado_resolucion: "NO_ATENDIDA",
+        creado_en: new Date().toISOString()
+    };
+
+    const alerts = readJson(STORAGE.alerts, []);
+    localStorage.setItem(STORAGE.alerts, JSON.stringify([alert, ...alerts]));
+    if (config.API_BASE_URL) sendToApi("/alertas", alert);
+    return alert;
+}
+
+function createTutor(data = {}) {
+    return {
+        id_tutor: data.id_tutor || createId(),
+        nombre_completo: data.nombre_completo || "",
+        telefono: data.telefono || "",
+        email: data.email || "",
+        relacion: data.relacion || "",
+        permisos: Array.isArray(data.permisos) ? data.permisos : []
+    };
+}
+
+function getTutors() {
+    return readJson(STORAGE.tutors, []).map(createTutor);
+}
+
+function saveTutor(tutor) {
+    const tutors = getTutors().filter(item => item.id_tutor !== tutor.id_tutor);
+    localStorage.setItem(STORAGE.tutors, JSON.stringify([...tutors, createTutor(tutor)]));
+}
+
+function associateTutor(tutorId, permissions = []) {
+    const associations = readJson(STORAGE.userTutors, []);
+    const association = {
+        id_usuario: activeUser?.id_usuario || null,
+        id_tutor: tutorId,
+        permisos: Array.isArray(permissions) ? permissions : []
+    };
+    const remaining = associations.filter(item => !(item.id_usuario === association.id_usuario && item.id_tutor === tutorId));
+    localStorage.setItem(STORAGE.userTutors, JSON.stringify([...remaining, association]));
 }
 
 async function hashPassword(password) {
@@ -1105,12 +1301,12 @@ function normalizePhone(phone) {
 }
 
 function getInitials(name) {
-    return String(name || "RS")
+    return String(name || "G")
         .split(/\s+/)
         .filter(Boolean)
         .slice(0, 2)
         .map(part => part[0].toUpperCase())
-        .join("") || "RS";
+        .join("") || "G";
 }
 
 function showMessage(element, message) {
@@ -1176,10 +1372,10 @@ function actualizarZonasCercanas(userLat = currentPosition?.lat, userLng = curre
         // Dibuja en el mapa si la zona está a menos de 10 km del usuario
         if (distanciaKm <= 10.0) {
             const circle = new google.maps.Circle({
-                strokeColor: "#FF2D55",
+                strokeColor: "#d32f2f",
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: "#FF2D55",
+                fillColor: "#d32f2f",
                 fillOpacity: 0.35,
                 map: mapInstance,
                 center: { lat: zona.lat, lng: zona.lng },
@@ -1196,6 +1392,6 @@ function actualizarZonasCercanas(userLat = currentPosition?.lat, userLng = curre
     });
 
     if (zonaCercanaDetectada) {
-        showDashboardMessage(`⚠️ ATENCIÓN: Te encuentras dentro de una zona de riesgo: ${zonaCercanaDetectada.nombre}`);
+        showDashboardMessage(`ATENCIÓN: Te encuentras dentro de una zona de riesgo: ${zonaCercanaDetectada.nombre}`);
     }
 }

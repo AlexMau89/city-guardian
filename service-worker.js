@@ -1,4 +1,4 @@
-const CACHE_NAME = "rumbo-seguro-v14";
+const CACHE_NAME = "guardian-v1";
 
 const FILES_TO_CACHE = [
     "./",
@@ -7,7 +7,9 @@ const FILES_TO_CACHE = [
     "./app.js",
     "./config.js",
     "./manifest.json",
-    "./camaras.json"
+    "./camaras.json",
+    "./assets/icon-192.png",
+    "./assets/icon-512.png"
 ];
 
 self.addEventListener("install", event => {

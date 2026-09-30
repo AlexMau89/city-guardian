@@ -1,11 +1,11 @@
 {
-  "name": "Rumbo Seguro",
-  "short_name": "Rumbo Seguro",
-  "description": "Monitoreo de ubicación y asistencia durante tus viajes",
+  "name": "Guardian",
+  "short_name": "Guardian",
+  "description": "Sistema institucional de monitoreo personal y asistencia durante viajes",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#09131f",
-  "theme_color": "#09131f",
+  "background_color": "#060b11",
+  "theme_color": "#060b11",
   "orientation": "portrait",
   "icons": [
     {
