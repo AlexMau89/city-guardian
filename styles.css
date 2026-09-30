@@ -534,3 +534,18 @@ h1 {
         align-items: center;
     }
 }
+
+.zones-button {
+    grid-column: 1 / -1;
+    background: var(--surface-raised);
+    border: 1px solid var(--amber);
+    color: var(--ink);
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.zones-button.is-active {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: #2b1f00;
+}

@@ -7,6 +7,7 @@ const ZONAS_RIESGO = [
 ];
 
 let zonasDibujadas = [];
+let zonasVisibles = false;
 
 const STORAGE = {
     users: "rs_usuarios",
@@ -39,6 +40,7 @@ function bindEvents() {
     document.getElementById("register-form").addEventListener("submit", registrarUsuario);
     document.getElementById("profile-form").addEventListener("submit", guardarPerfil);
     document.getElementById("panic-button").addEventListener("click", enviarAlertaPanic);
+    document.getElementById("zones-button").addEventListener("click", toggleZonasCriticas);
     document.getElementById("recenter-button").addEventListener("click", centrarMapa);
     document.getElementById("profile-button").addEventListener("click", abrirPerfil);
     document.getElementById("close-profile-button").addEventListener("click", cerrarPerfil);
@@ -461,6 +463,29 @@ function showDashboardMessage(message) {
     }, 7000);
 }
 
+function toggleZonasCriticas() {
+    zonasVisibles = !zonasVisibles;
+    const button = document.getElementById("zones-button");
+    const label = document.getElementById("zones-label");
+
+    if (zonasVisibles) {
+        button.classList.add("is-active");
+        label.textContent = "Ocultar áreas de riesgo";
+        actualizarZonasCercanas();
+        return;
+    }
+
+    button.classList.remove("is-active");
+    label.textContent = "Mostrar áreas de riesgo";
+    limpiarZonas();
+    document.getElementById("dashboard-message").textContent = "";
+}
+
+function limpiarZonas() {
+    zonasDibujadas.forEach(circle => circle.setMap(null));
+    zonasDibujadas = [];
+}
+
 // --- FUNCIONES DE DETECCIÓN DE ZONAS CERCANAS ---
 
 function calcularDistanciaKm(lat1, lon1, lat2, lon2) {
@@ -473,12 +498,12 @@ function calcularDistanciaKm(lat1, lon1, lat2, lon2) {
     return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
 
-function actualizarZonasCercanas(userLat, userLng) {
-    if (!mapInstance) return;
+function actualizarZonasCercanas(userLat = currentPosition?.lat, userLng = currentPosition?.lng) {
+    if (!mapInstance || !zonasVisibles) return;
+    if (!Number.isFinite(userLat) || !Number.isFinite(userLng)) return;
 
     // Limpiar círculos dibujados anteriormente
-    zonasDibujadas.forEach(circle => circle.setMap(null));
-    zonasDibujadas = [];
+    limpiarZonas();
 
     let zonaCercanaDetectada = null;
 
