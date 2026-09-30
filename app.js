@@ -783,7 +783,21 @@ async function trazarRuta(destino, savedPlaceKey = null) {
             });
             deviationAlertSent = false;
             saveTrip(currentTrip);
-            if (config.API_BASE_URL) sendToApi("/viajes", currentTrip);
+            if (config.API_BASE_URL) {
+                sendToApi("/viajes/notificar", {
+                    idViaje: currentTrip.id_viaje,
+                    nombreUsuario: getUserFullName(activeUser),
+                    estado: "INICIADO",
+                    origen: {
+                        lat: currentTrip.origen_lat,
+                        lon: currentTrip.origen_lon
+                    },
+                    destino: currentTrip.nombre_destino,
+                    etaMinutos: currentTrip.eta_original === null
+                        ? null
+                        : Math.ceil(currentTrip.eta_original / 60)
+                }, "POST", true);
+            }
 
             document.getElementById("route-modal").classList.add("is-hidden");
             document.getElementById("trip-title").textContent = `Recorrido activo hacia: ${destinationName}`;
@@ -892,6 +906,16 @@ function recalcularYEscalarAlerta(nuevaPosicion) {
                 nivel_gravedad: "ALTA",
                 position: nuevaPosicion
             });
+            if (config.API_BASE_URL) {
+                sendToApi("/alertas/desvio", {
+                    idViaje: currentTrip?.id_viaje || null,
+                    nombreUsuario: getUserFullName(activeUser),
+                    numeroDesvios: deviationCount,
+                    destino: currentTrip?.nombre_destino || "Destino no disponible",
+                    lat: nuevaPosicion.lat,
+                    lon: nuevaPosicion.lng
+                }, "POST", true);
+            }
             deviationAlertSent = true;
         }
     }
@@ -948,7 +972,21 @@ function finalizarRuta(finalState = "FINALIZADO") {
         currentTrip.contador_desvios = deviationCount;
         currentTrip.fin_viaje = new Date().toISOString();
         saveTrip(currentTrip);
-        if (config.API_BASE_URL) sendToApi(`/viajes/${encodeURIComponent(currentTrip.id_viaje)}`, currentTrip, "PUT");
+        if (config.API_BASE_URL) {
+            sendToApi("/viajes/notificar", {
+                idViaje: currentTrip.id_viaje,
+                nombreUsuario: getUserFullName(activeUser),
+                estado: "FINALIZADO",
+                origen: {
+                    lat: currentTrip.origen_lat,
+                    lon: currentTrip.origen_lon
+                },
+                destino: currentTrip.nombre_destino,
+                etaMinutos: currentTrip.eta_original === null
+                    ? null
+                    : Math.ceil(currentTrip.eta_original / 60)
+            }, "POST", true);
+        }
     }
 
     deviationCount = 0;
@@ -1162,7 +1200,19 @@ async function enviarAlertaPanic() {
     navigator.vibrate?.([180, 80, 180]);
     showDashboardMessage(position ? "Alerta registrada con ubicación para la Central de Emergencias." : "Alerta registrada. No se obtuvo la ubicación actual.");
 
-    if (config.API_BASE_URL && alert) await sendToApi("/alertas", alert);
+    if (config.API_BASE_URL && alert) {
+        await sendToApi("/alertas/panico", {
+            id_alerta: alert.id_alerta,
+            idViaje: alert.id_viaje,
+            nombreUsuario: getUserFullName(activeUser),
+            telefonoUsuario: activeUser?.telefono || "No disponible",
+            lat: alert.lat_incidente,
+            lon: alert.lon_incidente,
+            c5PosteId: alert.c5_poste_cercano_id,
+            c5Distancia: alert.c5_distancia_metros,
+            telemetriaSnapshot: alert.telemetria_snapshot
+        }, "POST", true);
+    }
 }
 
 function getOneLocation() {
@@ -1344,15 +1394,18 @@ async function guardarPerfil(event) {
     }
 }
 
-async function sendToApi(path, payload, method = "POST") {
+async function sendToApi(path, payload, method = "POST", requireOk = false) {
     try {
-        await fetch(`${getApiBaseUrl()}${path}`, {
+        const response = await fetch(`${getApiBaseUrl()}${path}`, {
             method,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
         });
+        if (requireOk && !response.ok) throw new Error(`${method} ${path} respondió ${response.status}`);
+        return response;
     } catch (error) {
         console.error("La API no está disponible:", error);
+        return null;
     }
 }
 
@@ -1499,7 +1552,6 @@ function registrarAlerta(data = {}) {
 
     const alerts = readJson(STORAGE.alerts, []);
     localStorage.setItem(STORAGE.alerts, JSON.stringify([alert, ...alerts]));
-    if (config.API_BASE_URL) sendToApi("/alertas", alert);
     return alert;
 }
 
