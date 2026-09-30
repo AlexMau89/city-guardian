@@ -24,6 +24,10 @@ let locationWatchId = null;
 let mapInstance = null;
 let locationMarker = null;
 let mapsLoadPromise = null;
+let directionsService = null;
+let directionsRenderer = null;
+let isTripActive = false;
+let currentDestination = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("app-version").textContent = config.APP_VERSION || "0.3.0";
@@ -41,12 +45,21 @@ function bindEvents() {
     document.getElementById("profile-form").addEventListener("submit", guardarPerfil);
     document.getElementById("panic-button").addEventListener("click", enviarAlertaPanic);
     document.getElementById("zones-button").addEventListener("click", toggleZonasCriticas);
+    document.getElementById("trip-control-button").addEventListener("click", manejarControlRecorrido);
+    document.getElementById("route-form").addEventListener("submit", manejarFormularioRuta);
+    document.getElementById("close-route-button").addEventListener("click", cerrarModalRuta);
+    document.querySelectorAll(".frequent-route-btn").forEach(button => {
+        button.addEventListener("click", () => trazarRuta(button.dataset.destination));
+    });
     document.getElementById("recenter-button").addEventListener("click", centrarMapa);
     document.getElementById("profile-button").addEventListener("click", abrirPerfil);
     document.getElementById("close-profile-button").addEventListener("click", cerrarPerfil);
     document.getElementById("logout-button").addEventListener("click", cerrarSesion);
     document.getElementById("profile-modal").addEventListener("click", event => {
         if (event.target.id === "profile-modal") cerrarPerfil();
+    });
+    document.getElementById("route-modal").addEventListener("click", event => {
+        if (event.target.id === "route-modal") cerrarModalRuta();
     });
 }
 
@@ -168,6 +181,8 @@ function mostrarDashboard() {
 
 function cerrarSesion() {
     stopLocationTracking();
+    finalizarRuta();
+    cerrarModalRuta();
     activeUser = null;
     localStorage.removeItem(STORAGE.session);
     localStorage.removeItem("cg_usuario");
@@ -240,6 +255,7 @@ async function loadGoogleMap() {
     try {
         await loadMapsScript(); //[cite: 2]
         const { Map } = await window.google.maps.importLibrary("maps"); //[cite: 2]
+        const { DirectionsService, DirectionsRenderer } = await window.google.maps.importLibrary("routes");
         const initialPosition = currentPosition || defaultPosition; //[cite: 2]
 
         // Ocultamos el placeholder ANTES de inicializar el mapa para no perder su referencia[cite: 2, 4]
@@ -261,12 +277,118 @@ async function loadGoogleMap() {
             position: initialPosition, //[cite: 2]
             title: "Tu ubicación" //[cite: 2]
         });
+        directionsService = new DirectionsService();
+        directionsRenderer = new DirectionsRenderer({
+            map: mapInstance,
+            suppressMarkers: false
+        });
         updateMapPosition(); //[cite: 2]
+        actualizarZonasCercanas();
     } catch (error) {
         console.error("No se pudo cargar Google Maps:", error); //[cite: 2]
         if (placeholder) placeholder.classList.remove("is-hidden"); //[cite: 2, 4]
         showDashboardMessage("No se pudo cargar el mapa. Revisa la clave y las restricciones de Google Maps."); //[cite: 2]
     }
+}
+
+function manejarControlRecorrido() {
+    if (isTripActive) {
+        finalizarRuta();
+        return;
+    }
+
+    abrirModalRuta();
+}
+
+function abrirModalRuta() {
+    const modal = document.getElementById("route-modal");
+    const message = document.getElementById("route-message");
+    const input = document.getElementById("destination-input");
+
+    message.textContent = "";
+    modal.classList.remove("is-hidden");
+    window.setTimeout(() => input.focus(), 0);
+}
+
+function cerrarModalRuta() {
+    const modal = document.getElementById("route-modal");
+    if (modal) modal.classList.add("is-hidden");
+}
+
+function manejarFormularioRuta(event) {
+    event.preventDefault();
+    trazarRuta(document.getElementById("destination-input").value);
+}
+
+function actualizarControlRecorrido() {
+    const button = document.getElementById("trip-control-button");
+    const title = button.querySelector("strong");
+    const label = document.getElementById("trip-control-label");
+
+    button.classList.toggle("is-active", isTripActive);
+    button.setAttribute("aria-pressed", String(isTripActive));
+
+    if (isTripActive) {
+        title.textContent = "Finalizar recorrido";
+        label.textContent = "Ruta activa";
+        return;
+    }
+
+    title.textContent = "Iniciar recorrido";
+    label.textContent = "Seleccionar destino";
+}
+
+function trazarRuta(destino) {
+    const destination = typeof destino === "string" ? destino.trim() : destino;
+    const message = document.getElementById("route-message");
+
+    if (!destination) {
+        message.textContent = "Ingresa un destino para trazar la ruta.";
+        return;
+    }
+
+    if (!directionsService || !directionsRenderer) {
+        message.textContent = "El mapa todavía está cargando. Intenta de nuevo en un momento.";
+        return;
+    }
+
+    const origin = currentPosition
+        ? { lat: currentPosition.lat, lng: currentPosition.lng }
+        : defaultPosition;
+    const destinationLabel = typeof destination === "string"
+        ? destination
+        : destination.name || "Destino seleccionado";
+
+    directionsService.route({
+        origin,
+        destination,
+        travelMode: window.google.maps.TravelMode.WALKING
+    }, (response, status) => {
+        if (status !== "OK") {
+            message.textContent = "No se encontró una ruta para ese destino.";
+            console.error("No se pudo trazar la ruta:", status);
+            return;
+        }
+
+        directionsRenderer.setDirections(response);
+        isTripActive = true;
+        currentDestination = destination;
+        document.getElementById("trip-title").textContent = `Recorrido activo hacia: ${destinationLabel}`;
+        actualizarControlRecorrido();
+        cerrarModalRuta();
+        showDashboardMessage(`Ruta trazada hacia ${destinationLabel}.`);
+    });
+}
+
+function finalizarRuta() {
+    if (directionsRenderer) {
+        directionsRenderer.setDirections({ routes: [] });
+    }
+
+    isTripActive = false;
+    currentDestination = null;
+    actualizarControlRecorrido();
+    document.getElementById("trip-title").textContent = "Tu ubicación está protegida";
 }
 
 
