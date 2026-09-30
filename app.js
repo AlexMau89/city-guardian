@@ -119,14 +119,103 @@ function switchAuthView(viewName) {
     });
 }
 
+const VALIDATION = Object.freeze({
+    name: /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s']{2,40}$/,
+    phone: /^\d{10}$/,
+    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+    password: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/
+});
+
+function validateFormFields(fields) {
+    let isValid = true;
+
+    fields.forEach(fieldConfig => {
+        const input = document.getElementById(fieldConfig.id);
+        if (!input) return;
+
+        const value = input.value.trim();
+        const error = validateFieldValue(value, fieldConfig.type, fieldConfig.required !== false);
+
+        if (error) {
+            setFieldError(input, error);
+            isValid = false;
+            return;
+        }
+
+        clearFieldError(input);
+    });
+
+    return isValid;
+}
+
+function validateFieldValue(value, type, required = true) {
+    if (!value) return required ? "Este campo es obligatorio." : "";
+
+    if (type === "identifier") {
+        const validEmail = VALIDATION.email.test(value);
+        const validPhone = VALIDATION.phone.test(normalizePhone(value));
+        return validEmail || validPhone ? "" : "Escribe un correo válido o un teléfono de 10 dígitos.";
+    }
+
+    if (type === "phone") {
+        return VALIDATION.phone.test(normalizePhone(value)) ? "" : "Debe contener exactamente 10 dígitos.";
+    }
+
+    if (type === "name") {
+        return VALIDATION.name.test(value) ? "" : "Usa únicamente letras, espacios y apóstrofes (2 a 40 caracteres).";
+    }
+
+    if (type === "email") {
+        return VALIDATION.email.test(value) ? "" : "Escribe un correo electrónico válido.";
+    }
+
+    if (type === "password") {
+        return VALIDATION.password.test(value) ? "" : "Usa al menos 8 caracteres, una letra y un número.";
+    }
+
+    return "";
+}
+
+function setFieldError(input, message) {
+    const field = input.closest(".field");
+    if (!field) return;
+
+    let feedback = field.querySelector(".field-error");
+    if (!feedback) {
+        feedback = document.createElement("small");
+        feedback.className = "field-error";
+        feedback.setAttribute("role", "alert");
+        input.insertAdjacentElement("afterend", feedback);
+    }
+
+    field.classList.add("has-error");
+    input.classList.add("is-invalid");
+    input.setAttribute("aria-invalid", "true");
+    feedback.textContent = message;
+}
+
+function clearFieldError(input) {
+    const field = input.closest(".field");
+    const feedback = field?.querySelector(".field-error");
+    field?.classList.remove("has-error");
+    input.classList.remove("is-invalid");
+    input.removeAttribute("aria-invalid");
+    feedback?.remove();
+}
+
 async function iniciarSesion(event) {
     event.preventDefault();
     const identifier = document.getElementById("login-identifier").value.trim().toLowerCase();
     const password = document.getElementById("login-password").value;
     const message = document.getElementById("login-message");
 
-    if (!identifier || !password) {
-        showMessage(message, "Completa tu correo o teléfono y contraseña.");
+    const isValid = validateFormFields([
+        { id: "login-identifier", type: "identifier", required: true },
+        { id: "login-password", type: "password", required: true }
+    ]);
+
+    if (!isValid) {
+        showMessage(message, "Revisa los campos marcados antes de continuar.");
         return;
     }
 
@@ -139,7 +228,7 @@ async function iniciarSesion(event) {
         return;
     }
 
-    if (!user || user.password_hash !== await hashPassword(password)) {
+    if (!user || user.passwordHash !== await hashPassword(password)) {
         showMessage(message, "La contraseña no coincide.");
         return;
     }
@@ -153,38 +242,56 @@ async function iniciarSesion(event) {
 
 async function registrarUsuario(event) {
     event.preventDefault();
-    const name = document.getElementById("register-name").value.trim();
+    const nombres = document.getElementById("register-nombres").value.trim();
+    const apellidoPaterno = document.getElementById("register-paterno").value.trim();
+    const apellidoMaterno = document.getElementById("register-materno").value.trim();
     const phone = document.getElementById("register-phone").value.trim();
     const email = document.getElementById("register-email").value.trim().toLowerCase();
     const password = document.getElementById("register-password").value;
     const confirmation = document.getElementById("register-password-confirm").value;
     const message = document.getElementById("register-message");
 
-    if (!name || !phone || !email || !password || !confirmation) {
-        showMessage(message, "Completa todos los campos para crear tu cuenta.");
-        return;
-    }
+    const isValid = validateFormFields([
+        { id: "register-nombres", type: "name", required: true },
+        { id: "register-paterno", type: "name", required: true },
+        { id: "register-materno", type: "name", required: false },
+        { id: "register-phone", type: "phone", required: true },
+        { id: "register-email", type: "email", required: true },
+        { id: "register-password", type: "password", required: true },
+        { id: "register-password-confirm", type: "password", required: true }
+    ]);
 
-    if (password.length < 6) {
-        showMessage(message, "La contraseña debe tener al menos 6 caracteres.");
+    if (!isValid) {
+        showMessage(message, "Revisa los campos marcados antes de registrar el usuario.");
         return;
     }
 
     if (password !== confirmation) {
-        showMessage(message, "Las contraseñas no coinciden.");
+        setFieldError(document.getElementById("register-password-confirm"), "Las contraseñas deben coincidir.");
+        showMessage(message, "La confirmación de contraseña no coincide.");
         return;
     }
 
+    const normalizedPhone = normalizePhone(phone);
+
     const users = getUsers();
-    const duplicate = users.some(item => String(item.email || "").toLowerCase() === email || normalizePhone(item.telefono) === normalizePhone(phone));
+    const duplicate = users.some(item => String(item.email || "").toLowerCase() === email || normalizePhone(item.telefono) === normalizedPhone);
     if (duplicate) {
         showMessage(message, "Ya existe una cuenta con ese correo o teléfono.");
         return;
     }
 
-    activeUser = createUser({ nombre_completo: name, telefono: phone, email, password_hash: await hashPassword(password) });
+    activeUser = createUser({
+        nombres,
+        apellido_paterno: apellidoPaterno,
+        apellido_materno: apellidoMaterno,
+        telefono: normalizedPhone,
+        email,
+        passwordHash: await hashPassword(password)
+    });
     saveUsers([...users, activeUser]);
     saveSession();
+    if (config.API_BASE_URL) await sendToApi("/usuarios", activeUser);
     document.getElementById("register-form").reset();
     showMessage(message, "");
     mostrarDashboard();
@@ -193,8 +300,8 @@ async function registrarUsuario(event) {
 function mostrarDashboard() {
     document.getElementById("auth-view").classList.add("is-hidden");
     document.getElementById("dashboard-view").classList.remove("is-hidden");
-    document.getElementById("dashboard-greeting").textContent = `Usuario: ${activeUser.nombre_completo || "Sin identificar"}`;
-    document.getElementById("profile-initials").textContent = getInitials(activeUser.nombre_completo);
+    document.getElementById("dashboard-greeting").textContent = `Usuario: ${getUserFullName(activeUser)}`;
+    document.getElementById("profile-initials").textContent = getInitials(getUserFullName(activeUser));
     document.getElementById("call-button").href = `tel:${config.EMERGENCY_PHONE || "911"}`;
     document.getElementById("call-label").textContent = config.EMERGENCY_PHONE || "911";
     fillProfileForm();
@@ -1073,7 +1180,7 @@ function getOneLocation() {
 function abrirPerfil() {
     fillProfileForm();
     document.getElementById("profile-modal").classList.remove("is-hidden");
-    document.getElementById("profile-name").focus();
+    document.getElementById("profile-nombres").focus();
 }
 
 function cerrarPerfil() {
@@ -1082,7 +1189,9 @@ function cerrarPerfil() {
 
 function fillProfileForm() {
     if (!activeUser) return;
-    document.getElementById("profile-name").value = activeUser.nombre_completo || "";
+    document.getElementById("profile-nombres").value = activeUser.nombres || "";
+    document.getElementById("profile-paterno").value = activeUser.apellido_paterno || "";
+    document.getElementById("profile-materno").value = activeUser.apellido_materno || "";
     document.getElementById("profile-phone").value = activeUser.telefono || "";
     document.getElementById("profile-email").value = activeUser.email || "";
     document.getElementById("profile-device").value = activeUser.dispositivo_modelo || "";
@@ -1090,16 +1199,36 @@ function fillProfileForm() {
 
 async function guardarPerfil(event) {
     event.preventDefault();
+    const message = document.getElementById("profile-message");
+    const isValid = validateFormFields([
+        { id: "profile-nombres", type: "name", required: true },
+        { id: "profile-paterno", type: "name", required: true },
+        { id: "profile-materno", type: "name", required: false },
+        { id: "profile-phone", type: "phone", required: true },
+        { id: "profile-email", type: "email", required: true }
+    ]);
+
+    if (!isValid) {
+        showMessage(message, "Revisa los campos marcados antes de guardar.");
+        return;
+    }
+
     const updated = {
         ...activeUser,
-        nombre_completo: document.getElementById("profile-name").value.trim(),
-        telefono: document.getElementById("profile-phone").value.trim(),
+        nombres: document.getElementById("profile-nombres").value.trim(),
+        apellido_paterno: document.getElementById("profile-paterno").value.trim(),
+        apellido_materno: document.getElementById("profile-materno").value.trim(),
+        telefono: normalizePhone(document.getElementById("profile-phone").value),
         email: document.getElementById("profile-email").value.trim().toLowerCase(),
         dispositivo_modelo: document.getElementById("profile-device").value.trim()
     };
 
-    if (!updated.nombre_completo || !updated.telefono || !updated.email) {
-        showMessage(document.getElementById("profile-message"), "Nombre, teléfono y correo son obligatorios.");
+    const duplicate = getUsers().some(user =>
+        user.id_usuario !== activeUser.id_usuario &&
+        (String(user.email || "").toLowerCase() === updated.email || normalizePhone(user.telefono) === updated.telefono)
+    );
+    if (duplicate) {
+        showMessage(message, "Ya existe otro usuario con ese correo o teléfono.");
         return;
     }
 
@@ -1107,9 +1236,9 @@ async function guardarPerfil(event) {
     saveUsers([...users, updated]);
     activeUser = updated;
     saveSession();
-    document.getElementById("dashboard-greeting").textContent = `Usuario: ${activeUser.nombre_completo}`;
-    document.getElementById("profile-initials").textContent = getInitials(activeUser.nombre_completo);
-    showMessage(document.getElementById("profile-message"), "Cambios guardados.");
+    document.getElementById("dashboard-greeting").textContent = `Usuario: ${getUserFullName(activeUser)}`;
+    document.getElementById("profile-initials").textContent = getInitials(getUserFullName(activeUser));
+    showMessage(message, "Cambios guardados.");
 
     if (config.API_BASE_URL && updated.id_usuario) {
         await sendToApi(`/usuarios/${encodeURIComponent(updated.id_usuario)}`, updated, "PUT");
@@ -1131,19 +1260,51 @@ async function sendToApi(path, payload, method = "POST") {
 function createUser(data) {
     return {
         id_usuario: data.id_usuario || createId(),
-        nombre_completo: data.nombre_completo || "Usuario",
+        nombres: data.nombres || "Usuario",
+        apellido_paterno: data.apellido_paterno || "",
+        apellido_materno: data.apellido_materno || "",
         telefono: data.telefono || "",
         email: data.email || "",
-        password_hash: data.password_hash || "",
-        push_token: data.push_token || null,
-        dispositivo_modelo: data.dispositivo_modelo || navigator.userAgent.slice(0, 48),
-        app_version: data.app_version || config.APP_VERSION || "1.0.0",
+        passwordHash: data.passwordHash || "",
+        dispositivo_modelo: data.dispositivo_modelo || navigator.userAgent.slice(0, 50),
+        app_version: data.app_version || config.APP_VERSION,
         creado_en: data.creado_en || new Date().toISOString()
     };
 }
 
 function normalizeUser(data) {
-    return createUser(data);
+    const legacyName = splitLegacyName(data.nombre_completo);
+    return createUser({
+        id_usuario: data.id_usuario,
+        nombres: data.nombres || legacyName.nombres,
+        apellido_paterno: data.apellido_paterno || legacyName.apellido_paterno,
+        apellido_materno: data.apellido_materno || legacyName.apellido_materno,
+        telefono: data.telefono,
+        email: data.email,
+        passwordHash: data.passwordHash,
+        dispositivo_modelo: data.dispositivo_modelo,
+        app_version: data.app_version,
+        creado_en: data.creado_en
+    });
+}
+
+function splitLegacyName(fullName) {
+    const parts = String(fullName || "").trim().split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return { nombres: "Usuario", apellido_paterno: "", apellido_materno: "" };
+    if (parts.length === 1) return { nombres: parts[0], apellido_paterno: "", apellido_materno: "" };
+    if (parts.length === 2) return { nombres: parts[0], apellido_paterno: parts[1], apellido_materno: "" };
+
+    return {
+        nombres: parts.slice(0, -2).join(" "),
+        apellido_paterno: parts[parts.length - 2],
+        apellido_materno: parts[parts.length - 1]
+    };
+}
+
+function getUserFullName(user) {
+    return [user?.nombres, user?.apellido_paterno, user?.apellido_materno]
+        .filter(Boolean)
+        .join(" ") || "Usuario";
 }
 
 function createId() {
@@ -1277,11 +1438,11 @@ async function hashPassword(password) {
 }
 
 function getUsers() {
-    return readJson(STORAGE.users, []);
+    return readJson(STORAGE.users, []).map(normalizeUser);
 }
 
 function saveUsers(users) {
-    localStorage.setItem(STORAGE.users, JSON.stringify(users));
+    localStorage.setItem(STORAGE.users, JSON.stringify(users.map(normalizeUser)));
 }
 
 function saveSession() {

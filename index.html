@@ -42,7 +42,7 @@
 
                     <label class="field">
                         <span>Contraseña</span>
-                        <input id="login-password" name="password_hash" type="password" placeholder="Contraseña" autocomplete="current-password" required>
+                        <input id="login-password" name="passwordHash" type="password" placeholder="Contraseña" autocomplete="current-password" required>
                     </label>
 
                     <button class="button button-primary" type="submit">Iniciar sesión <span aria-hidden="true">→</span></button>
@@ -55,12 +55,22 @@
                         <h2>Crea tu cuenta</h2>
                     </div>
 
-                    <label class="field">
-                        <span>Nombre completo</span>
-                        <input id="register-name" name="nombre_completo" type="text" placeholder="Nombre y apellidos" autocomplete="name" required>
-                    </label>
+                    <div class="field-row name-fields">
+                        <label class="field">
+                            <span>Nombres</span>
+                            <input id="register-nombres" name="nombres" type="text" placeholder="Ej. Juan Carlos" autocomplete="given-name" required>
+                        </label>
+                        <label class="field">
+                            <span>Apellido paterno</span>
+                            <input id="register-paterno" name="apellido_paterno" type="text" placeholder="Ej. Pérez" autocomplete="family-name" required>
+                        </label>
+                        <label class="field">
+                            <span>Apellido materno</span>
+                            <input id="register-materno" name="apellido_materno" type="text" placeholder="Ej. Gómez (Opcional)" autocomplete="additional-name">
+                        </label>
+                    </div>
 
-                    <div class="field-row">
+                    <div class="field-row contact-fields">
                         <label class="field">
                             <span>Teléfono</span>
                             <input id="register-phone" name="telefono" type="tel" placeholder="55 0000 0000" autocomplete="tel" required>
@@ -73,12 +83,12 @@
 
                     <label class="field">
                         <span>Contraseña</span>
-                        <input id="register-password" name="password_hash" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required>
+                        <input id="register-password" name="passwordHash" type="password" placeholder="Mínimo 8 caracteres, letras y números" autocomplete="new-password" minlength="8" required>
                     </label>
 
                     <label class="field">
                         <span>Repite tu contraseña</span>
-                        <input id="register-password-confirm" name="password_confirm" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" minlength="6" required>
+                        <input id="register-password-confirm" name="password_confirm" type="password" placeholder="Repite tu contraseña" autocomplete="new-password" minlength="8" required>
                     </label>
 
                     <button class="button button-primary" type="submit">Registrar usuario <span aria-hidden="true">→</span></button>
@@ -120,7 +130,7 @@
 
             <div id="simulation-controls" class="is-hidden" style="margin: 10px 18px; display: flex; gap: 8px;">
                 <button id="sim-start-btn" class="button button-primary" type="button" style="min-height: 40px; font-size: 12px;">
-                    Simular telemetría
+                    Simular recorrido
                 </button>
                 <button id="sim-deviate-btn" class="button button-secondary" type="button" style="min-height: 40px; font-size: 12px; border-color: var(--amber); color: var(--amber);">
                     Simular desvío
@@ -173,18 +183,30 @@
             </div>
 
             <form id="profile-form" class="profile-form" novalidate>
-                <label class="field">
-                    <span>Nombre completo</span>
-                    <input id="profile-name" name="nombre_completo" type="text" required autocomplete="name">
-                </label>
-                <label class="field">
-                    <span>Teléfono</span>
-                    <input id="profile-phone" name="telefono" type="tel" required autocomplete="tel">
-                </label>
-                <label class="field">
-                    <span>Correo</span>
-                    <input id="profile-email" name="email" type="email" required autocomplete="email">
-                </label>
+                <div class="field-row name-fields">
+                    <label class="field">
+                        <span>Nombres</span>
+                        <input id="profile-nombres" name="nombres" type="text" placeholder="Ej. Juan Carlos" autocomplete="given-name" required>
+                    </label>
+                    <label class="field">
+                        <span>Apellido paterno</span>
+                        <input id="profile-paterno" name="apellido_paterno" type="text" placeholder="Ej. Pérez" autocomplete="family-name" required>
+                    </label>
+                    <label class="field">
+                        <span>Apellido materno</span>
+                        <input id="profile-materno" name="apellido_materno" type="text" placeholder="Ej. Gómez (Opcional)" autocomplete="additional-name">
+                    </label>
+                </div>
+                <div class="field-row contact-fields">
+                    <label class="field">
+                        <span>Teléfono</span>
+                        <input id="profile-phone" name="telefono" type="tel" placeholder="10 dígitos" required autocomplete="tel">
+                    </label>
+                    <label class="field">
+                        <span>Correo</span>
+                        <input id="profile-email" name="email" type="email" placeholder="tu@correo.com" required autocomplete="email">
+                    </label>
+                </div>
                 <label class="field">
                     <span>Modelo del dispositivo</span>
                     <input id="profile-device" name="dispositivo_modelo" type="text" placeholder="Opcional" autocomplete="off">
