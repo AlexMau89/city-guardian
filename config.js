@@ -1,6 +1,6 @@
 window.APP_CONFIG = Object.freeze({
     // Clave restringida por dominio para habilitar el mapa de monitoreo en vivo.
-    GOOGLE_MAPS_API_KEY: "AIzaSyD51LNm1X0LmeeAXzB1c7KpEUHwIByuVeY",
+    GOOGLE_MAPS_API_KEY: "AIzaSyCYlisYDD9HP9VjF2-CZWKci6Pz3qmpN48",
     API_BASE_URL: "http://localhost:3000",
     EMERGENCY_PHONE: "911",
     APP_NAME: "Guardian",
